@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 // import GameRecord from "./components/GameRecord";
 import Home from "./components/Home";
 import MidHeader from "./components/MidHeader";
+import MainPage from './components/MainPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/register' element={<RegistrationPage />} />
+        <Route path='/main' element={<MainPage />} />
       </Routes>
     </Router>
     </>
