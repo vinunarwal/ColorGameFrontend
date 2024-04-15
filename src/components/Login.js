@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Swal from 'sweetalert2';
+
 const Login = () => {
    const [formData, setFormData] = useState({
       email: '',
@@ -9,6 +9,7 @@ const Login = () => {
    });
 
    const [error, setError] = useState('');
+   const navigate = useNavigate(); // Import useNavigate hook
 
    const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,11 +21,7 @@ const Login = () => {
          const response = await axios.post('http://localhost:5000/login', formData);
          const { data } = response;
          if (data.userId) {
-            Swal.fire({
-               icon: 'success',
-               title: 'Login Successful',
-               text: 'Welcome back!',
-            });
+            navigate('/main'); // Navigate to main page upon successful login
          } else {
             setError(data.error || 'Login failed');
          }
