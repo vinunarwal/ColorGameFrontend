@@ -1,11 +1,18 @@
-import './App.css';
+import "./App.css";
+import ColorPicker from "./components/ColorPicker";
+import Footer from "./components/Footer";
+// import GameRecord from "./components/GameRecord";
+import Home from "./components/Home";
+import MidHeader from "./components/MidHeader";
 
 function App() {
   return (
     <>
-    <div className='text-center text-red-700'>
-      <h1>Hello World !</h1>
-    </div>
+      <Home />
+      <MidHeader />
+      <ColorPicker />
+      {/* <GameRecord /> */}
+      <Footer />
     </>
   );
 }
