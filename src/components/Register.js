@@ -10,7 +10,7 @@ const RegistrationPage = () => {
       password: ''
    });
    const [error, setError] = useState('');
-   const navigate = useNavigate(); // Import useNavigate from 'react-router-dom'
+   const navigate = useNavigate(); 
 
    const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,14 +22,12 @@ const RegistrationPage = () => {
          const response = await axios.post('http://localhost:5000/register', formData);
          const { data } = response;
          if (data.token) {
-            // Registration successful, show SweetAlert
             Swal.fire({
                title: 'Registration Successful!',
                text: 'You have successfully registered.',
                icon: 'success',
                confirmButtonText: 'OK'
             }).then(() => {
-               // Navigate to login page after SweetAlert is closed
                navigate('/');
             });
          } else {
