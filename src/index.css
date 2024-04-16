@@ -2,3 +2,6 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+.example::-webkit-scrollbar {
+    display: none !important;
+}
