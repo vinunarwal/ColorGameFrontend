@@ -6,7 +6,7 @@ import axios from "axios";
 
 function ColorPicker() {
    const [timer, setTimer] = useState(2); // 3 minutes in seconds
-   const [id, setId] = useState(1234567890); // Initial ID
+   const [id, setId] = useState(1234567890); 
    const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
    const [amount, setAmount] = useState("");
 
