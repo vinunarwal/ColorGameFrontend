@@ -1,7 +1,15 @@
 import React from "react";
 import manicon from "../assets/images/jpg/manicon.jpg";
 import BellIcon from "../assets/images/svg/bell.svg";
+import { useNavigate } from 'react-router-dom'; 
+
 const ProfilePage = () => {
+  const navigate = useNavigate(); 
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
   return (
     <div>
       <div className="max-w-lg mx-auto px-[12px]">
@@ -72,9 +80,12 @@ const ProfilePage = () => {
             <p>About</p>
           </div>
           <div className="text-center">
-            <button className="border-1 mt-5 bg-[red] rounded-md text-white border-solid py-[10px] px-[35px]">
-              logout
-            </button>
+          <button 
+            className="border-1  rounded-md mt-5 bg-[red] text-white border-solid py-[7px] px-[15px]"
+            onClick={handleLogout} 
+          >
+            Logout
+          </button>
           </div>
         </div>
       </div>
