@@ -1,11 +1,13 @@
+// import './index.css';
 import './App.css';
+import Recharge from './components/Recharge';
 
 function App() {
   return (
     <>
-    <div className='text-center text-red-700'>
-      <h1>Hello World !</h1>
-    </div>
+      <div>
+        <Recharge />
+      </div>
     </>
   );
 }
