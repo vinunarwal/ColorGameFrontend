@@ -76,6 +76,7 @@ const ProfilePage = () => {
               logout
             </button>
           </div>
+        
         </div>
       </div>
     </div>
