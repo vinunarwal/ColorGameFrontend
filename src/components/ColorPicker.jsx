@@ -5,7 +5,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import axios from "axios"; 
 
 function ColorPicker() {
-   const [timer, setTimer] = useState(180); // 3 minutes in seconds
+   const [timer, setTimer] = useState(2); // 3 minutes in seconds
    const [id, setId] = useState(1234567890); // Initial ID
    const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
    const [amount, setAmount] = useState(""); 
@@ -15,7 +15,7 @@ function ColorPicker() {
          if (timer > 0) {
             setTimer(timer - 1); 
          } else {
-            setTimer(180); 
+            setTimer(2); 
             setId((prevId) => prevId + 1);
             setPeriodIds((prevIds) => [id, ...prevIds]); // Add current ID to periodIds array
          }
@@ -107,7 +107,7 @@ function ColorPicker() {
       <div className="container mx-auto px-4">
          <div
             className="bg-slate-100 mx-auto py-2  "
-            style={{ maxWidth: "700px" }}
+            style={{ maxWidth: "420px" }}
          >
             <div className="p-4 rounded-lg max-w-[640px] mx-auto ">
                <div className="flex justify-between w-full sm:w-auto mb-4 sm:mb-0">
