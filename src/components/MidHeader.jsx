@@ -9,7 +9,7 @@ function MidHeader() {
 
   return (
     <div className="container mx-auto px-4">
-      <div className="bg-slate-200 mx-auto py-4" style={{ maxWidth: "700px" }}>
+      <div className="bg-slate-200 mx-auto py-4" style={{ maxWidth: "420px" }}>
         <div
           className="flex justify-between px-4 mx-auto"
           style={{ maxWidth: "640px" }}
