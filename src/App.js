@@ -1,10 +1,12 @@
-import './App.css';
-import Login from './components/Login'
+import "./App.css";
+import Login from "./components/Login";
+import ProfilePage from "./components/ProfilePage";
 
 function App() {
   return (
     <>
-    <Login />
+      {/* <Login /> */}
+      <ProfilePage />
     </>
   );
 }
