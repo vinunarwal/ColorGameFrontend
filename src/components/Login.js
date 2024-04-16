@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -9,7 +9,14 @@ const Login = () => {
    });
 
    const [error, setError] = useState('');
-   const navigate = useNavigate(); // Import useNavigate hook
+   const navigate = useNavigate();
+
+   useEffect(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+         navigate('/main');
+      }
+   }, [navigate]);
 
    const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,8 +27,9 @@ const Login = () => {
       try {
          const response = await axios.post('http://localhost:5000/login', formData);
          const { data } = response;
-         if (data.userId) {
-            navigate('/main'); // Navigate to main page upon successful login
+         if (data.token) {
+            localStorage.setItem('token', data.token);
+            navigate('/main');
          } else {
             setError(data.error || 'Login failed');
          }
@@ -29,6 +37,7 @@ const Login = () => {
          setError('Login failed');
       }
    };
+
 
    return (
       <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
