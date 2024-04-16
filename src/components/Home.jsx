@@ -3,7 +3,7 @@ import React from "react";
 function Home() {
   return (
     <div className="container mx-auto px-4">
-      <div className="bg-slate-300 mx-auto py-2" style={{ maxWidth: "700px" }}>
+      <div className="bg-slate-300 mx-auto py-2" style={{ maxWidth: "420px" }}>
         <div
           className="bg-blue-500 p-4 rounded-lg mx-auto"
           style={{ maxWidth: "640px" }}

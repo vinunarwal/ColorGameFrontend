@@ -7,7 +7,7 @@ function ColorPicker() {
   const [timer, setTimer] = useState(2); // 3 minutes in seconds
   const [id, setId] = useState(1234567890); // Initial ID
   const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
-  const [amount, setAmount] = useState(""); // State to store the input amount
+  // const [amount, setAmount] = useState(""); // State to store the input amount
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -77,9 +77,9 @@ function ColorPicker() {
     <div className="container mx-auto px-4">
       <div
         className="bg-slate-100 mx-auto py-2  "
-        style={{ maxWidth: "700px" }}
+        style={{ maxWidth: "420px" }}
       >
-        <div className="p-4 rounded-lg max-w-[640px] mx-auto ">
+        <div className="p-4 rounded-lg max-w-[420px] mx-auto ">
           <div className="flex justify-between w-full sm:w-auto mb-4 sm:mb-0">
             <h2 className="text-lg font-bold">Period</h2>
             <h2 className="text-lg font-bold">Count Down</h2>
