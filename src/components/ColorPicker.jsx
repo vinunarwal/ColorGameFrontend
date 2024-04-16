@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 
 function ColorPicker() {
-  const [timer, setTimer] = useState(180); // 3 minutes in seconds
+  const [timer, setTimer] = useState(2); // 3 minutes in seconds
   const [id, setId] = useState(1234567890); // Initial ID
   const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
   const [amount, setAmount] = useState(""); // State to store the input amount
@@ -14,7 +14,7 @@ function ColorPicker() {
       if (timer > 0) {
         setTimer(timer - 1); // Decrease timer by 1 second
       } else {
-        setTimer(180); // Restart the timer when it reaches 0 (3 minutes again)
+        setTimer(2); // Restart the timer when it reaches 0 (3 minutes again)
         setId((prevId) => prevId + 1); // Increment ID by 1
         setPeriodIds((prevIds) => [id, ...prevIds]); // Add current ID to periodIds array
       }
