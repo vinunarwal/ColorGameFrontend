@@ -5,33 +5,47 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import axios from "axios";
 
 function ColorPicker() {
-   const [timer, setTimer] = useState(180); 
-   const [id, setId] = useState(1234567890); 
-   const [periodIds, setPeriodIds] = useState([]); 
-   const [amount, setAmount] = useState("");
+   const [timer, setTimer] = useState(60); // 3 minutes in seconds
+   const [id, setId] = useState(1234567890); // Initial ID
+   const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
+   const [lowestBetNumber, setLowestBetNumber] = useState("");
+ 
 
    useEffect(() => {
       const interval = setInterval(() => {
-         if (timer > 0) {
-            setTimer(timer - 1);
-         } else {
-            setTimer(2);
-            setId((prevId) => prevId + 1);
-            setPeriodIds((prevIds) => [id, ...prevIds]); // Add current ID to periodIds array
-         }
+        if (timer > 0) {
+          setTimer(timer - 1);
+        } else {
+          setTimer(60);
+          setId((prevId) => prevId + 1);
+          updatePeriodIds(id); // Update periodIds with the new ID
+          fetchLowestBetNumber(id); // Fetch lowest bet number for the new period
+        }
       }, 1000);
 
       return () => clearInterval(interval);
    }, [timer]);
 
-   const minutes = Math.floor(timer / 60);
-   const seconds = timer % 60;
-   const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
+  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
-   // Function to handle updating periodIds in GameRecord component
-   const updatePeriodIds = (newId) => {
-      setPeriodIds((prevIds) => [...prevIds, newId]); // Add new ID to periodIds array
-   };
+  const fetchLowestBetNumber = (periodId) => {
+    axios
+      .get(`http://localhost:5000/lowest/${periodId}`)
+      .then((response) => {
+        const { lowestBetNumber } = response.data;
+        setLowestBetNumber(lowestBetNumber);
+      })
+      .catch((error) => {
+        console.error("Error fetching lowest bet number:", error);
+      });
+  };
+
+  // Function to handle updating periodIds in GameRecord component
+  const updatePeriodIds = (newId) => {
+    setPeriodIds((prevIds) => [...prevIds, newId]); // Add new ID to periodIds array
+  };
 
    const handleBet = (selection, periodId) => {
       let amount = 10; 
@@ -45,31 +59,31 @@ function ColorPicker() {
           <button id="increaseBy1000" class="swal2-confirm swal2-styled">+1000</button>
         </div>
       `,
-         focusConfirm: false,
-         showCancelButton: true,
-         cancelButtonText: 'Cancel',
-         preConfirm: () => {
-            amount = document.getElementById("amountInput").value;
-            if (!amount || amount < 10) {
-               Swal.showValidationMessage("Please enter a valid amount (min: 10)");
-            } else {
-               return amount;
-            }
-         },
-         didOpen: () => {
-            const increaseBy10Button = document.getElementById("increaseBy10");
-            const increaseBy100Button = document.getElementById("increaseBy100");
-            const increaseBy1000Button = document.getElementById("increaseBy1000");
+      focusConfirm: false,
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      preConfirm: () => {
+        amount = document.getElementById("amountInput").value;
+        if (!amount || amount < 10) {
+          Swal.showValidationMessage("Please enter a valid amount (min: 10)");
+        } else {
+          return amount;
+        }
+      },
+      didOpen: () => {
+        const increaseBy10Button = document.getElementById("increaseBy10");
+        const increaseBy100Button = document.getElementById("increaseBy100");
+        const increaseBy1000Button = document.getElementById("increaseBy1000");
 
-            increaseBy10Button.addEventListener("click", () => {
-               amount = parseInt(amount) + 10;
-               document.getElementById("amountInput").value = amount;
-            });
+        increaseBy10Button.addEventListener("click", () => {
+          amount = parseInt(amount) + 10;
+          document.getElementById("amountInput").value = amount;
+        });
 
-            increaseBy100Button.addEventListener("click", () => {
-               amount = parseInt(amount) + 100;
-               document.getElementById("amountInput").value = amount;
-            });
+        increaseBy100Button.addEventListener("click", () => {
+          amount = parseInt(amount) + 100;
+          document.getElementById("amountInput").value = amount;
+        });
 
             increaseBy1000Button.addEventListener("click", () => {
                amount = parseInt(amount) + 1000;
