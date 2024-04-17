@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 function Footer() {
   return (
-    // <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white">
     <div className="container fixed bottom-0 z-[10000] left-0 right-0 mx-auto px-4zz">
       <div className="bg-slate-400 mx-auto py-2 max-w-[420px]">
         <div className=" flex items-center justify-around px-4 mx-auto max-w-[640px]">
@@ -71,7 +70,6 @@ function Footer() {
         </div>
       </div>
     </div>
-    // </div>
   );
 }
 
