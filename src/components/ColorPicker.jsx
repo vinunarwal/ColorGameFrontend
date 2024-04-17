@@ -90,19 +90,6 @@ function ColorPicker() {
       });
    };
 
-
-   const determineWinning = () => {
-      axios.get('http://localhost:5000/number')
-         .then(response => {
-            const winningNumberColor = response.data.winningNumberColor;
-            Swal.fire("Winning Result!", `The winning number/color is: ${winningNumberColor}`, "success");
-         })
-         .catch(error => {
-            console.error('Error determining winning number/color:', error);
-            Swal.fire("Error!", "Failed to determine winning number/color. Please try again.", "error");
-         });
-   };
-
    return (
       <div className="container mx-auto px-4">
          <div
@@ -209,9 +196,6 @@ function ColorPicker() {
 
                   </div>
                </div>
-               {/*<button onClick={determineWinning} className="bg-blue-500 text-white py-2 px-4 rounded mt-4">
-                  Determine Winning
-               </button>*/}
             </div>
          </div>
          <GameRecord periodIds={periodIds} />
