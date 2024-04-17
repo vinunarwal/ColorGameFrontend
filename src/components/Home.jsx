@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -11,9 +12,9 @@ function Home() {
           <p className="text-white text-lg">Available Balance: 0.00</p>
           <div className="flex justify-between items-center">
             <div className="mt-4">
-              <button className="bg-green-500 text-white py-2 px-4 rounded mr-4">
+              <Link to ="/recharge" className="bg-green-500 text-white py-2 px-4 rounded mr-4">
                 Recharge
-              </button>
+              </Link>
               <button className="bg-white text-black py-2 px-4 rounded">
                 Read Rules
               </button>

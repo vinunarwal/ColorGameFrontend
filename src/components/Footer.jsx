@@ -6,7 +6,7 @@ function Footer() {
     <div className="container fixed bottom-0 z-[10000] left-0 right-0 mx-auto px-4zz">
       <div className="bg-slate-400 mx-auto py-2 max-w-[420px]">
         <div className=" flex items-center justify-around px-4 mx-auto max-w-[640px]">
-          <button className="flex flex-col items-center justify-center  text-white py-2 px-4 rounded">
+          <Link to ='/main' className="flex flex-col items-center justify-center  text-white py-2 px-4 rounded">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 mr-0"
@@ -20,8 +20,8 @@ function Footer() {
               />
             </svg>
             Home
-          </button>
-          <button className="flex flex-col items-center justify-center  text-white py-2 px-4 rounded">
+          </Link>
+          <Link to ='/recharge' className="flex flex-col items-center justify-center  text-white py-2 px-4 rounded">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 mr-0"
@@ -35,7 +35,7 @@ function Footer() {
               />
             </svg>
             Recharge
-          </button>
+          </Link>
           <button className="flex flex-col items-center justify-center text-white py-2 px-4 rounded">
             <svg
               xmlns="http://www.w3.org/2000/svg"

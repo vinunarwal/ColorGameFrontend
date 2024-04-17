@@ -2,27 +2,27 @@ import React, { useState, useEffect } from "react";
 import GameRecord from "./GameRecord";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
-import axios from "axios";
+import axios from "axios"; 
 
 function ColorPicker() {
-   const [timer, setTimer] = useState(2); // 3 minutes in seconds
+   const [timer, setTimer] = useState(180); // 3 minutes in seconds
    const [id, setId] = useState(1234567890); // Initial ID
    const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
-   const [amount, setAmount] = useState("");
+   const [amount, setAmount] = useState(""); 
 
    useEffect(() => {
       const interval = setInterval(() => {
          if (timer > 0) {
-            setTimer(timer - 1);
+            setTimer(timer - 1); 
          } else {
-            setTimer(2);
+            setTimer(180); 
             setId((prevId) => prevId + 1);
             setPeriodIds((prevIds) => [id, ...prevIds]); // Add current ID to periodIds array
          }
-      }, 1000);
+      }, 1000); 
 
-      return () => clearInterval(interval);
-   }, [timer]);
+      return () => clearInterval(interval); 
+   }, [timer]); 
 
    const minutes = Math.floor(timer / 60);
    const seconds = timer % 60;
@@ -33,8 +33,8 @@ function ColorPicker() {
       setPeriodIds((prevIds) => [...prevIds, newId]); // Add new ID to periodIds array
    };
 
-   const handleBet = (selection, periodId) => {
-      let amount = 10; 
+   const handleBet = (selection) => {
+      let amount = 10; // Initial amount
       Swal.fire({
          title: "Place Your Bet",
          html: `
@@ -78,7 +78,7 @@ function ColorPicker() {
          },
       }).then((result) => {
          if (result.isConfirmed) {
-            axios.post('http://localhost:5000/bet', { userId: 'yourUserId', amount, selection, periodId })
+            axios.post('http://localhost:5000/bet', { userId: 'yourUserId', amount, selection })
                .then(response => {
                   Swal.fire("Success!", `Your bet of ${amount} on ${selection} is placed.`, "success");
                })
@@ -120,19 +120,19 @@ function ColorPicker() {
                </div>
                <div className="flex justify-around mt-4">
                   <button
-                     onClick={() => handleBet('Green', id)}
+                     onClick={() => handleBet('Green')}
                      className="bg-green-500 text-white py-2 px-4 rounded"
                   >
                      Join Green
                   </button>
                   <button
-                     onClick={() => handleBet('Red', id)}
+                     onClick={() => handleBet('Red')}
                      className="bg-red-500 text-white py-2 px-4 rounded"
                   >
                      Join Red
                   </button>
                   <button
-                     onClick={() => handleBet('Violet', id)}
+                     onClick={() => handleBet('Violet')}
                      className="bg-purple-500 text-white py-2 px-4 rounded"
                   >
                      Join Violet
@@ -142,63 +142,60 @@ function ColorPicker() {
                   <div className="text-center">
                      <div className="flex justify-around mt-4">
                         <button
-                           onClick={() => handleBet('0', id)}
+                           onClick={() => handleBet('0')}
                            className="bg-gradient-to-r from-green-500 to-violet-500 text-white py-1 px-5 rounded"
                         >
                            0
                         </button>
                         <button
-                           onClick={() => handleBet('1', id)}
+                           onClick={() => handleBet('1')}
                            className="bg-green-500 text-white py-1 px-5 rounded"
                         >
                            1
                         </button>
                         <button
-                           onClick={() => handleBet('2', id)}
+                           onClick={() => handleBet('2')}
                            className="bg-red-500 text-white py-1 px-5 rounded"
                         >
                            2
                         </button>
                         <button
-                           onClick={() => handleBet('3', id)}
+                           onClick={() => handleBet('3')}
                            className="bg-green-500 text-white py-1 px-5 rounded"
                         >
                            3
                         </button>
                         <button
-                           onClick={() => handleBet('4', id)}
+                           onClick={() => handleBet('4')}
                            className="bg-red-500 text-white py-1 px-5 rounded"
                         >
                            4
                         </button>
                      </div>
-
                      <div className="flex justify-around mt-4">
-                        <button
-                           onClick={() => handleBet('5', id)}
-                           className="bg-gradient-to-r from-red-500 to-violet-500 text-white py-1 px-5 rounded">
+                        <button className="bg-gradient-to-r from-red-500 to-violet-500 text-white py-1 px-5 rounded">
                            5
                         </button>
                         <button
-                           onClick={() => handleBet('6', id)}
+                           onClick={() => handleBet('5')}
                            className="bg-red-500 text-white py-1 px-5 rounded"
                         >
                            6
                         </button>
                         <button
-                           onClick={() => handleBet('7', id)}
+                           onClick={() => handleBet('6')}
                            className="bg-green-500 text-white py-1 px-5 rounded"
                         >
                            7
                         </button>
                         <button
-                           onClick={() => handleBet('8', id)}
+                           onClick={() => handleBet('7')}
                            className="bg-red-500 text-white py-1 px-5 rounded"
                         >
                            8
                         </button>
                         <button
-                           onClick={() => handleBet('9', id)}
+                           onClick={() => handleBet('8')}
                            className="bg-green-500 text-white py-1 px-5 rounded"
                         >
                            9
