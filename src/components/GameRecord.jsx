@@ -1,6 +1,8 @@
+// GameRecord.jsx
+
 import React from "react";
 
-function GameRecord({ periodIds }) {
+function GameRecord({ periodIds, lowestBetNumber }) {
   return (
     <div className="container mx-auto">
       <div className="bg-slate-100 mx-auto py-4 max-w-[420px]">
@@ -22,7 +24,7 @@ function GameRecord({ periodIds }) {
                   <tr key={index}>
                     <td className="px-4 py-2">{id}</td>
                     <td className="px-4 py-2">Price data</td>
-                    <td className="px-4 py-2">Number data</td>
+                    <td className="px-4 py-2">{lowestBetNumber}</td>
                     <td className="px-4 py-2">Result data</td>
                   </tr>
                 ))}
