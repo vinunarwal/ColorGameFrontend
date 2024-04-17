@@ -5,7 +5,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import axios from "axios"; 
 
 function ColorPicker() {
-   const [timer, setTimer] = useState(2); // 3 minutes in seconds
+   const [timer, setTimer] = useState(180); // 3 minutes in seconds
    const [id, setId] = useState(1234567890); // Initial ID
    const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
    const [amount, setAmount] = useState(""); 
@@ -15,7 +15,7 @@ function ColorPicker() {
          if (timer > 0) {
             setTimer(timer - 1); 
          } else {
-            setTimer(2); 
+            setTimer(180); 
             setId((prevId) => prevId + 1);
             setPeriodIds((prevIds) => [id, ...prevIds]); // Add current ID to periodIds array
          }
