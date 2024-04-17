@@ -7,7 +7,7 @@ function Recharge() {
     return (
         <div>
             <div className=' mt-[40px]'>
-                <div className='content max-w-md mx-auto px-[12px] bg-slate-100'>
+                <div className='content max-w-[420px] mx-auto px-[12px] bg-slate-100'>
 
                     {/* Profile Secttion */}
                     <div className='pt-[12px] '>
@@ -45,7 +45,7 @@ function Recharge() {
                         </div>
                     </div>
 
-                    <p className=' font-bold text-xl my-[10px]'>Select Amount</p>
+                    <p className=' font-bold text-xl my-[10px] pl-5'>Select Amount</p>
 
                     {/* Select Amount Section */}
                     <div className='Select-Amonunt'>
@@ -67,34 +67,34 @@ function Recharge() {
                             </div>
 
                             <div className="flex justify-center">
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="flex flex-wrap justify-between">
                                     <div>
-                                        <button className="bg-amber-500 hover:bg-blue-700 text-white font-bold py-2 px-11 mx-8 mt-3 rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline">
                                             ₹200
                                         </button>
                                     </div>
                                     <div>
-                                        <button className="bg-amber-500 hover:bg-blue-700 text-white font-bold py-2 px-11 mx-8 mt-3 rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline">
                                             ₹300
                                         </button>
                                     </div>
                                     <div>
-                                        <button className="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-11 mx-8 rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
                                             ₹500
                                         </button>
                                     </div>
                                     <div>
-                                        <button className="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-10 mx-8 rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
                                             ₹1000
                                         </button>
                                     </div>
                                     <div>
-                                        <button className="bg-lime-500 hover:bg-blue-700 text-white font-bold py-2 px-10 mx-8 rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
                                             ₹2000
                                         </button>
                                     </div>
                                     <div>
-                                        <button className="bg-lime-500 hover:bg-blue-700 text-white font-bold py-2 px-10 mx-8 rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
                                             ₹4000
                                         </button>
                                     </div>
