@@ -5,7 +5,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import axios from "axios"; 
 
 function ColorPicker() {
-   const [timer, setTimer] = useState(180); // 3 minutes in seconds
+   const [timer, setTimer] = useState(2); // 3 minutes in seconds
    const [id, setId] = useState(1234567890); // Initial ID
    const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
    const [amount, setAmount] = useState(""); 
@@ -15,7 +15,7 @@ function ColorPicker() {
          if (timer > 0) {
             setTimer(timer - 1); 
          } else {
-            setTimer(180); 
+            setTimer(2); 
             setId((prevId) => prevId + 1);
             setPeriodIds((prevIds) => [id, ...prevIds]); // Add current ID to periodIds array
          }
@@ -90,18 +90,6 @@ function ColorPicker() {
       });
    };
 
-
-   const determineWinning = () => {
-      axios.get('http://localhost:5000/number')
-         .then(response => {
-            const winningNumberColor = response.data.winningNumberColor;
-            Swal.fire("Winning Result!", `The winning number/color is: ${winningNumberColor}`, "success");
-         })
-         .catch(error => {
-            console.error('Error determining winning number/color:', error);
-            Swal.fire("Error!", "Failed to determine winning number/color. Please try again.", "error");
-         });
-   };
 
    return (
       <div className="container mx-auto px-4">

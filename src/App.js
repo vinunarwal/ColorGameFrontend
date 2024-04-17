@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import ProfilePage from "./components/ProfilePage";
 import Recharge from "./components/Recharge"
-import Footer  from "./components/Footer";
 
 function App() {
   return (
@@ -19,7 +18,6 @@ function App() {
           <Route path="/ProfilePage" element={<ProfilePage />} />
           <Route path="/recharge" element={<Recharge />} />
         </Routes>
-        <Footer />
       </Router>
     </>
   );
