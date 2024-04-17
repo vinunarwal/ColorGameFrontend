@@ -2,42 +2,55 @@ import React, { useState, useEffect } from "react";
 import GameRecord from "./GameRecord";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
-import axios from "axios"; 
+import axios from "axios";
 
 function ColorPicker() {
-   const [timer, setTimer] = useState(180); // 3 minutes in seconds
-   const [id, setId] = useState(1234567890); // Initial ID
-   const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
-   const [amount, setAmount] = useState(""); 
+  const [timer, setTimer] = useState(180); // 3 minutes in seconds
+  const [id, setId] = useState(1234567890); // Initial ID
+  const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
+  const [lowestBetNumber, setLowestBetNumber] = useState("");
 
-   useEffect(() => {
-      const interval = setInterval(() => {
-         if (timer > 0) {
-            setTimer(timer - 1); 
-         } else {
-            setTimer(180); 
-            setId((prevId) => prevId + 1);
-            setPeriodIds((prevIds) => [id, ...prevIds]); // Add current ID to periodIds array
-         }
-      }, 1000); 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (timer > 0) {
+        setTimer(timer - 1);
+      } else {
+        setTimer(180);
+        setId((prevId) => prevId + 1);
+        updatePeriodIds(id); // Update periodIds with the new ID
+        fetchLowestBetNumber(id); // Fetch lowest bet number for the new period
+      }
+    }, 1000);
 
-      return () => clearInterval(interval); 
-   }, [timer]); 
+    return () => clearInterval(interval);
+  }, [timer]);
 
-   const minutes = Math.floor(timer / 60);
-   const seconds = timer % 60;
-   const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
+  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
-   // Function to handle updating periodIds in GameRecord component
-   const updatePeriodIds = (newId) => {
-      setPeriodIds((prevIds) => [...prevIds, newId]); // Add new ID to periodIds array
-   };
+  const fetchLowestBetNumber = (periodId) => {
+    axios
+      .get(`http://localhost:5000/lowest/${periodId}`)
+      .then((response) => {
+        const { lowestBetNumber } = response.data;
+        setLowestBetNumber(lowestBetNumber);
+      })
+      .catch((error) => {
+        console.error("Error fetching lowest bet number:", error);
+      });
+  };
 
-   const handleBet = (selection) => {
-      let amount = 10; // Initial amount
-      Swal.fire({
-         title: "Place Your Bet",
-         html: `
+  // Function to handle updating periodIds in GameRecord component
+  const updatePeriodIds = (newId) => {
+    setPeriodIds((prevIds) => [...prevIds, newId]); // Add new ID to periodIds array
+  };
+
+  const handleBet = (selection) => {
+    let amount = 10; // Initial amount
+    Swal.fire({
+      title: "Place Your Bet",
+      html: `
         <input id="amountInput" type="number" placeholder="Enter Amount (min: 10)" class="swal2-input" value="10" min="10">
         <div class="flex justify-around mt-4">
           <button id="increaseBy10" class="swal2-confirm swal2-styled">+10</button>
@@ -45,175 +58,169 @@ function ColorPicker() {
           <button id="increaseBy1000" class="swal2-confirm swal2-styled">+1000</button>
         </div>
       `,
-         focusConfirm: false,
-         showCancelButton: true,
-         cancelButtonText: 'Cancel',
-         preConfirm: () => {
-            amount = document.getElementById("amountInput").value;
-            if (!amount || amount < 10) {
-               Swal.showValidationMessage("Please enter a valid amount (min: 10)");
-            } else {
-               return amount;
-            }
-         },
-         didOpen: () => {
-            const increaseBy10Button = document.getElementById("increaseBy10");
-            const increaseBy100Button = document.getElementById("increaseBy100");
-            const increaseBy1000Button = document.getElementById("increaseBy1000");
+      focusConfirm: false,
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      preConfirm: () => {
+        amount = document.getElementById("amountInput").value;
+        if (!amount || amount < 10) {
+          Swal.showValidationMessage("Please enter a valid amount (min: 10)");
+        } else {
+          return amount;
+        }
+      },
+      didOpen: () => {
+        const increaseBy10Button = document.getElementById("increaseBy10");
+        const increaseBy100Button = document.getElementById("increaseBy100");
+        const increaseBy1000Button = document.getElementById("increaseBy1000");
 
-            increaseBy10Button.addEventListener("click", () => {
-               amount = parseInt(amount) + 10;
-               document.getElementById("amountInput").value = amount;
-            });
+        increaseBy10Button.addEventListener("click", () => {
+          amount = parseInt(amount) + 10;
+          document.getElementById("amountInput").value = amount;
+        });
 
-            increaseBy100Button.addEventListener("click", () => {
-               amount = parseInt(amount) + 100;
-               document.getElementById("amountInput").value = amount;
-            });
+        increaseBy100Button.addEventListener("click", () => {
+          amount = parseInt(amount) + 100;
+          document.getElementById("amountInput").value = amount;
+        });
 
-            increaseBy1000Button.addEventListener("click", () => {
-               amount = parseInt(amount) + 1000;
-               document.getElementById("amountInput").value = amount;
-            });
-         },
-      }).then((result) => {
-         if (result.isConfirmed) {
-            axios.post('http://localhost:5000/bet', { userId: 'yourUserId', amount, selection })
-               .then(response => {
-                  Swal.fire("Success!", `Your bet of ${amount} on ${selection} is placed.`, "success");
-               })
-               .catch(error => {
-                  console.error('Error placing bet:', error);
-                  Swal.fire("Error!", "Failed to place bet. Please try again.", "error");
-               });
-         }
-      });
-   };
+        increaseBy1000Button.addEventListener("click", () => {
+          amount = parseInt(amount) + 1000;
+          document.getElementById("amountInput").value = amount;
+        });
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post("http://localhost:5000/bet", {
+            userId: "yourUserId",
+            amount,
+            selection,
+          })
+          .then((response) => {
+            Swal.fire(
+              "Success!",
+              `Your bet of ${amount} on ${selection} is placed.`,
+              "success"
+            );
+          })
+          .catch((error) => {
+            console.error("Error placing bet:", error);
+            Swal.fire(
+              "Error!",
+              "Failed to place bet. Please try again.",
+              "error"
+            );
+          });
+      }
+    });
+  };
 
-
-   const determineWinning = () => {
-      axios.get('http://localhost:5000/number')
-         .then(response => {
-            const winningNumberColor = response.data.winningNumberColor;
-            Swal.fire("Winning Result!", `The winning number/color is: ${winningNumberColor}`, "success");
-         })
-         .catch(error => {
-            console.error('Error determining winning number/color:', error);
-            Swal.fire("Error!", "Failed to determine winning number/color. Please try again.", "error");
-         });
-   };
-
-   return (
-      <div className="container mx-auto px-4">
-         <div
-            className="bg-slate-100 mx-auto py-2  "
-            style={{ maxWidth: "420px" }}
-         >
-            <div className="p-4 rounded-lg max-w-[640px] mx-auto ">
-               <div className="flex justify-between w-full sm:w-auto mb-4 sm:mb-0">
-                  <h2 className="text-lg font-bold">Period</h2>
-                  <h2 className="text-lg font-bold">Count Down</h2>
-               </div>
-               <div className="flex justify-between w-full sm:w-auto">
-                  <h2 className="text-lg font-medium">ID: {id}</h2>
-                  <h2 className="text-lg font-medium">{`0${minutes}:${formattedSeconds}`}</h2>
-               </div>
-               <div className="flex justify-around mt-4">
-                  <button
-                     onClick={() => handleBet('Green')}
-                     className="bg-green-500 text-white py-2 px-4 rounded"
-                  >
-                     Join Green
-                  </button>
-                  <button
-                     onClick={() => handleBet('Red')}
-                     className="bg-red-500 text-white py-2 px-4 rounded"
-                  >
-                     Join Red
-                  </button>
-                  <button
-                     onClick={() => handleBet('Violet')}
-                     className="bg-purple-500 text-white py-2 px-4 rounded"
-                  >
-                     Join Violet
-                  </button>
-               </div>
-               <div>
-                  <div className="text-center">
-                     <div className="flex justify-around mt-4">
-                        <button
-                           onClick={() => handleBet('0')}
-                           className="bg-gradient-to-r from-green-500 to-violet-500 text-white py-1 px-5 rounded"
-                        >
-                           0
-                        </button>
-                        <button
-                           onClick={() => handleBet('1')}
-                           className="bg-green-500 text-white py-1 px-5 rounded"
-                        >
-                           1
-                        </button>
-                        <button
-                           onClick={() => handleBet('2')}
-                           className="bg-red-500 text-white py-1 px-5 rounded"
-                        >
-                           2
-                        </button>
-                        <button
-                           onClick={() => handleBet('3')}
-                           className="bg-green-500 text-white py-1 px-5 rounded"
-                        >
-                           3
-                        </button>
-                        <button
-                           onClick={() => handleBet('4')}
-                           className="bg-red-500 text-white py-1 px-5 rounded"
-                        >
-                           4
-                        </button>
-                     </div>
-                     <div className="flex justify-around mt-4">
-                        <button className="bg-gradient-to-r from-red-500 to-violet-500 text-white py-1 px-5 rounded">
-                           5
-                        </button>
-                        <button
-                           onClick={() => handleBet('5')}
-                           className="bg-red-500 text-white py-1 px-5 rounded"
-                        >
-                           6
-                        </button>
-                        <button
-                           onClick={() => handleBet('6')}
-                           className="bg-green-500 text-white py-1 px-5 rounded"
-                        >
-                           7
-                        </button>
-                        <button
-                           onClick={() => handleBet('7')}
-                           className="bg-red-500 text-white py-1 px-5 rounded"
-                        >
-                           8
-                        </button>
-                        <button
-                           onClick={() => handleBet('8')}
-                           className="bg-green-500 text-white py-1 px-5 rounded"
-                        >
-                           9
-                        </button>
-
-
-                     </div>
-
-                  </div>
-               </div>
-               {/*<button onClick={determineWinning} className="bg-blue-500 text-white py-2 px-4 rounded mt-4">
-                  Determine Winning
-               </button>*/}
+  return (
+    <div className="container mx-auto px-4">
+      <div
+        className="bg-slate-100 mx-auto py-2  "
+        style={{ maxWidth: "420px" }}
+      >
+        <div className="p-4 rounded-lg max-w-[640px] mx-auto ">
+          <div className="flex justify-between w-full sm:w-auto mb-4 sm:mb-0">
+            <h2 className="text-lg font-bold">Period</h2>
+            <h2 className="text-lg font-bold">Count Down</h2>
+          </div>
+          <div className="flex justify-between w-full sm:w-auto">
+            <h2 className="text-lg font-medium">ID: {id}</h2>
+            <h2 className="text-lg font-medium">{`0${minutes}:${formattedSeconds}`}</h2>
+          </div>
+          <div className="flex justify-around mt-4">
+            <button
+              onClick={() => handleBet("Green")}
+              className="bg-green-500 text-white py-2 px-4 rounded"
+            >
+              Join Green
+            </button>
+            <button
+              onClick={() => handleBet("Red")}
+              className="bg-red-500 text-white py-2 px-4 rounded"
+            >
+              Join Red
+            </button>
+            <button
+              onClick={() => handleBet("Violet")}
+              className="bg-purple-500 text-white py-2 px-4 rounded"
+            >
+              Join Violet
+            </button>
+          </div>
+          <div>
+            <div className="text-center">
+              <div className="flex justify-around mt-4">
+                <button
+                  onClick={() => handleBet("0")}
+                  className="bg-gradient-to-r from-green-500 to-violet-500 text-white py-1 px-5 rounded"
+                >
+                  0
+                </button>
+                <button
+                  onClick={() => handleBet("1")}
+                  className="bg-green-500 text-white py-1 px-5 rounded"
+                >
+                  1
+                </button>
+                <button
+                  onClick={() => handleBet("2")}
+                  className="bg-red-500 text-white py-1 px-5 rounded"
+                >
+                  2
+                </button>
+                <button
+                  onClick={() => handleBet("3")}
+                  className="bg-green-500 text-white py-1 px-5 rounded"
+                >
+                  3
+                </button>
+                <button
+                  onClick={() => handleBet("4")}
+                  className="bg-red-500 text-white py-1 px-5 rounded"
+                >
+                  4
+                </button>
+              </div>
+              <div className="flex justify-around mt-4">
+                <button className="bg-gradient-to-r from-red-500 to-violet-500 text-white py-1 px-5 rounded">
+                  5
+                </button>
+                <button
+                  onClick={() => handleBet("5")}
+                  className="bg-red-500 text-white py-1 px-5 rounded"
+                >
+                  6
+                </button>
+                <button
+                  onClick={() => handleBet("6")}
+                  className="bg-green-500 text-white py-1 px-5 rounded"
+                >
+                  7
+                </button>
+                <button
+                  onClick={() => handleBet("7")}
+                  className="bg-red-500 text-white py-1 px-5 rounded"
+                >
+                  8
+                </button>
+                <button
+                  onClick={() => handleBet("8")}
+                  className="bg-green-500 text-white py-1 px-5 rounded"
+                >
+                  9
+                </button>
+              </div>
             </div>
-         </div>
-         <GameRecord periodIds={periodIds} />
+          </div>
+        </div>
       </div>
-   );
+      <GameRecord periodIds={periodIds} />
+    </div>
+  );
 }
 
 export default ColorPicker;
