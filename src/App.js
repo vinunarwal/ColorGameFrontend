@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import MainPage from "./components/MainPage";
 import ProfilePage from "./components/ProfilePage";
+import Footer from "./components/Footer";
 
 function App() {
   return (
