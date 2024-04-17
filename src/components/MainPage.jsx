@@ -10,8 +10,6 @@ function MainPage() {
     <Home />
     <MidHeader />
     <ColorPicker />
-    <Footer />
-      
     </>
   )
 }
