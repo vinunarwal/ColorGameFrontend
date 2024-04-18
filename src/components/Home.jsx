@@ -39,7 +39,7 @@ function Home() {
               </button>
               {isOpen && (
                 <div className="fixed inset-0 z-[1000000]  flex items-center justify-center bg-gray-500 bg-opacity-75">
-                  <div className="bg-white max-w-[400px] mx-auto rounded-lg p-4 max-w-md">
+                  <div className="bg-white max-w-[420px] mx-auto rounded-lg p-4">
                     <h2 className="text-md font-bold mb-4">Rules</h2>
                     <p className="">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
