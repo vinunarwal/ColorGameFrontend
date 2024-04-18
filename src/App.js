@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import ProfilePage from "./components/ProfilePage";
 import Recharge from "./components/Recharge"
-import Footer  from "./components/Footer";
 import Address from "./components/Address";
 import AddAddress from "./components/AddAddress";
 
@@ -23,7 +22,6 @@ function App() {
           <Route path="/Address" element={<Address />} />
           <Route path="/AddAddress" element={<AddAddress />} />
         </Routes>
-        {/* <Footer /> */}
       </Router>
     </>
   );
