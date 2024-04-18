@@ -10,6 +10,7 @@ import bankcard from "../assets/images/svg/bankcard.svg";
 import complaints from "../assets/images/svg/complaints.svg";
 import appdownload from "../assets/images/svg/appdownload.svg";
 import wallet from "../assets/images/svg/wallet.svg";
+import Footer from "./Footer";
 const ProfilePage = () => {
   const navigate = useNavigate();
 
@@ -106,6 +107,7 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };
