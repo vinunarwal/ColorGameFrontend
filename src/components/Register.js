@@ -109,7 +109,7 @@ const RegistrationPage = () => {
                </form>
                {error && <p className="text-red-500 text-center">{error}</p>}
             </div>
-            <p className="text-center text-gray-600 my-4">Already registered? <Link to="/Login" className="text-indigo-600 hover:underline">Login here</Link>.</p>
+            <p className="text-center text-gray-600 my-4">Already registered? <Link to="/" className="text-indigo-600 hover:underline">Login here</Link>.</p>
          </div>
       </div>
    );

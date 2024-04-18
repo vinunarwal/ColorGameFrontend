@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Footer from "./Footer";
-import RulesPopup from "./RulesPopup";
 
 function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +45,6 @@ function Home() {
                       scelerisque dolor efficitur.
                     </p>
                     <div className="text-center">
-                      {" "}
                       <button
                         className=" mr-4 mt-2 text-sm bg-[red] rounded-md px-[20px] py-[7px] text-white"
                         onClick={closePopup}

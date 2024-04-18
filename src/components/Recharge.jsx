@@ -4,6 +4,7 @@ import Bankicon from '../Images/bank-icon.png';
 import Ruppees from '../Images/ruppes-icon.png';
 import { jwtDecode } from 'jwt-decode';
 import Footer from './Footer';
+import { Link } from 'react-router-dom';
 
 
 function Recharge() {
@@ -53,7 +54,7 @@ function Recharge() {
                             <div className=' flex justify-center items-center'>
                                 <div className='icon mr-5'>🔔</div>
                                 <div className='Profile'>
-                                    <img className=' w-8' src={Icon} alt='not found' />
+                                    <Link to ="/ProfilePage"><img className=' w-8' src={Icon} alt='not found' /></Link>
                                 </div>
                             </div>
                         </div>

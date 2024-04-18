@@ -80,9 +80,12 @@ const ProfilePage = () => {
           <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
             <img src={wallet} alt="wallet" /> <p className="ps-2">Wallet</p>
           </div>
-          <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
+          <Link
+            to="/Address"
+            className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] "
+          >
             <img src={address} alt="ADDRESS" /> <p className="ps-2">Address</p>
-          </div>
+          </Link>
           <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
             <img src={appdownload} alt="app" />{" "}
             <p className="ps-2">App Download</p>
