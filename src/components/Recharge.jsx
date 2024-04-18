@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react';
 import Icon from '../Images/Icon-color.png';
 import Bankicon from '../Images/bank-icon.png';
 import Ruppees from '../Images/ruppes-icon.png';
 
 function Recharge() {
+
+    const [amount, setAmount] = useState(""); // State to store the input amount
+
+    // Function to handle button clicks and update the input amount
+    const handleAmountClick = (amountValue) => {
+        setAmount(amountValue);
+    };
     return (
         <div>
             <div className=' mt-[40px]'>
@@ -54,10 +61,14 @@ function Recharge() {
                             <div className='flex justify-center px-[10px] rtl relative mx-[16px] mb-5'>
                                 <input
                                     type="number"
-                                    className="rounded-lg block w-full px-4 py-2 text-gray-700 bg-white focus:border-white focus:outline-none focus:ring focus:ring-white-200 pl-12"
+                                    className=" outline-black rounded-lg block w-full px-4 py-2 text-gray-700 bg-white  pl-12"
                                     placeholder="Enter amount"
-                                />
-                                <img className='absolute top-0 left-3 w-11 h-10 rounded-s-lg' src={Ruppees} alt="not found rounded-md" />
+                                    value={amount} // Use the state value for the input
+                                    onChange={(e) => setAmount(e.target.value)} // Update the state on input change
+                                    min="100" // Minimum amount set to 100
+                                    max="100000"
+                                /> 
+                                <img className='absolute top-1 left-3 w-11 h-8 rounded-s-lg' src={Ruppees} alt="not found rounded-md" />
                             </div>
 
                             <div className="flex items-center justify-center">
@@ -69,32 +80,38 @@ function Recharge() {
                             <div className="flex justify-center">
                                 <div className="flex flex-wrap justify-between">
                                     <div>
-                                        <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline" 
+                                        onClick={() => handleAmountClick("200")}>
                                             ₹200
                                         </button>
                                     </div>
                                     <div>
-                                        <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline"
+                                        onClick={() => handleAmountClick("300")}>
                                             ₹300
                                         </button>
                                     </div>
                                     <div>
-                                        <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                        onClick={() => handleAmountClick("500")}>
                                             ₹500
                                         </button>
                                     </div>
                                     <div>
-                                        <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                        onClick={() => handleAmountClick("1000")}>
                                             ₹1000
                                         </button>
                                     </div>
                                     <div>
-                                        <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                        onClick={() => handleAmountClick("2000")}>
                                             ₹2000
                                         </button>
                                     </div>
                                     <div>
-                                        <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
+                                        <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                        onClick={() => handleAmountClick("4000")}>
                                             ₹4000
                                         </button>
                                     </div>
