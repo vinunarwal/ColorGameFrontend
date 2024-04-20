@@ -7,9 +7,10 @@ import Footer from './Footer'
 function MainPage() {
   return (
     <>
-    <Home />
-    <MidHeader />
-    <ColorPicker />
+      <Home />
+      <MidHeader />
+      <ColorPicker />
+      <Footer/>
     </>
   )
 }

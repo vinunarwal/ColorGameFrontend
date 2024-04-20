@@ -1,119 +1,265 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import Icon from '../Images/Icon-color.png';
 import Bankicon from '../Images/bank-icon.png';
 import Ruppees from '../Images/ruppes-icon.png';
+import { jwtDecode } from 'jwt-decode';
+import Footer from './Footer';
+import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import axios from 'axios';
 
 function Recharge() {
-    return (
-        <div>
-            <div className=' mt-[40px]'>
-                <div className='content max-w-[420px] mx-auto px-[12px] bg-slate-100'>
+   const [greeting, setGreeting] = useState('');
+   const [username, setUsername] = useState('');
+   const [amount, setAmount] = useState('');
+   const [transactionId, setTransactionId] = useState('');
+   const [platform, setPlatform] = useState('');
+   const [showMessage, setShowMessage] = useState(false);
+   const [submitClicked, setSubmitClicked] = useState(false);
+   const [userId, setUserId] = useState("");
 
-                    {/* Profile Secttion */}
-                    <div className='pt-[12px] '>
-                        <div className='Header mb-5 flex py-[8px] rounded-xl justify-between mx-[40px] px-[12px] bg-white '>
-                            <div className='User'>
-                                <div className='text-gray-500 text-xs'>Hello, Good Morning</div>
-                                <div className=' font-bold text-sm'>Vivek Prajapati</div>
-                            </div>
-                            <div className=' flex justify-center items-center'>
-                                <div className='icon mr-5'>🔔</div>
-                                <div className='Profile'>
-                                    <img className=' w-8' src={Icon} alt='not found' />
-                                </div>
-                            </div>
+   useEffect(() => {
+      const currentHour = new Date().getHours();
+      if (currentHour >= 6 && currentHour < 12) {
+         setGreeting('Good Morning');
+      } else if (currentHour >= 12 && currentHour < 18) {
+         setGreeting('Good Afternoon');
+      } else {
+         setGreeting('Good Evening');
+      }
+
+      const token = localStorage.getItem('token');
+      if (token) {
+         const decodedToken = jwtDecode(token);
+         setUsername(decodedToken.username || decodedToken.email);
+         setUserId(decodedToken.userId); 
+      }
+   }, []);
+
+   const handleAmountClick = (amountValue) => {
+      setAmount(amountValue);
+   };
+
+   const handleRecharge = () => {
+      if (!amount) {
+         Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please enter the recharge amount!',
+         });
+         return;
+      }
+
+      const qrCodeHtml = `
+          <div style="display: flex; flex-direction: column; align-items: center;">
+              <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?data=Amount:${amount}&size=150x150" alt="QR Code">
+              </div>
+              <p style="text-align: center; margin-top: 10px;">Scan and Pay</p>
+          </div>
+      `;
+      Swal.fire({
+         title: 'QR Code',
+         html: qrCodeHtml,
+         showCloseButton: true,
+         showConfirmButton: false,
+         customClass: {
+            popup: 'center-popup'
+         }
+      });
+   };
+
+
+   const handleSubmit = async (e) => {
+      e.preventDefault();
+      setSubmitClicked(true);
+      if (!amount || !transactionId || !platform) {
+         return;
+      }
+      try {
+         const response = await axios.post('http://localhost:5000/transaction', { transactionId, platform, amount });
+         if (response.status === 200 || response.status === 201) {
+            setShowMessage(true);
+            console.log('Transaction details saved successfully');
+            // Clear input fields after successful submission
+            setTransactionId('');
+            setPlatform('');
+            setAmount('');
+         } else {
+            console.error('Failed to save transaction details');
+         }
+      } catch (error) {
+         console.error('Error while saving transaction details:', error);
+      }
+   };
+
+
+   return (
+      <div>
+         <div className=' mt-[40px]'>
+            <div className='content max-w-[420px] mx-auto px-[12px] bg-slate-100'>
+
+               {/* Profile Secttion */}
+               <div className='pt-[12px] '>
+                  <div className='Header mb-5 flex py-[8px] rounded-xl justify-between mx-[40px] px-[12px] bg-white '>
+                     <div className='User'>
+                        <div className='text-gray-500 text-xs'>Hello, {greeting}</div>
+                        <div className=' font-bold text-sm'>{username}</div>
+                     </div>
+                     <div className=' flex justify-center items-center'>
+                        <div className='icon mr-5'>🔔</div>
+                        <div className='Profile'>
+                           <Link to="/ProfilePage"><img className=' w-8' src={Icon} alt='not found' /></Link>
                         </div>
-                    </div>
+                     </div>
+                  </div>
+               </div>
 
-                    {/* Total Balance Section */}
-                    <div className='bg-white rounded-lg mx-[15px]'>
-                        <div className='flex justify-between mx-[30px] py-[10px]'>
-                            <div className='bank-img'>
-                                <img className=' w-20 h-13' src={Bankicon} alt="not found" />
-                            </div>
-                            <div className='Total-balance'>
-                                <div>
-                                    <text className=' text-gray-400'>Total Balance</text>
-                                </div>
-                                <div>
-                                    <h2 className=' text-blue-600'>Rs. <span>2,902.54</span></h2>
-                                </div>
-                                <div>
-                                    <text className=' text-gray-400'>ID: <span>61acfede230f7</span></text>
-                                </div>
-                            </div>
+               {/* Total Balance Section */}
+               <div className='bg-white rounded-lg mx-[15px]'>
+                  <div className='flex justify-between mx-[30px] py-[10px]'>
+                     <div className='bank-img'>
+                        <img className=' w-20 h-13' src={Bankicon} alt="not found" />
+                     </div>
+                     <div className='Total-balance'>
+                        <div>
+                           <text className=' text-gray-400'>Total Balance</text>
                         </div>
-                    </div>
+                        <div>
+                           <h2 className=' text-blue-600'>Rs. <span>0</span></h2>
+                        </div>
+                        <div>
+                           <text className=' text-gray-400'>ID: <span>{userId}</span></text>
+                        </div>
+                     </div>
+                  </div>
+               </div>
 
-                    <p className=' font-bold text-xl my-[10px] pl-5'>Select Amount</p>
+               <p className=' font-bold text-xl my-[10px] pl-5'>Select Amount</p>
 
-                    {/* Select Amount Section */}
-                    <div className='Select-Amonunt'>
-                        <div className='enteramount'>
+               {/* Select Amount Section */}
+               <div className='Select-Amonunt'>
+                  <div className='enteramount'>
 
-                            <div className='flex justify-center px-[10px] rtl relative mx-[16px] mb-5'>
-                                <input
-                                    type="number"
-                                    className="rounded-lg block w-full px-4 py-2 text-gray-700 bg-white focus:border-white focus:outline-none focus:ring focus:ring-white-200 pl-12"
-                                    placeholder="Enter amount"
-                                />
-                                <img className='absolute top-0 left-3 w-11 h-10 rounded-s-lg' src={Ruppees} alt="not found rounded-md" />
-                            </div>
+                     <div className='flex justify-center px-[10px] rtl relative mx-[16px] mb-5'>
+                        <input
+                           type="number"
+                           className=" outline-black rounded-lg block w-full px-4 py-2 text-gray-700 bg-white  pl-12"
+                           placeholder="Enter amount..."
+                           value={amount}
+                           required
+                           onChange={(e) => setAmount(e.target.value)}
+                           min="100"
+                           max="100000"
+                        />
+                        <img className='absolute top-1 left-3 w-11 h-8 rounded-s-lg' src={Ruppees} alt="not found rounded-md" />
+                     </div>
 
-                            <div className="flex items-center justify-center">
-                                <hr className="w-full border-gray-400 border-t-2 mx-4" />
-                                <span className="text-gray-400">OR</span>
-                                <hr className="w-full border-gray-400 border-t-2 mx-4" />
-                            </div>
+                     <div className="flex items-center justify-center">
+                        <hr className="w-full border-gray-400 border-t-2 mx-4" />
+                        <span className="text-gray-400">OR</span>
+                        <hr className="w-full border-gray-400 border-t-2 mx-4" />
+                     </div>
 
-                            <div className="flex justify-center">
-                                <div className="flex flex-wrap justify-between">
-                                    <div>
-                                        <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline">
-                                            ₹200
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline">
-                                            ₹300
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
-                                            ₹500
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
-                                            ₹1000
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
-                                            ₹2000
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline">
-                                            ₹4000
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                     <div className="flex justify-center">
+                        <div className="flex flex-wrap justify-between">
+                           <div>
+                              <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("200")}>
+                                 ₹200
+                              </button>
+                           </div>
+                           <div>
+                              <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("300")}>
+                                 ₹300
+                              </button>
+                           </div>
+                           <div>
+                              <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("500")}>
+                                 ₹500
+                              </button>
+                           </div>
+                           <div>
+                              <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("1000")}>
+                                 ₹1000
+                              </button>
+                           </div>
+                           <div>
+                              <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("2000")}>
+                                 ₹2000
+                              </button>
+                           </div>
+                           <div>
+                              <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("4000")}>
+                                 ₹4000
+                              </button>
+                           </div>
+                        </div>
+                     </div>
 
-                            <div className="flex justify-center mt-5 pb-5">
-                                <button className=" bg-sky-500 hover:bg-rose-600 text-white text-lg font-bold py-3 px-20 rounded-lg focus:outline-none focus:shadow-outline">
-                                    Recharge
-                                </button>
-                            </div>
+                     <div className="flex justify-center mt-5 pb-5">
+                        <button className="bg-sky-500 hover:bg-rose-600 duration-300 text-white text-lg font-bold py-3 px-20 rounded-lg focus:outline-none focus:shadow-outline" onClick={handleRecharge}>
+                           Recharge
+                        </button>
+                     </div>
+
+                     {/* Text and input fields for transaction ID and platform */}
+
+                     <div className="flex flex-col justify-center mt-4">
+                        <p className="text-center text-gray-600 mb-2">After payment, enter your transaction ID and platform:</p>
+                        <div className="flex items-center justify-center">
+                           <input type="text"
+                              placeholder="Transaction ID *"
+                              className="border border-gray-300 rounded-md px-3 py-2 mr-2 focus:outline-none"
+                              value={transactionId}
+                              required
+                              onChange={(e) => setTransactionId(e.target.value)}
+                           />
+
+                           <input type="text"
+                              placeholder="Platform.. Eg. Paytm *"
+                              className="border border-gray-300 rounded-md px-3 py-2 mr-2  focus:outline-none"
+                              value={platform}
+                              required
+                              onChange={(e) => setPlatform(e.target.value)}
+                           />
 
                         </div>
-                    </div>
 
-                </div>
+                        {submitClicked && (!transactionId || !platform) && (
+                           <p className="text-red-500 text-sm">Transaction ID, Platform & Amount are mandatory *</p>
+                        )}
+
+                        <button className="bg-sky-500 hover:bg-rose-600 text-white font-bold py-2 px-6 rounded-md my-2 focus:outline-none"
+                           onClick={handleSubmit}>
+                           Submit</button>
+                     </div>
+                     <div>
+                        {showMessage && ( // Render message if showMessage is true
+                           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mb-1 rounded relative" role="alert">
+                              <span className="block sm:inline"> Transaction details saved successfully.</span>
+                              <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                 <svg onClick={() => setShowMessage(false)} className="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.35 14.35a1 1 0 0 1-1.41 0L10 11.41l-2.93 2.93a1 1 0 1 1-1.41-1.41L8.59 10 5.66 7.07a1 1 0 0 1 1.41-1.41L10 8.59l2.93-2.93a1 1 0 0 1 1.41 1.41L11.41 10l2.93 2.93a1 1 0 0 1 0 1.42z" /></svg>
+                              </span>
+                           </div>
+                        )}
+                     </div>
+
+
+                  </div>
+               </div>
+
             </div>
-        </div>
-    )
+         </div>
+
+         <Footer />
+      </div>
+   );
 }
 
 export default Recharge;

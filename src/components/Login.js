@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const Login = () => {
    const [formData, setFormData] = useState({
-      email: '',
+      username: '',
       password: ''
    });
 
@@ -46,17 +46,17 @@ const Login = () => {
             <div className="mt-8 bg-gray-100 py-8 px-4 shadow rounded-lg sm:px-10">
                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div>
-                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                        Email address
+                     <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                     Username
                      </label>
                      <div className="mt-1">
                         <input
-                           id="email"
-                           name="email"
-                           type="email"
-                           autoComplete="email"
-                           placeholder='Enter your mail...'
-                           value={formData.email}
+                           id="username"
+                           name="username"
+                           type="text"
+                           autoComplete="username"
+                           placeholder='Enter your username...'
+                           value={formData.username}
                            onChange={handleChange}
                            required
                            className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
