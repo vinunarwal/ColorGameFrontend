@@ -5,85 +5,84 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import axios from "axios";
 
 function ColorPicker() {
-   const [timer, setTimer] = useState(60); // 3 minutes in seconds
-   const [id, setId] = useState(1234567890); // Initial ID
-   const [periodIds, setPeriodIds] = useState([]); // Array to store period IDs
+   const [timer, setTimer] = useState(60);
+   const [id, setId] = useState(1234567890);
+   const [periodIds, setPeriodIds] = useState([]);
    const [lowestBetNumber, setLowestBetNumber] = useState("");
- 
+
 
    useEffect(() => {
       const interval = setInterval(() => {
-        if (timer > 0) {
-          setTimer(timer - 1);
-        } else {
-          setTimer(60);
-          setId((prevId) => prevId + 1);
-          updatePeriodIds(id); // Update periodIds with the new ID
-          fetchLowestBetNumber(id); // Fetch lowest bet number for the new period
-        }
+         if (timer > 0) {
+            setTimer(timer - 1);
+         } else {
+            setTimer(60);
+            setId((prevId) => prevId + 1);
+            updatePeriodIds(id);
+            fetchLowestBetNumber(id);
+         }
       }, 1000);
 
       return () => clearInterval(interval);
    }, [timer]);
 
-  const minutes = Math.floor(timer / 60);
-  const seconds = timer % 60;
-  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+   const minutes = Math.floor(timer / 60);
+   const seconds = timer % 60;
+   const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
-  const fetchLowestBetNumber = (periodId) => {
-    axios
-      .get(`http://localhost:5000/lowest/${periodId}`)
-      .then((response) => {
-        const { lowestBetNumber } = response.data;
-        setLowestBetNumber(lowestBetNumber);
-      })
-      .catch((error) => {
-        console.error("Error fetching lowest bet number:", error);
-      });
-  };
+   const fetchLowestBetNumber = (periodId) => {
+      axios
+         .get(`http://localhost:5000/lowest/${periodId}`)
+         .then((response) => {
+            const { lowestBetNumber } = response.data;
+            setLowestBetNumber(lowestBetNumber);
+         })
+         .catch((error) => {
+            console.error("Error fetching lowest bet number:", error);
+         });
+   };
 
-  // Function to handle updating periodIds in GameRecord component
-  const updatePeriodIds = (newId) => {
-    setPeriodIds((prevIds) => [...prevIds, newId]); // Add new ID to periodIds array
-  };
+   const updatePeriodIds = (newId) => {
+      setPeriodIds((prevIds) => [...prevIds, newId]);
+   };
 
    const handleBet = (selection, periodId) => {
-      let amount = 10; 
+      let amount = 10;
       Swal.fire({
          title: "Place Your Bet",
          html: `
-        <input id="amountInput" type="number" placeholder="Enter Amount (min: 10)" class="swal2-input" value="10" min="10">
-        <div class="flex justify-around mt-4">
-          <button id="increaseBy10" class="swal2-confirm swal2-styled">+10</button>
-          <button id="increaseBy100" class="swal2-confirm swal2-styled">+100</button>
-          <button id="increaseBy1000" class="swal2-confirm swal2-styled">+1000</button>
+        <input id="amountInput" type="number" placeholder="Enter Amount (min: 10)" className="swal2-input" value="10" min="10">
+        <div className="flex justify-around mt-4">
+          <button id="increaseBy10" className="swal2-confirm swal2-styled">+10</button>
+          <button id="increaseBy100" className="swal2-confirm swal2-styled">+100</button>
+          <button id="increaseBy1000" className="swal2-confirm swal2-styled">+1000</button>
         </div>
       `,
-      focusConfirm: false,
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      preConfirm: () => {
-        amount = document.getElementById("amountInput").value;
-        if (!amount || amount < 10) {
-          Swal.showValidationMessage("Please enter a valid amount (min: 10)");
-        } else {
-          return amount;
-        }
-      },
-      didOpen: () => {
-        const increaseBy10Button = document.getElementById("increaseBy10");
-        const increaseBy100Button = document.getElementById("increaseBy100");
-        const increaseBy1000Button = document.getElementById("increaseBy1000");
+         focusConfirm: false,
+         showCancelButton: true,
+         cancelButtonText: "Cancel",
+         preConfirm: () => {
+            amount = document.getElementById("amountInput").value;
+            if (!amount || amount < 10) {
+               Swal.showValidationMessage("Please enter a valid amount (min: 10)");
+            } else {
+               return amount;
+            }
+         },
+         didOpen: () => {
+            const increaseBy10Button = document.getElementById("increaseBy10");
+            const increaseBy100Button = document.getElementById("increaseBy100");
+            const increaseBy1000Button = document.getElementById("increaseBy1000");
 
-        increaseBy10Button.addEventListener("click", () => {
-          amount = parseInt(amount) + 10;
-          document.getElementById("amountInput").value = amount;
-        });
+            increaseBy10Button.addEventListener("click", () => {
+               amount = parseInt(amount) + 10;
+               document.getElementById("amountInput").value = amount;
+            });
 
-        increaseBy100Button.addEventListener("click", () => {
-          amount = parseInt(amount) + 100;
-          document.getElementById("amountInput").value = amount;
-        });
+            increaseBy100Button.addEventListener("click", () => {
+               amount = parseInt(amount) + 100;
+               document.getElementById("amountInput").value = amount;
+            });
 
             increaseBy1000Button.addEventListener("click", () => {
                amount = parseInt(amount) + 1000;
@@ -110,7 +109,6 @@ function ColorPicker() {
             className="bg-slate-100 mx-auto py-2  "
             style={{ maxWidth: "420px" }}
          >
-
             <div className="p-4 rounded-lg max-w-[640px] mx-auto ">
                <div className="flex justify-between w-full sm:w-auto mb-4 sm:mb-0">
                   <h2 className="text-lg font-bold">Period</h2>
@@ -205,10 +203,7 @@ function ColorPicker() {
                         >
                            9
                         </button>
-
-
                      </div>
-
                   </div>
                </div>
             </div>
