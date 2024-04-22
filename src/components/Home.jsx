@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
 function Home() {
   const [isOpen, setIsOpen] = useState(false);
 
