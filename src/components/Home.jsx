@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
 function Home() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openPopup = () => {
+    setIsOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closePopup = () => {
+    setIsOpen(false);
+    document.body.style.overflow = "auto";
+  };
   return (
     <div className="container mx-auto px-4">
       <div className="bg-slate-300 mx-auto py-2" style={{ maxWidth: "420px" }}>
@@ -12,12 +22,38 @@ function Home() {
           <p className="text-white text-lg">Available Balance: 0.00</p>
           <div className="flex justify-between items-center">
             <div className="mt-4">
-              <Link to ="/recharge" className="bg-green-500 text-white py-2 px-4 rounded mr-4">
+              <Link
+                to="/recharge"
+                className="bg-green-500 text-white py-2 px-4 rounded mr-4"
+              >
                 Recharge
               </Link>
-              <button className="bg-white text-black py-2 px-4 rounded">
+              <button
+                className="bg-white text-black py-2 px-4 rounded"
+                onClick={openPopup}
+              >
                 Read Rules
               </button>
+              {isOpen && (
+                <div className="fixed inset-0 z-[1000000]  flex items-center justify-center bg-gray-500 bg-opacity-75">
+                  <div className="bg-white max-w-[420px] mx-auto rounded-lg p-4">
+                    <h2 className="text-md font-bold mb-4">Rules</h2>
+                    <p className="">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Fusce consectetur justo in tortor consectetur, id
+                      scelerisque dolor efficitur.
+                    </p>
+                    <div className="text-center">
+                      <button
+                        className=" mr-4 mt-2 text-sm bg-[red] rounded-md px-[20px] py-[7px] text-white"
+                        onClick={closePopup}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="mt-4">
               <button className="bg-white text-black py-2 px-3 rounded-full">
@@ -41,7 +77,6 @@ function Home() {
         </div>
       </div>
     </div>
-    
   );
 }
 
