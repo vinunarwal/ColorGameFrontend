@@ -37,12 +37,35 @@ function Home() {
               </button>
               {isOpen && (
                 <div className="fixed inset-0 z-[1000000]  flex items-center justify-center bg-gray-500 bg-opacity-75">
-                  <div className="bg-white max-w-[420px] mx-auto rounded-lg p-4">
-                    <h2 className="text-md font-bold mb-4">Rules</h2>
-                    <p className="">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Fusce consectetur justo in tortor consectetur, id
-                      scelerisque dolor efficitur.
+                  <div className="bg-white max-w-[400px] mx-auto rounded-lg p-4 max-w-md">
+                    <h2 className="text-md font-bold mb-4">Rule of guess:</h2>
+                    <p className="text-[13px] mt-2">
+                      3 minutes 1 issue, 2 minutes and 30 seconds to order, 30
+                      seconds to show the lottery result. It opens all day. The
+                      total number of trade is 480 issues
+                    </p>
+                    <p className="text-[13px] mt-2">
+                      If you spend 100 to trade, after deducting 2 service fee,
+                      your contract amount is 98:
+                    </p>
+
+                    <p className="text-[13px] mt-2">
+                      1. JOIN GREEN: if the result shows 1,3,7,9, you will get
+                      (98*2) 196 If the result shows 5, you will get (98*1.5)
+                      147
+                    </p>
+                    <p className="text-[13px] mt-2">
+                      2. JOIN RED: if the result shows 2,4,6,8, you will get
+                      (98*2) 196; If the result shows 0, you will get (98*1.5)
+                      147
+                    </p>
+                    <p className="text-[13px] mt-2">
+                      3. JOIN VIOLET: if the result shows 0 or 5, you will get
+                      (98*4.5) 441
+                    </p>
+                    <p className="text-[13px] mt-2">
+                      4.SELECT NUMBER:if the result is the same as the number
+                      you selected, you will get(98*9)882.
                     </p>
                     <div className="text-center">
                       <button

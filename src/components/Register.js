@@ -35,7 +35,7 @@ const RegistrationPage = () => {
          }
       } catch (error) {
          setError('Registration failed');
-      } 
+      }
    };
 
    return (
