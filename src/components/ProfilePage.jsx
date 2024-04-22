@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import manicon from "../assets/images/jpg/manicon.jpg";
 import BellIcon from "../assets/images/svg/bell.svg";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,13 +11,31 @@ import complaints from "../assets/images/svg/complaints.svg";
 import appdownload from "../assets/images/svg/appdownload.svg";
 import wallet from "../assets/images/svg/wallet.svg";
 import Footer from "./Footer";
+import { jwtDecode } from 'jwt-decode';
+
 const ProfilePage = () => {
   const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [userId, setUserId] = useState("");
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwtDecode(token);
+
+      setUsername(decodedToken.username);
+      setMobile(decodedToken.mobile);
+      setUserId(decodedToken.userId); 
+    }
+  }, []);
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
+
+
   return (
     <div>
       <div className="max-w-lg mx-auto px-[12px]">
@@ -31,10 +49,10 @@ const ProfilePage = () => {
               />
               <div className=" ps-[20px]">
                 <p className=" text-white font-medium">
-                  User : <span>12345</span>
+                  User : <span>{username}</span>
                 </p>
                 <p className=" text-white font-medium">
-                  ID : <span>22255</span>
+                  ID : <span>{userId}</span>
                 </p>
               </div>
             </div>
@@ -49,7 +67,7 @@ const ProfilePage = () => {
           <div>
             <p className=" text-white mt-[20px] font-medium">
               Mobile :
-              <span className=" font-semibold text-[14px]">+912255663344</span>
+              <span className=" font-semibold text-[14px]">{mobile}</span>
             </p>
             <p className=" text-white mt-1 font-medium">
               Available Balance :
