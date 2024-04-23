@@ -1,27 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
 function GameRecord({ periodIds }) {
-  const [lowestBetNumbers, setLowestBetNumbers] = useState([]);
-
-  useEffect(() => {
-    const fetchLowestBetNumbers = async () => {
-      try {
-        const lowestBetNumbers = await Promise.all(
-          periodIds.map(async (id) => {
-            const response = await axios.get(`http://localhost:5000/lowest/${id}`);
-            return { periodId: id, lowestBetNumber: response.data.lowestBetNumber };
-          })
-        );
-        setLowestBetNumbers(lowestBetNumbers);
-      } catch (error) {
-        console.error("Error fetching lowest bet numbers:", error);
-      }
-    };
-
-    fetchLowestBetNumbers();
-  }, [periodIds]);
-
   return (
     <div className="container mx-auto">
       <div className="bg-slate-100 mx-auto py-4 max-w-[420px]">
@@ -33,14 +12,18 @@ function GameRecord({ periodIds }) {
               <thead className="sticky bg-slate-100 top-0 z-10">
                 <tr>
                   <th className="px-4 py-2">Period</th>
-                  <th className="px-4 py-2">Lowest Bet Number</th>
+                  <th className="px-4 py-2">Price</th>
+                  <th className="px-4 py-2">Number</th>
+                  <th className="px-4 py-2">Result</th>
                 </tr>
               </thead>
               <tbody>
-                {lowestBetNumbers.map(({ periodId, lowestBetNumber }, index) => (
+                {periodIds.map((id, index) => (
                   <tr key={index}>
-                    <td className="px-4 py-2">{periodId}</td>
-                    <td className="px-4 py-2">{lowestBetNumber}</td>
+                    <td className="px-4 py-2">{id}</td>
+                    <td className="px-4 py-2">Price data</td>
+                    <td className="px-4 py-2">Number data</td>
+                    <td className="px-4 py-2">Result data</td>
                   </tr>
                 ))}
               </tbody>
@@ -51,5 +34,5 @@ function GameRecord({ periodIds }) {
     </div>
   );
 }
+ export default GameRecord;
 
-export default GameRecord;
