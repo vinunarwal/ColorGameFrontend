@@ -17,6 +17,8 @@ function Recharge() {
    const [showMessage, setShowMessage] = useState(false);
    const [submitClicked, setSubmitClicked] = useState(false);
    const [userId, setUserId] = useState("");
+   const [bankBalance, setBankBalance] = useState("0");
+
 
    useEffect(() => {
       const currentHour = new Date().getHours();
@@ -31,10 +33,20 @@ function Recharge() {
       const token = localStorage.getItem('token');
       if (token) {
          const decodedToken = jwtDecode(token);
-         setUsername(decodedToken.username || decodedToken.email);
+         setUsername(decodedToken.username);
          setUserId(decodedToken.userId); 
+
+         axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+         .then(response => {
+            setBankBalance(response.data.bankBalance);
+         })
+         .catch(error => {
+            console.error('Error fetching user data:', error);
+         });
+     
       }
    }, []);
+
 
    const handleAmountClick = (amountValue) => {
       setAmount(amountValue);
@@ -73,11 +85,11 @@ function Recharge() {
    const handleSubmit = async (e) => {
       e.preventDefault();
       setSubmitClicked(true);
-      if (!amount || !transactionId || !platform) {
+      if (!amount || !transactionId || !platform || !userId) {
          return;
       }
       try {
-         const response = await axios.post('http://localhost:5000/transaction', { transactionId, platform, amount });
+         const response = await axios.post('http://localhost:5000/transaction', { transactionId, platform, amount, userId  });
          if (response.status === 200 || response.status === 201) {
             setShowMessage(true);
             console.log('Transaction details saved successfully');
@@ -85,6 +97,7 @@ function Recharge() {
             setTransactionId('');
             setPlatform('');
             setAmount('');
+           
          } else {
             console.error('Failed to save transaction details');
          }
@@ -126,7 +139,7 @@ function Recharge() {
                            <text className=' text-gray-400'>Total Balance</text>
                         </div>
                         <div>
-                           <h2 className=' text-blue-600'>Rs. <span>0</span></h2>
+                           <h2 className=' text-blue-600'>Rs. <span>{bankBalance}</span></h2>
                         </div>
                         <div>
                            <text className=' text-gray-400'>ID: <span>{userId}</span></text>
@@ -261,5 +274,4 @@ function Recharge() {
       </div>
    );
 }
-
 export default Recharge;
