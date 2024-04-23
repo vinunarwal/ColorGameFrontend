@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import Icon from '../Images/Icon-color.png';
 import Bankicon from '../Images/bank-icon.png';
 import Ruppees from '../Images/ruppes-icon.png';
@@ -11,6 +12,7 @@ import axios from 'axios';
 import Marquee from "react-fast-marquee";
 
 function Recharge() {
+
     const [greeting, setGreeting] = useState('');
     const [username, setUsername] = useState('');
     const [amount, setAmount] = useState('');
@@ -95,7 +97,6 @@ function Recharge() {
         }
     };
 
-
     return (
         <div>
             <div className=' mt-[5px]'>
@@ -147,6 +148,7 @@ function Recharge() {
                                 <input
                                     type="number"
                                     className=" outline-black rounded-lg block w-full px-4 py-2 text-gray-700 bg-white  pl-12"
+
                                     placeholder="Enter amount..."
                                     value={amount}
                                     required
@@ -166,37 +168,47 @@ function Recharge() {
                             <div className="flex justify-center">
                                 <div className="flex flex-wrap justify-between">
                                     <div>
+
                                         <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline"
                                             onClick={() => handleAmountClick("200")}>
+
                                             ₹200
                                         </button>
                                     </div>
                                     <div>
                                         <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline"
+
                                             onClick={() => handleAmountClick("300")}>
                                             ₹300
                                         </button>
                                     </div>
                                     <div>
                                         <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+
                                             onClick={() => handleAmountClick("500")}>
+
                                             ₹500
                                         </button>
                                     </div>
                                     <div>
                                         <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+
                                             onClick={() => handleAmountClick("1000")}>
+
                                             ₹1000
                                         </button>
                                     </div>
                                     <div>
                                         <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+
                                             onClick={() => handleAmountClick("2000")}>
+
                                             ₹2000
                                         </button>
                                     </div>
                                     <div>
                                         <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+
                                             onClick={() => handleAmountClick("4000")}>
                                             ₹4000
                                         </button>
