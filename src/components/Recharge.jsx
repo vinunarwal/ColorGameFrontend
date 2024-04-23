@@ -12,109 +12,210 @@ import axios from 'axios';
 import Marquee from "react-fast-marquee";
 
 function Recharge() {
+   const [greeting, setGreeting] = useState('');
+   const [username, setUsername] = useState('');
+   const [amount, setAmount] = useState('');
+   const [transactionId, setTransactionId] = useState('');
+   const [platform, setPlatform] = useState('');
+   const [showMessage, setShowMessage] = useState(false);
+   const [submitClicked, setSubmitClicked] = useState(false);
+   const [userId, setUserId] = useState("");
+   const [bankBalance, setBankBalance] = useState("0");
 
-    const [greeting, setGreeting] = useState('');
-    const [username, setUsername] = useState('');
-    const [amount, setAmount] = useState('');
-    const [transactionId, setTransactionId] = useState('');
-    const [platform, setPlatform] = useState('');
-    const [showMessage, setShowMessage] = useState(false);
-    const [submitClicked, setSubmitClicked] = useState(false);
-    const [userId, setUserId] = useState("");
 
-    useEffect(() => {
-        const currentHour = new Date().getHours();
-        if (currentHour >= 6 && currentHour < 12) {
-            setGreeting('Good Morning');
-        } else if (currentHour >= 12 && currentHour < 18) {
-            setGreeting('Good Afternoon');
-        } else {
-            setGreeting('Good Evening');
-        }
+   useEffect(() => {
+      const currentHour = new Date().getHours();
+      if (currentHour >= 6 && currentHour < 12) {
+         setGreeting('Good Morning');
+      } else if (currentHour >= 12 && currentHour < 18) {
+         setGreeting('Good Afternoon');
+      } else {
+         setGreeting('Good Evening');
+      }
 
-        const token = localStorage.getItem('token');
-        if (token) {
-            const decodedToken = jwtDecode(token);
-            setUsername(decodedToken.username || decodedToken.email);
-            setUserId(decodedToken.userId);
-        }
-    }, []);
+      const token = localStorage.getItem('token');
+      if (token) {
+         const decodedToken = jwtDecode(token);
+         setUsername(decodedToken.username);
+         setUserId(decodedToken.userId); 
 
-    const handleAmountClick = (amountValue) => {
-        setAmount(amountValue);
-    };
+         axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+         .then(response => {
+            setBankBalance(response.data.bankBalance);
+         })
+         .catch(error => {
+            console.error('Error fetching user data:', error);
+         });
+     
+      }
+   }, []);
 
-    const handleRecharge = () => {
-        if (!amount) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Please enter the recharge amount!',
-            });
-            return;
-        }
 
-        const qrCodeHtml = `
-       <div style="display: flex; flex-direction: column; align-items: center;">
-          <div style="display: flex; justify-content: center; align-items: center; height:100%">
-             <img className='w-8' src=${qr} alt='QR Code'/>
+   const handleAmountClick = (amountValue) => {
+      setAmount(amountValue);
+   };
+
+   const handleRecharge = () => {
+      if (!amount) {
+         Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please enter the recharge amount!',
+         });
+         return;
+      }
+
+      const qrCodeHtml = `
+          <div style="display: flex; flex-direction: column; align-items: center;">
+              <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?data=Amount:${amount}&size=150x150" alt="QR Code">
+              </div>
+              <p style="text-align: center; margin-top: 10px;">Scan and Pay</p>
           </div>
-          <p style="text-align: center; margin-top: 10px;">Scan and Pay</p>
-       </div>
-    `;
-        Swal.fire({
-            title: 'QR Code',
-            html: qrCodeHtml,
-            showCloseButton: true,
-            showConfirmButton: false,
-            customClass: {
-                popup: 'center-popup'
-            }
-        });
-    };
+      `;
+      Swal.fire({
+         title: 'QR Code',
+         html: qrCodeHtml,
+         showCloseButton: true,
+         showConfirmButton: false,
+         customClass: {
+            popup: 'center-popup'
+         }
+      });
+   };
 
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setSubmitClicked(true);
-        if (!amount || !transactionId || !platform) {
-            return;
-        }
-        try {
-            const response = await axios.post('http://localhost:5000/transaction', { transactionId, platform, amount });
-            if (response.status === 200 || response.status === 201) {
-                setShowMessage(true);
-                console.log('Transaction details saved successfully');
-                // Clear input fields after successful submission
-                setTransactionId('');
-                setPlatform('');
-                setAmount('');
-            } else {
-                console.error('Failed to save transaction details');
-            }
-        } catch (error) {
-            console.error('Error while saving transaction details:', error);
-        }
-    };
+   const handleSubmit = async (e) => {
+      e.preventDefault();
+      setSubmitClicked(true);
+      if (!amount || !transactionId || !platform || !userId) {
+         return;
+      }
+      try {
+         const response = await axios.post('http://localhost:5000/transaction', { transactionId, platform, amount, userId  });
+         if (response.status === 200 || response.status === 201) {
+            setShowMessage(true);
+            console.log('Transaction details saved successfully');
+            // Clear input fields after successful submission
+            setTransactionId('');
+            setPlatform('');
+            setAmount('');
+           
+         } else {
+            console.error('Failed to save transaction details');
+         }
+      } catch (error) {
+         console.error('Error while saving transaction details:', error);
+      }
+   };
 
-    return (
-        <div>
-            <div className=' mt-[5px]'>
-                <div className='content max-w-[420px] mx-auto px-[12px] bg-slate-100'>
 
-                    {/* Profile Secttion */}
-                    <div className='pt-[12px] '>
-                        <div className='Header mb-5 flex py-[8px] rounded-xl justify-between mx-[40px] px-[12px] bg-white '>
-                            <div className='User'>
-                                <div className='text-gray-500 text-xs'>Hello, {greeting}</div>
-                                <div className=' font-bold text-sm'>{username}</div>
-                            </div>
-                            <div className=' flex justify-center items-center'>
-                                <div className='icon mr-5'>🔔</div>
-                                <div className='Profile'>
-                                    <Link to="/ProfilePage"><img className=' w-8' src={Icon} alt='not found' /></Link>
-                                </div>
-                            </div>
+   return (
+      <div>
+         <div className=' mt-[40px]'>
+            <div className='content max-w-[420px] mx-auto px-[12px] bg-slate-100'>
+
+               {/* Profile Secttion */}
+               <div className='pt-[12px] '>
+                  <div className='Header mb-5 flex py-[8px] rounded-xl justify-between mx-[40px] px-[12px] bg-white '>
+                     <div className='User'>
+                        <div className='text-gray-500 text-xs'>Hello, {greeting}</div>
+                        <div className=' font-bold text-sm'>{username}</div>
+                     </div>
+                     <div className=' flex justify-center items-center'>
+                        <div className='icon mr-5'>🔔</div>
+                        <div className='Profile'>
+                           <Link to="/ProfilePage"><img className=' w-8' src={Icon} alt='not found' /></Link>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               {/* Total Balance Section */}
+               <div className='bg-white rounded-lg mx-[15px]'>
+                  <div className='flex justify-between mx-[30px] py-[10px]'>
+                     <div className='bank-img'>
+                        <img className=' w-20 h-13' src={Bankicon} alt="not found" />
+                     </div>
+                     <div className='Total-balance'>
+                        <div>
+                           <text className=' text-gray-400'>Total Balance</text>
+                        </div>
+                        <div>
+                           <h2 className=' text-blue-600'>Rs. <span>{bankBalance}</span></h2>
+                        </div>
+                        <div>
+                           <text className=' text-gray-400'>ID: <span>{userId}</span></text>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <p className=' font-bold text-xl my-[10px] pl-5'>Select Amount</p>
+
+               {/* Select Amount Section */}
+               <div className='Select-Amonunt'>
+                  <div className='enteramount'>
+
+                     <div className='flex justify-center px-[10px] rtl relative mx-[16px] mb-5'>
+                        <input
+                           type="number"
+                           className=" outline-black rounded-lg block w-full px-4 py-2 text-gray-700 bg-white  pl-12"
+                           placeholder="Enter amount..."
+                           value={amount}
+                           required
+                           onChange={(e) => setAmount(e.target.value)}
+                           min="100"
+                           max="100000"
+                        />
+                        <img className='absolute top-1 left-3 w-11 h-8 rounded-s-lg' src={Ruppees} alt="not found rounded-md" />
+                     </div>
+
+                     <div className="flex items-center justify-center">
+                        <hr className="w-full border-gray-400 border-t-2 mx-4" />
+                        <span className="text-gray-400">OR</span>
+                        <hr className="w-full border-gray-400 border-t-2 mx-4" />
+                     </div>
+
+                     <div className="flex justify-center">
+                        <div className="flex flex-wrap justify-between">
+                           <div>
+                              <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("200")}>
+                                 ₹200
+                              </button>
+                           </div>
+                           <div>
+                              <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("300")}>
+                                 ₹300
+                              </button>
+                           </div>
+                           <div>
+                              <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("500")}>
+                                 ₹500
+                              </button>
+                           </div>
+                           <div>
+                              <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("1000")}>
+                                 ₹1000
+                              </button>
+                           </div>
+                           <div>
+                              <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("2000")}>
+                                 ₹2000
+                              </button>
+                           </div>
+                           <div>
+                              <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 onClick={() => handleAmountClick("4000")}>
+                                 ₹4000
+                              </button>
+                           </div>
+
                         </div>
                     </div>
 
@@ -282,5 +383,4 @@ function Recharge() {
         </div>
     );
 }
-
 export default Recharge;
