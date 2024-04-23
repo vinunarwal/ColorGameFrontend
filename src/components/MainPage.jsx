@@ -6,9 +6,10 @@ import ColorPicker from './ColorPicker'
 function MainPage() {
   return (
     <>
-    <Home />
-    <MidHeader />
-    <ColorPicker />
+      <Home />
+      <MidHeader />
+      <ColorPicker />
+      <Footer/>
     </>
   )
 }
