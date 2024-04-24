@@ -1,12 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
 import Icon from '../Images/Icon-color.png';
 import Bankicon from '../Images/bank-icon.png';
 import Ruppees from '../Images/ruppes-icon.png';
+import qr from '../Images/qrcode.jpg';
 import { jwtDecode } from 'jwt-decode';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import Marquee from "react-fast-marquee";
+
 
 function Recharge() {
    const [greeting, setGreeting] = useState('');
@@ -34,16 +38,16 @@ function Recharge() {
       if (token) {
          const decodedToken = jwtDecode(token);
          setUsername(decodedToken.username);
-         setUserId(decodedToken.userId); 
+         setUserId(decodedToken.userId);
 
          axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
-         .then(response => {
-            setBankBalance(response.data.bankBalance);
-         })
-         .catch(error => {
-            console.error('Error fetching user data:', error);
-         });
-     
+            .then(response => {
+               setBankBalance(response.data.bankBalance);
+            })
+            .catch(error => {
+               console.error('Error fetching user data:', error);
+            });
+
       }
    }, []);
 
@@ -63,13 +67,13 @@ function Recharge() {
       }
 
       const qrCodeHtml = `
-          <div style="display: flex; flex-direction: column; align-items: center;">
-              <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
-                  <img src="https://api.qrserver.com/v1/create-qr-code/?data=Amount:${amount}&size=150x150" alt="QR Code">
-              </div>
-              <p style="text-align: center; margin-top: 10px;">Scan and Pay</p>
+       <div style="display: flex; flex-direction: column; align-items: center;">
+          <div style="display: flex; justify-content: center; align-items: center; height:100%">
+             <img className='w-8' src=${qr} alt='QR Code'/>
           </div>
-      `;
+          <p style="text-align: center; margin-top: 10px;">Scan and Pay</p>
+       </div>
+    `;
       Swal.fire({
          title: 'QR Code',
          html: qrCodeHtml,
@@ -81,7 +85,6 @@ function Recharge() {
       });
    };
 
-
    const handleSubmit = async (e) => {
       e.preventDefault();
       setSubmitClicked(true);
@@ -89,7 +92,7 @@ function Recharge() {
          return;
       }
       try {
-         const response = await axios.post('http://localhost:5000/transaction', { transactionId, platform, amount, userId  });
+         const response = await axios.post('http://localhost:5000/transaction', { transactionId, platform, amount, userId });
          if (response.status === 200 || response.status === 201) {
             setShowMessage(true);
             console.log('Transaction details saved successfully');
@@ -97,7 +100,7 @@ function Recharge() {
             setTransactionId('');
             setPlatform('');
             setAmount('');
-           
+
          } else {
             console.error('Failed to save transaction details');
          }
@@ -106,10 +109,9 @@ function Recharge() {
       }
    };
 
-
    return (
       <div>
-         <div className=' mt-[40px]'>
+         <div className=' mt-[5px]'>
             <div className='content max-w-[420px] mx-auto px-[12px] bg-slate-100'>
 
                {/* Profile Secttion */}
@@ -130,8 +132,8 @@ function Recharge() {
 
                {/* Total Balance Section */}
                <div className='bg-white rounded-lg mx-[15px]'>
-                  <div className='flex justify-between mx-[30px] py-[10px]'>
-                     <div className='bank-img'>
+                  <div className='flex justify-between mx-[12px] py-[10px]'>
+                     <div className='bank-img max-[394px]:hidden'>
                         <img className=' w-20 h-13' src={Bankicon} alt="not found" />
                      </div>
                      <div className='Total-balance'>
@@ -223,34 +225,41 @@ function Recharge() {
 
                      {/* Text and input fields for transaction ID and platform */}
 
-                     <div className="flex flex-col justify-center mt-4">
-                        <p className="text-center text-gray-600 mb-2">After payment, enter your transaction ID and platform:</p>
-                        <div className="flex items-center justify-center">
-                           <input type="text"
-                              placeholder="Transaction ID *"
-                              className="border border-gray-300 rounded-md px-3 py-2 mr-2 focus:outline-none"
-                              value={transactionId}
-                              required
-                              onChange={(e) => setTransactionId(e.target.value)}
-                           />
+                     <div className="pb-6">
+                        <div className="flex flex-col justify-center bg-slate-300 rounded-md">
+                           <Marquee className=''>
+                              <p className="text-center text-gray-600 mb-3 mt-4 font-bold rounded-2xl">After payment, enter your transaction ID and platform:</p>
+                           </Marquee>
+                           <div className="min-[370px]flex text-center items-center justify-around mb-3">
+                              <input type="text"
+                                 placeholder="Transaction ID *"
+                                 className="border bg-amber-100 border-gray-300 max-[370px]:mb-3 rounded-md px-1 max-w-40 py-1 min-[370px]:mr-2 focus:outline-none"
+                                 value={transactionId}
+                                 required
+                                 onChange={(e) => setTransactionId(e.target.value)}
+                              />
 
-                           <input type="text"
-                              placeholder="Platform.. Eg. Paytm *"
-                              className="border border-gray-300 rounded-md px-3 py-2 mr-2  focus:outline-none"
-                              value={platform}
-                              required
-                              onChange={(e) => setPlatform(e.target.value)}
-                           />
+                              <input type="text"
+                                 placeholder="Platform.. Eg. Paytm *"
+                                 className="border border-gray-300 bg-amber-100 rounded-md px-1 max-w-40 py-1 focus:outline-none"
+                                 value={platform}
+                                 required
+                                 onChange={(e) => setPlatform(e.target.value)}
+                              />
 
+                           </div>
+
+                           {submitClicked && (!transactionId || !platform) && (
+
+                              <p className="text-red-500 text-sm">Transaction ID, Platform & Amount are mandatory *</p>
+
+                           )}
+                           <div className=' flex justify-center'>
+                              <button className="bg-sky-500 hover:bg-rose-600 text-white font-bold py-2 px-9 rounded-md my-2 mb-4  focus:outline-none"
+                                 onClick={handleSubmit}>
+                                 Submit</button>
+                           </div>
                         </div>
-
-                        {submitClicked && (!transactionId || !platform) && (
-                           <p className="text-red-500 text-sm">Transaction ID, Platform & Amount are mandatory *</p>
-                        )}
-
-                        <button className="bg-sky-500 hover:bg-rose-600 text-white font-bold py-2 px-6 rounded-md my-2 focus:outline-none"
-                           onClick={handleSubmit}>
-                           Submit</button>
                      </div>
                      <div>
                         {showMessage && ( // Render message if showMessage is true
@@ -274,4 +283,5 @@ function Recharge() {
       </div>
    );
 }
+
 export default Recharge;
