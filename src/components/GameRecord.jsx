@@ -1,6 +1,6 @@
 import React from "react";
 
-function GameRecord({ periodIds }) {
+function GameRecord({ periodIds, lowestBetNumberMap }) {
   return (
     <div className="container mx-auto">
       <div className="bg-slate-100 mx-auto py-4 max-w-[420px]">
@@ -13,7 +13,7 @@ function GameRecord({ periodIds }) {
                 <tr>
                   <th className="px-4 py-2">Period</th>
                   <th className="px-4 py-2">Price</th>
-                  <th className="px-4 py-2">Number</th>
+                  {/*<th className="px-4 py-2">Number</th>*/}
                   <th className="px-4 py-2">Result</th>
                 </tr>
               </thead>
@@ -22,8 +22,8 @@ function GameRecord({ periodIds }) {
                   <tr key={index}>
                     <td className="px-4 py-2">{id}</td>
                     <td className="px-4 py-2">Price data</td>
-                    <td className="px-4 py-2">Number data</td>
-                    <td className="px-4 py-2">Result data</td>
+                    {/*<td className="px-4 py-2">Number data</td>*/}
+                    <td className="px-4 py-2">{lowestBetNumberMap[id]}</td> {/* Display lowestBetNumber */}
                   </tr>
                 ))}
               </tbody>
@@ -34,5 +34,5 @@ function GameRecord({ periodIds }) {
     </div>
   );
 }
- export default GameRecord;
+export default GameRecord;
 
