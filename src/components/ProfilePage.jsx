@@ -11,13 +11,16 @@ import complaints from "../assets/images/svg/complaints.svg";
 import appdownload from "../assets/images/svg/appdownload.svg";
 import wallet from "../assets/images/svg/wallet.svg";
 import Footer from "./Footer";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [mobile, setMobile] = useState("");
   const [userId, setUserId] = useState("");
+  const [bankBalance, setBankBalance] = useState("0");
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -26,6 +29,16 @@ const ProfilePage = () => {
       setUsername(decodedToken.username);
       setMobile(decodedToken.mobile);
       setUserId(decodedToken.userId);
+
+
+      axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+      .then(response => {
+         setBankBalance(response.data.bankBalance);
+      })
+      .catch(error => {
+         console.error('Error fetching user data:', error);
+      });
+      
     }
   }, []);
 
@@ -70,7 +83,7 @@ const ProfilePage = () => {
             <p className=" text-white mt-1 font-medium">
               Available Balance :
               <span className=" font-semibold text-[14px]">&#8377;</span>
-              <span className=" font-semibold text-[14px]">1</span>
+              <span className=" font-semibold text-[14px]">{bankBalance}</span>
             </p>
           </div>
 

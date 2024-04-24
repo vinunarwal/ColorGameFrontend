@@ -1,8 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 function Home() {
   const [isOpen, setIsOpen] = useState(false);
+  const [bankBalance, setBankBalance] = useState("0");
+
+  useEffect(()=>{
+    const token = localStorage.getItem('token');
+      if (token) {
+         const decodedToken = jwtDecode(token);
+
+         axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+         .then(response => {
+          setBankBalance(response.data.bankBalance);
+         })
+         .catch(error => {
+            console.error('Error fetching user data:', error);
+         });
+     
+      }
+  } ,[]
+);
 
   const openPopup = () => {
     setIsOpen(true);
@@ -20,7 +40,7 @@ function Home() {
           className="bg-blue-500 p-4 rounded-lg mx-auto"
           style={{ maxWidth: "640px" }}
         >
-          <p className="text-white text-lg">Available Balance: 0.00</p>
+          <p className="text-white text-lg">Available Balance: {bankBalance}</p>
           <div className="flex justify-between items-center">
             <div className="mt-4">
               <Link

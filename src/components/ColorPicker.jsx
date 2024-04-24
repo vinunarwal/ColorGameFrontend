@@ -3,9 +3,9 @@ import GameRecord from "./GameRecord";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 function ColorPicker() {
-
   const initialTimer = localStorage.getItem("timer") || 60;
   const initialId = localStorage.getItem("id") || 1234567890;
   const initialPeriodIds = JSON.parse(localStorage.getItem("periodIds")) || [];
@@ -14,6 +14,27 @@ function ColorPicker() {
   const [id, setId] = useState(parseInt(initialId));
   const [periodIds, setPeriodIds] = useState(initialPeriodIds);
   const [lowestBetNumber, setLowestBetNumber] = useState("");
+  const [bankBalance, setBankBalance] = useState(0);
+  const [userId, setUserId] = useState("");
+
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setUserId(decodedToken.userId); 
+
+      axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+      .then(response => {
+         setBankBalance(response.data.bankBalance);
+      })
+      .catch(error => {
+         console.error('Error fetching user data:', error);
+      });
+      
+    }
+  }, []);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -37,26 +58,25 @@ function ColorPicker() {
     localStorage.setItem("periodIds", JSON.stringify(periodIds));
   }, [periodIds]);
 
-   const minutes = Math.floor(timer / 60);
-   const seconds = timer % 60;
-   const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
+  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
-   const fetchLowestBetNumber = (periodId) => {
-      axios
-         .get(`http://localhost:5000/lowest/${periodId}`)
-         .then((response) => {
-            const { lowestBetNumber } = response.data;
-            setLowestBetNumber(lowestBetNumber);
-         })
-         .catch((error) => {
-            console.error("Error fetching lowest bet number:", error);
-         });
-   };
+  const fetchLowestBetNumber = (periodId) => {
+    axios
+      .get(`http://localhost:5000/lowest/${periodId}`)
+      .then((response) => {
+        const { lowestBetNumber } = response.data;
+        setLowestBetNumber(lowestBetNumber);
+      })
+      .catch((error) => {
+        console.error("Error fetching lowest bet number:", error);
+      });
+  };
 
 
-  // Function to handle updating periodIds in GameRecord component
   const updatePeriodIds = (newId) => {
-    setPeriodIds((prevIds) => [ newId,...prevIds]); // Add new ID to periodIds array
+    setPeriodIds((prevIds) => [newId, ...prevIds]);
   };
 
   const handleBet = (selection, periodId) => {
@@ -69,34 +89,35 @@ function ColorPicker() {
           <button id="increaseBy10" class="swal2-confirm swal2-styled">+10</button>
           <button id="increaseBy100" class="swal2-confirm swal2-styled">+100</button>
           <button id="increaseBy1000" class="swal2-confirm swal2-styled">+1000</button>
-
         </div>
       `,
-         focusConfirm: false,
-         showCancelButton: true,
-         cancelButtonText: "Cancel",
-         preConfirm: () => {
-            amount = document.getElementById("amountInput").value;
-            if (!amount || amount < 10) {
-               Swal.showValidationMessage("Please enter a valid amount (min: 10)");
-            } else {
-               return amount;
-            }
-         },
-         didOpen: () => {
-            const increaseBy10Button = document.getElementById("increaseBy10");
-            const increaseBy100Button = document.getElementById("increaseBy100");
-            const increaseBy1000Button = document.getElementById("increaseBy1000");
+      focusConfirm: false,
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      preConfirm: () => {
+        amount = document.getElementById("amountInput").value;
+        if (!amount || amount < 10) {
+          Swal.showValidationMessage("Please enter a valid amount (min: 10)");
+        } else if (amount > bankBalance) { // Check if bet amount exceeds bank balance
+          Swal.showValidationMessage("Insufficient balance. Please recharge your account.");
+        } else {
+          return amount;
+        }
+      },
+      didOpen: () => {
+        const increaseBy10Button = document.getElementById("increaseBy10");
+        const increaseBy100Button = document.getElementById("increaseBy100");
+        const increaseBy1000Button = document.getElementById("increaseBy1000");
 
-            increaseBy10Button.addEventListener("click", () => {
-               amount = parseInt(amount) + 10;
-               document.getElementById("amountInput").value = amount;
-            });
+        increaseBy10Button.addEventListener("click", () => {
+          amount = parseInt(amount) + 10;
+          document.getElementById("amountInput").value = amount;
+        });
 
-            increaseBy100Button.addEventListener("click", () => {
-               amount = parseInt(amount) + 100;
-               document.getElementById("amountInput").value = amount;
-            });
+        increaseBy100Button.addEventListener("click", () => {
+          amount = parseInt(amount) + 100;
+          document.getElementById("amountInput").value = amount;
+        });
 
         increaseBy1000Button.addEventListener("click", () => {
           amount = parseInt(amount) + 1000;
@@ -107,12 +128,16 @@ function ColorPicker() {
       if (result.isConfirmed) {
         axios
           .post("http://localhost:5000/bet", {
-            userId: "yourUserId",
+            userId,
             amount,
             selection,
             periodId,
           })
           .then((response) => {
+
+            const updatedBankBalance = bankBalance - amount;
+          setBankBalance(updatedBankBalance); 
+
             Swal.fire(
               "Success!",
               `Your bet of ${amount} on ${selection} is placed.`,
@@ -130,6 +155,7 @@ function ColorPicker() {
       }
     });
   };
+
 
   return (
     <div className="container mx-auto px-4">
