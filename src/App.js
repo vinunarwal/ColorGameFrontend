@@ -5,10 +5,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import MainPage from "./components/MainPage";
 import ProfilePage from "./components/ProfilePage";
-import Recharge from "./components/Recharge"
+import Recharge from "./components/Recharge";
 import Address from "./components/Address";
 import AddAddress from "./components/AddAddress";
 import AdminPanel from "./Admin/AdminPanel";
+import Complaints from "./components/Complaints";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/Address" element={<Address />} />
           <Route path="/AddAddress" element={<AddAddress />} />
           <Route path="/adminPanel" element={<AdminPanel />} />
+          <Route path="/Complaints" element={<Complaints />} />
         </Routes>
       </Router>
     </>

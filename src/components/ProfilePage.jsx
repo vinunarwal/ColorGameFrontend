@@ -11,30 +11,28 @@ import complaints from "../assets/images/svg/complaints.svg";
 import appdownload from "../assets/images/svg/appdownload.svg";
 import wallet from "../assets/images/svg/wallet.svg";
 import Footer from "./Footer";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [mobile, setMobile] = useState('');
+  const [username, setUsername] = useState("");
+  const [mobile, setMobile] = useState("");
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwtDecode(token);
-
       setUsername(decodedToken.username);
       setMobile(decodedToken.mobile);
-      setUserId(decodedToken.userId); 
+      setUserId(decodedToken.userId);
     }
   }, []);
-  
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
-
 
   return (
     <div>
@@ -108,10 +106,13 @@ const ProfilePage = () => {
             <img src={appdownload} alt="app" />{" "}
             <p className="ps-2">App Download</p>
           </div>
-          <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
+          <Link
+            to="/Complaints"
+            className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] "
+          >
             <img src={complaints} alt="complaints" />{" "}
             <p className="ps-2">Complaints and suggestions</p>
-          </div>
+          </Link>
           <div className="flex  border-b-[1px]  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
             <img src={about} alt="about" /> <p className=" ps-2">About</p>
           </div>
@@ -125,7 +126,7 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
