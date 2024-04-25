@@ -93,6 +93,11 @@ const ProfilePage = () => {
               Recharge
             </button>
           </Link>
+          <Link to="/withdrawal">
+            <button className="border-1 hover:bg-purple-300 duration-300 rounded-md mt-5 mx-3 bg-[#8c44de] text-white border-solid py-[7px] px-[15px]">
+              Withdral
+            </button>
+          </Link>
         </div>
         <div className="m-[20px]">
           <div className="flex  ">
