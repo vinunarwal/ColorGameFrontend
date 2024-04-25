@@ -64,6 +64,14 @@ function Recharge() {
          });
          return;
       }
+      else if (amount < 100 || amount > 100000) {
+         Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Amount should be greater than 100 and less than 100,000',
+         });
+         return;
+      }
 
       const qrCodeHtml = `
        <div style="display: flex; flex-direction: column; align-items: center;">
@@ -110,7 +118,7 @@ function Recharge() {
 
    return (
       <div>
-         <div className=' mt-[5px]'>
+         <div className=' mt-[40px]'>
             <div className='content max-w-[420px] mx-auto px-[12px] bg-slate-100'>
 
                {/* Profile Secttion */}
@@ -217,7 +225,8 @@ function Recharge() {
                      </div>
 
                      <div className="flex justify-center mt-5 pb-5">
-                        <button className="bg-sky-500 hover:bg-rose-600 duration-300 text-white text-lg font-bold py-3 px-20 rounded-lg focus:outline-none focus:shadow-outline" onClick={handleRecharge}>
+                        <button className="bg-sky-500 hover:bg-rose-600 duration-300 text-white text-lg font-bold py-3 px-20 rounded-lg focus:outline-none focus:shadow-outline"
+                           onClick={handleRecharge}>
                            Recharge
                         </button>
                      </div>
@@ -239,17 +248,29 @@ function Recharge() {
                               />
 
                               <select
+
+                                 value={platform}
+                                 onChange={(e) => setPlatform(e.target.value)}
+                                 className="border border-gray-300 bg-amber-100 rounded-md px-1 max-w-40 py-1 focus:outline-none"
+                                 style={{ fontFamily: 'Arial, sans-serif', fontSize: '16px', fontWeight: 'normal' }}
+                              >
+                                 <option value="">Select Platform...</option>
+                                 <option value="Paytm">Paytm</option>
+                                 <option value="UPI">UPI</option>
+                                 <option value="PhonePe">PhonePe</option>
+                                 <option value="Google Pay">Google Pay</option>
+                              </select>
+
+                              {/* <input type="text"
+                                 placeholder="Platform.. Eg. Paytm *"
+
                                  className="border border-gray-300 bg-amber-100 rounded-md px-1 max-w-40 py-1 focus:outline-none"
                                  value={platform}
                                  required
                                  onChange={(e) => setPlatform(e.target.value)}
-                              >
-                                 <option value="">Select Platform</option>
-                                 <option value="Paytm">Paytm</option>
-                                 <option value="Google Pay">Google Pay</option>
-                                 <option value="PhonePe">PhonePe</option>
-                              </select>
 
+                                 
+                              /> */}
 
                            </div>
 
