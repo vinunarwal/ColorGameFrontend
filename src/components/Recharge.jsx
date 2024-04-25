@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Icon from '../Images/Icon-color.png';
 import Bankicon from '../Images/bank-icon.png';
@@ -239,13 +238,18 @@ function Recharge() {
                                  onChange={(e) => setTransactionId(e.target.value)}
                               />
 
-                              <input type="text"
-                                 placeholder="Platform.. Eg. Paytm *"
+                              <select
                                  className="border border-gray-300 bg-amber-100 rounded-md px-1 max-w-40 py-1 focus:outline-none"
                                  value={platform}
                                  required
                                  onChange={(e) => setPlatform(e.target.value)}
-                              />
+                              >
+                                 <option value="">Select Platform</option>
+                                 <option value="Paytm">Paytm</option>
+                                 <option value="Google Pay">Google Pay</option>
+                                 <option value="PhonePe">PhonePe</option>
+                              </select>
+
 
                            </div>
 
