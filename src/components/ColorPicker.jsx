@@ -13,10 +13,10 @@ function ColorPicker() {
   const [timer, setTimer] = useState(parseInt(initialTimer));
   const [id, setId] = useState(parseInt(initialId));
   const [periodIds, setPeriodIds] = useState(initialPeriodIds);
-  const [lowestBetNumber, setLowestBetNumber] = useState("");
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
   const [countdownOpacity, setCountdownOpacity] = useState(1);
+  const [lowestBetNumberMap, setLowestBetNumberMap] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -69,15 +69,24 @@ function ColorPicker() {
 
   const fetchLowestBetNumber = (periodId) => {
     axios
-      .get(`http://localhost:5000/lowest/${periodId}`)
+      .get(`http://localhost:5000/lowest/${periodId}`) // Use periodId instead of id
       .then((response) => {
         const { lowestBetNumber } = response.data;
-        setLowestBetNumber(lowestBetNumber);
+        setLowestBetNumberMap((prevMap) => ({
+          ...prevMap,
+          [periodId]: lowestBetNumber, // Use periodId instead of id
+        }));
       })
       .catch((error) => {
         console.error("Error fetching lowest bet number:", error);
       });
   };
+  
+  useEffect(() => {
+    fetchLowestBetNumber(id); 
+  }, [id]); 
+  
+
 
   const updatePeriodIds = (newId) => {
     setPeriodIds((prevIds) => [newId, ...prevIds]);
@@ -287,7 +296,7 @@ function ColorPicker() {
           </div>
         </div>
       </div>
-      <GameRecord periodIds={periodIds} />
+      <GameRecord periodIds={periodIds} lowestBetNumberMap={lowestBetNumberMap} />
     </div>
   );
 }
