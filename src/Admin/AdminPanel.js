@@ -29,25 +29,32 @@ function AdminPanel() {
 
    const updateTransactionStatus = async (transactionId, status) => {
       try {
-          await axios.put('http://localhost:5000/updateStatus', { transactionId, status });
-          fetchTransactions(); // Refresh transactions after updating status
+         await axios.put('http://localhost:5000/updateStatus', { transactionId, status });
+         fetchTransactions(); // Refresh transactions after updating status
       } catch (error) {
-          console.error('Error updating transaction status:', error);
+         console.error('Error updating transaction status:', error);
       }
-  };
-  
+   };
+
+
 
    return (
       <div className="container mx-auto px-4 py-8">
          <h1 className="text-3xl font-bold mb-4">Admin Panel</h1>
          <div className="flex justify-center mb-4">
-            <button onClick={() => handleFilterChange('pending')} className={`mr-2 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md 
+            <button
+               onClick={() => handleFilterChange('pending')}
+               className={`mr-2 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md 
                 ${filter === 'pending' && 'bg-gray-300'}`}>
                Pending Transactions</button>
-            <button onClick={() => handleFilterChange('success')} className={`mr-2 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md
+            <button
+               onClick={() => handleFilterChange('success')}
+               className={`mr-2 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md
                  ${filter === 'success' && 'bg-gray-300'}`}>
                Successful Transactions</button>
-            <button onClick={() => handleFilterChange('failed')} className={`bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md
+            <button
+               onClick={() => handleFilterChange('failed')}
+               className={`bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md
                  ${filter === 'failed' && 'bg-gray-300'}`}>
                Failed Transactions</button>
          </div>

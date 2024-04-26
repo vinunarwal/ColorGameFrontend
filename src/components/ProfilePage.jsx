@@ -12,12 +12,17 @@ import appdownload from "../assets/images/svg/appdownload.svg";
 import wallet from "../assets/images/svg/wallet.svg";
 import Footer from "./Footer";
 import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
+import WithdrawPopup from "./WithdrawPopup ";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [mobile, setMobile] = useState('');
   const [userId, setUserId] = useState("");
+  const [bankBalance, setBankBalance] = useState("0");
+  const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -26,10 +31,24 @@ const ProfilePage = () => {
 
       setUsername(decodedToken.username);
       setMobile(decodedToken.mobile);
-      setUserId(decodedToken.userId); 
+      setUserId(decodedToken.userId);
+
+      axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+        .then(response => {
+          setBankBalance(response.data.bankBalance);
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
+
     }
   }, []);
-  
+
+
+  const toggleWithdrawPopup = () => {
+    setShowWithdrawPopup(!showWithdrawPopup);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
@@ -72,7 +91,7 @@ const ProfilePage = () => {
             <p className=" text-white mt-1 font-medium">
               Available Balance :
               <span className=" font-semibold text-[14px]">&#8377;</span>
-              <span className=" font-semibold text-[14px]">1</span>
+              <span className=" font-semibold text-[14px]">{bankBalance}</span>
             </p>
           </div>
 
@@ -81,6 +100,20 @@ const ProfilePage = () => {
               Recharge
             </button>
           </Link>
+
+
+          <button
+            className="border-1 hover:bg-red-500 duration-300 rounded-md mt-5 ml-3 bg-[red] text-white border-solid py-[7px] px-[15px]"
+            onClick={toggleWithdrawPopup}
+          >
+            Withdraw
+          </button>
+
+            {/* Withdraw popup */}
+            {showWithdrawPopup && <WithdrawPopup onClose={toggleWithdrawPopup} />}
+
+
+
         </div>
         <div className="m-[20px]">
           <div className="flex  ">
@@ -125,7 +158,7 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

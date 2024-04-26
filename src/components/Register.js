@@ -10,12 +10,34 @@ const RegistrationPage = () => {
       password: '',
       mobile: ''
    });
-   const [error, setError] = useState('');
+   const [errors, setErrors] = useState({});
    const navigate = useNavigate();
 
    const handleChange = (e) => {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+      const { name, value } = e.target;
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const mobileRegex = /^[0-9]{10}$/;
+
+      let errorMessage = '';
+      if (name === 'email') {
+         if (!emailRegex.test(value)) {
+            errorMessage = 'Please enter a valid email address';
+         }
+      } else if (name === 'mobile') {
+         if (!mobileRegex.test(value)) {
+            errorMessage = 'Please enter a valid mobile number';
+         }
+      }
+
+      // Update form data
+      setFormData({ ...formData, [name]: value });
+
+      // Update errors state
+      setErrors({ ...errors, [name]: errorMessage });
    };
+
+
 
    const handleSubmit = async (e) => {
       e.preventDefault();
@@ -32,12 +54,27 @@ const RegistrationPage = () => {
                navigate('/');
             });
          } else {
-            setError(data.error || 'Registration failed');
+            setErrors(data.errors || 'Registration failed');
          }
       } catch (error) {
-         setError('Registration failed');
-      } 
+         console.log('Error response:', error.response);
+         if (error.response) {
+            const { data } = error.response;
+            if (data.error) {
+               setErrors({ general: data.error });
+            } else if (data.email) {
+               setErrors({ email: 'Email already in use' });
+            } else if (data.mobile) {
+               setErrors({ mobile: 'Mobile number already in use' });
+            } else {
+               setErrors({ general: 'Registration failed' });
+            }
+         } else {
+            setErrors({ general: 'Registration failed' });
+         }
+      }
    };
+
 
    return (
       <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -126,9 +163,12 @@ const RegistrationPage = () => {
                      </button>
                   </div>
                </form>
-               {error && <p className="text-red-500 text-center">{error}</p>}
+               {errors.general && <p className="text-red-500 text-center">{errors.general}</p>}
+               {errors.email && <p className="text-red-500 text-center">{errors.email}</p>}
+               {errors.mobile && <p className="text-red-500 text-center">{errors.mobile}</p>}
             </div>
-            <p className="text-center text-gray-600 my-4">Already registered? <Link to="/" className="text-indigo-600 hover:underline">Login here</Link>.</p>
+            <p className="text-center text-gray-600 my-4">Already registered?
+               <Link to="/" className="text-indigo-600 hover:underline">Login here</Link>.</p>
          </div>
       </div>
    );
