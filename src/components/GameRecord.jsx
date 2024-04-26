@@ -1,6 +1,9 @@
 import React from "react";
 
 function GameRecord({ periodIds }) {
+  // Get the latest 10 elements from periodIds
+  const latestTenPeriodIds = periodIds.slice(0, 10);
+
   return (
     <div className="container mx-auto">
       <div className="bg-slate-100 mx-auto py-4 max-w-[420px]">
@@ -18,7 +21,7 @@ function GameRecord({ periodIds }) {
                 </tr>
               </thead>
               <tbody>
-                {periodIds.map((id, index) => (
+                {latestTenPeriodIds.map((id, index) => (
                   <tr key={index}>
                     <td className="px-4 py-2">{id}</td>
                     <td className="px-4 py-2">Price data</td>
@@ -34,5 +37,5 @@ function GameRecord({ periodIds }) {
     </div>
   );
 }
- export default GameRecord;
 
+export default GameRecord;
