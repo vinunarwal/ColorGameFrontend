@@ -1,4 +1,3 @@
-// TransactionList.js
 import React from 'react';
 
 function TransactionList({ transactions, updateTransactionStatus }) {
@@ -44,10 +43,14 @@ function TransactionList({ transactions, updateTransactionStatus }) {
                         {transaction.status === 'pending' && (
                            <td className="border px-4 py-2">
                               <div>
-                                 <button onClick={() => handleAccept(transaction.transactionId)} className="hover:text-xl text-green-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                 <button
+                                    onClick={() => handleAccept(transaction.transactionId)}
+                                    className="hover:text-xl text-green-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                     ✓
                                  </button>
-                                 <button onClick={() => handleDeny(transaction.transactionId)} className="hover:text-xl text-red-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                 <button
+                                    onClick={() => handleDeny(transaction.transactionId)}
+                                    className="hover:text-xl text-red-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                     ✗
                                  </button>
                               </div>

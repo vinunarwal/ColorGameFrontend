@@ -20,7 +20,7 @@ const ProfilePage = () => {
   const [mobile, setMobile] = useState("");
   const [userId, setUserId] = useState("");
   const [bankBalance, setBankBalance] = useState("0");
-
+  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -30,15 +30,14 @@ const ProfilePage = () => {
       setMobile(decodedToken.mobile);
       setUserId(decodedToken.userId);
 
-
       axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
-      .then(response => {
-         setBankBalance(response.data.bankBalance);
-      })
-      .catch(error => {
-         console.error('Error fetching user data:', error);
-      });
-      
+        .then(response => {
+          setBankBalance(response.data.bankBalance);
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
+
     }
   }, []);
 
@@ -92,6 +91,15 @@ const ProfilePage = () => {
               Recharge
             </button>
           </Link>
+
+          <Link to='/withdraw'>
+            <button
+              className="border-1 hover:bg-red-500 duration-300 rounded-md mt-5 ml-3 bg-[red] text-white border-solid py-[7px] px-[15px]"
+            >
+              Withdraw
+            </button>
+          </Link>
+
         </div>
         <div className="m-[20px]">
           <div className="flex  ">
