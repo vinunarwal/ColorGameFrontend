@@ -13,7 +13,6 @@ import wallet from "../assets/images/svg/wallet.svg";
 import Footer from "./Footer";
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
-import WithdrawPopup from "./WithdrawPopup ";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -21,8 +20,7 @@ const ProfilePage = () => {
   const [mobile, setMobile] = useState('');
   const [userId, setUserId] = useState("");
   const [bankBalance, setBankBalance] = useState("0");
-  const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
-
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -44,10 +42,6 @@ const ProfilePage = () => {
     }
   }, []);
 
-
-  const toggleWithdrawPopup = () => {
-    setShowWithdrawPopup(!showWithdrawPopup);
-  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -101,18 +95,13 @@ const ProfilePage = () => {
             </button>
           </Link>
 
-
-          <button
-            className="border-1 hover:bg-red-500 duration-300 rounded-md mt-5 ml-3 bg-[red] text-white border-solid py-[7px] px-[15px]"
-            onClick={toggleWithdrawPopup}
-          >
-            Withdraw
-          </button>
-
-            {/* Withdraw popup */}
-            {showWithdrawPopup && <WithdrawPopup onClose={toggleWithdrawPopup} />}
-
-
+          <Link to='/withdraw'>
+            <button
+              className="border-1 hover:bg-red-500 duration-300 rounded-md mt-5 ml-3 bg-[red] text-white border-solid py-[7px] px-[15px]"
+            >
+              Withdraw
+            </button>
+          </Link>
 
         </div>
         <div className="m-[20px]">

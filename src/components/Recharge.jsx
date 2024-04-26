@@ -118,14 +118,14 @@ function Recharge() {
 
    return (
       <div>
-         <div className=' mt-[40px]'>
+         <div className=' mt-[5px]'>
             <div className='content max-w-[420px] mx-auto px-[12px] bg-slate-100'>
 
                {/* Profile Secttion */}
                <div className='pt-[12px] '>
-                  <div className='Header mb-5 flex py-[8px] rounded-xl justify-between mx-[40px] px-[12px] bg-white '>
+                  <div className='Header mb-5 flex py-[8px] rounded-xl justify-between mx-[40px] px-[12px] bg-sky-300 '>
                      <div className='User'>
-                        <div className='text-gray-500 text-xs'>Hello, {greeting}</div>
+                        <div className='text-gray-950 text-xs'>Hello, {greeting}</div>
                         <div className=' font-bold text-sm'>{username}</div>
                      </div>
                      <div className=' flex justify-center items-center'>
@@ -138,26 +138,34 @@ function Recharge() {
                </div>
 
                {/* Total Balance Section */}
-               <div className='bg-white rounded-lg mx-[15px]'>
+               <div className='rounded-lg mx-[15px] bg-lime-200'>
                   <div className='flex justify-between mx-[12px] py-[10px]'>
                      <div className='bank-img max-[394px]:hidden'>
                         <img className=' w-20 h-13' src={Bankicon} alt="not found" />
                      </div>
                      <div className='Total-balance'>
                         <div>
-                           <text className=' text-gray-400'>Total Balance</text>
+                           <text className=' text-black'
+                              style={{ fontFamily: 'Times New Roman', fontSize: '18px', fontWeight: 'normal' }}>
+                              Total Balance</text>
                         </div>
                         <div>
-                           <h2 className=' text-blue-600'>Rs. <span>{bankBalance}</span></h2>
+                           <h2 className=' text-blue-600'
+                              style={{ fontFamily: 'Source Code Pro', fontSize: '18px', fontWeight: 'normal' }}>
+                              Rs. <span>{bankBalance}</span></h2>
                         </div>
                         <div>
-                           <text className=' text-gray-400'>ID: <span>{userId}</span></text>
+                           <text className=' text-gray-500'
+                              style={{ fontFamily: 'Source Code Pro', fontSize: '18px', fontWeight: 'normal' }}>
+                              ID: <span>{userId}</span></text>
                         </div>
                      </div>
                   </div>
                </div>
 
-               <p className=' font-bold text-xl my-[10px] pl-5'>Select Amount</p>
+               <p className=' font-bold text-xl my-[10px] pl-5'
+                  style={{ fontFamily: 'Times New Roman', fontSize: '20px', fontWeight: 'normal' }}>
+                  Select Amount</p>
 
                {/* Select Amount Section */}
                <div className='Select-Amonunt'>
@@ -167,6 +175,7 @@ function Recharge() {
                         <input
                            type="number"
                            className=" outline-black rounded-lg block w-full px-4 py-2 text-gray-700 bg-white  pl-12"
+                           style={{ fontFamily: 'Roboto Mono', fontSize: '16px', fontWeight: 'normal' }}
                            placeholder="Enter amount..."
                            value={amount}
                            required
@@ -187,36 +196,42 @@ function Recharge() {
                         <div className="flex flex-wrap justify-between">
                            <div>
                               <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline"
+                                 style={{ fontFamily: 'Roboto Mono', fontSize: '16px', fontWeight: 'normal' }}
                                  onClick={() => handleAmountClick("200")}>
                                  ₹200
                               </button>
                            </div>
                            <div>
                               <button className="bg-amber-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8  rounded-lg focus:outline-none focus:shadow-outline"
+                                 style={{ fontFamily: 'Roboto Mono', fontSize: '16px', fontWeight: 'normal' }}
                                  onClick={() => handleAmountClick("300")}>
                                  ₹300
                               </button>
                            </div>
                            <div>
                               <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-11 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 style={{ fontFamily: 'Roboto Mono', fontSize: '16px', fontWeight: 'normal' }}
                                  onClick={() => handleAmountClick("500")}>
                                  ₹500
                               </button>
                            </div>
                            <div>
                               <button className="bg-yellow-400 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 style={{ fontFamily: 'Roboto Mono', fontSize: '16px', fontWeight: 'normal' }}
                                  onClick={() => handleAmountClick("1000")}>
                                  ₹1000
                               </button>
                            </div>
                            <div>
                               <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 style={{ fontFamily: 'Roboto Mono', fontSize: '16px', fontWeight: 'normal' }}
                                  onClick={() => handleAmountClick("2000")}>
                                  ₹2000
                               </button>
                            </div>
                            <div>
                               <button className="bg-lime-500 hover:bg-blue-700 mt-[10px] duration-500 text-white font-bold py-2 px-10 mx-2 min-[430px]:mx-8 rounded-lg focus:outline-none focus:shadow-outline"
+                                 style={{ fontFamily: 'Roboto Mono', fontSize: '16px', fontWeight: 'normal' }}
                                  onClick={() => handleAmountClick("4000")}>
                                  ₹4000
                               </button>
@@ -226,6 +241,7 @@ function Recharge() {
 
                      <div className="flex justify-center mt-5 pb-5">
                         <button className="bg-sky-500 hover:bg-rose-600 duration-300 text-white text-lg font-bold py-3 px-20 rounded-lg focus:outline-none focus:shadow-outline"
+                           style={{ fontFamily: 'Times New Roman', fontSize: '20px', fontWeight: 'normal' }}
                            onClick={handleRecharge}>
                            Recharge
                         </button>
@@ -236,12 +252,14 @@ function Recharge() {
                      <div className="pb-6">
                         <div className="flex flex-col justify-center bg-slate-300 rounded-md">
                            <Marquee className=''>
-                              <p className="text-center text-gray-600 mb-3 mt-4 font-bold rounded-2xl">After payment, enter your transaction ID and platform:</p>
+                              <p className="text-center text-gray-600 mb-3 mt-4 font-bold rounded-2xl"
+                                 style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight: 'normal' }}>After payment, enter your transaction ID and platform:</p>
                            </Marquee>
                            <div className="min-[370px]flex text-center items-center justify-around mb-3">
-                              <input type="text"
+                              <input type="Number"
                                  placeholder="Transaction ID *"
                                  className="border bg-amber-100 border-gray-300 max-[370px]:mb-3 rounded-md px-1 max-w-40 py-1 min-[370px]:mr-2 focus:outline-none"
+                                 style={{ fontFamily: 'Roboto Mono', fontSize: '16px', fontWeight: 'normal' }}
                                  value={transactionId}
                                  required
                                  onChange={(e) => setTransactionId(e.target.value)}
@@ -252,13 +270,23 @@ function Recharge() {
                                  value={platform}
                                  onChange={(e) => setPlatform(e.target.value)}
                                  className="border border-gray-300 bg-amber-100 rounded-md px-1 max-w-40 py-1 focus:outline-none"
-                                 style={{ fontFamily: 'Arial, sans-serif', fontSize: '16px', fontWeight: 'normal' }}
+                                 style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}
                               >
-                                 <option value="">Select Platform...</option>
-                                 <option value="Paytm">Paytm</option>
-                                 <option value="UPI">UPI</option>
-                                 <option value="PhonePe">PhonePe</option>
-                                 <option value="Google Pay">Google Pay</option>
+                                 <option value=""
+                                    style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}>
+                                    Select Platform...</option>
+                                 <option value="Paytm"
+                                    style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}>
+                                    Paytm</option>
+                                 <option value="UPI"
+                                    style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}>
+                                    UPI</option>
+                                 <option value="PhonePe"
+                                    style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}>
+                                    PhonePe</option>
+                                 <option value="Google Pay"
+                                    style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}>
+                                    Google Pay</option>
                               </select>
 
                               {/* <input type="text"
@@ -276,11 +304,14 @@ function Recharge() {
 
                            {submitClicked && (!transactionId || !platform) && (
 
-                              <p className="text-red-500 text-sm">Transaction ID, Platform & Amount are mandatory *</p>
+                              <p className="text-red-500 text-sm"
+                                 style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}>
+                                 Transaction ID, Platform & Amount are mandatory *</p>
 
                            )}
                            <div className=' flex justify-center'>
-                              <button className="bg-sky-500 hover:bg-rose-600 text-white font-bold py-2 px-9 rounded-md my-2 mb-4  focus:outline-none"
+                              <button className="bg-sky-500 hover:bg-rose-600 duration-500 text-white font-bold py-2 px-9 rounded-md my-2 mb-4  focus:outline-none"
+                                 style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}
                                  onClick={handleSubmit}>
                                  Submit</button>
                            </div>
