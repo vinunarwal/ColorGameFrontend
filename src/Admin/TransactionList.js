@@ -55,7 +55,7 @@ function TransactionList({ transactions, updateTransactionStatus }) {
                         onClick={() => handleDeny(transaction.transactionId)}
                         className="hover:text-xl text-red-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                       >
-                        ✗`
+                        ✗
                       </button>
                     </div>
                   </td>

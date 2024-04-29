@@ -59,19 +59,19 @@ function AdminPanel() {
     }
   };
 
-  const updateWithdrawStatus = async (upiId, status) => {
-    try {
-      await axios.put("http://localhost:5000/updateWithdrawStatus", {
-        upiId,
-        status,
-      });
-      fetchWithdrawals();
-    } catch (error) {
-      console.error("Error updating withdrawal status:", error);
-    }
-  };
+const updateWithdrawStatus = async (upiId, status) => {
+  try {
+    await axios.put("http://localhost:5000/status", {
+      upiId: upiId, // Pass upiId as a property of the object
+      status: status, // Pass status as a property of the object
+    });
+    fetchWithdrawals();
+  } catch (error) {
+    console.error("Error updating withdrawal status:", error);
+  }
+};
 
-  const handleRechargeButtonClick = () => {
+  const handleRechargeButtonClick = () => { 
     setShowTransactionList(true);
   };
 

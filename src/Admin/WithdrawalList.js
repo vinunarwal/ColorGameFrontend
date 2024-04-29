@@ -1,4 +1,6 @@
+// WithdrawList.js
 import React from "react";
+import axios from "axios";
 
 function WithdrawList({ withdrawals, updateWithdrawStatus }) {
   const handleAccept = async (upiId) => {
@@ -11,6 +13,7 @@ function WithdrawList({ withdrawals, updateWithdrawStatus }) {
 
   const handleDeny = async (upiId) => {
     try {
+      console.log("Denying withdrawal for UPI ID:", upiId);
       await updateWithdrawStatus(upiId, "failed");
     } catch (error) {
       console.error("Error denying withdrawal:", error);
@@ -27,7 +30,9 @@ function WithdrawList({ withdrawals, updateWithdrawStatus }) {
               <th className="text-left py-2 px-4">UPI ID</th>
               <th className="text-left py-2 px-4">Amount</th>
               <th className="text-left py-2 px-4">Status</th>
-              <th className="text-left py-2 px-4">Actions</th>
+              {withdrawals.some(
+                (withdrawal) => withdrawal.status === "pending"
+              ) && <th className="text-left py-2 px-4">Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -38,8 +43,8 @@ function WithdrawList({ withdrawals, updateWithdrawStatus }) {
                   {withdrawal.withDrawAmount}
                 </td>
                 <td className="border px-4 py-2">{withdrawal.status}</td>
-                <td className="border px-4 py-2">
-                  {withdrawal.status === "pending" && (
+                {withdrawal.status === "pending" && (
+                  <td className="border px-4 py-2">
                     <div>
                       <button
                         onClick={() => handleAccept(withdrawal.upiId)}
@@ -54,8 +59,8 @@ function WithdrawList({ withdrawals, updateWithdrawStatus }) {
                         ✗
                       </button>
                     </div>
-                  )}
-                </td>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
