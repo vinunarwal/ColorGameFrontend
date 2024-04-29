@@ -22,7 +22,7 @@ function App() {
           <Route path="/main" element={<MainPage />} />
           <Route path="/ProfilePage" element={<ProfilePage />} />
           <Route path="/recharge" element={<Recharge />} />
-          <Route path="/withdrawal" element={<Withdrawal />} />
+          <Route path="/withdrawal" element={<Withdrawl />} />
           <Route path="/Address" element={<Address />} />
           <Route path="/AddAddress" element={<AddAddress />} />
           <Route path="/adminPanel" element={<AdminPanel />} />
