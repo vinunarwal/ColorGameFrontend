@@ -9,7 +9,7 @@ import Recharge from "./components/Recharge"
 import Address from "./components/Address";
 import AddAddress from "./components/AddAddress";
 import AdminPanel from "./Admin/AdminPanel";
-import Withdrawal from "./components/Withdrawal";
+import Withdrawl from "./components/Withdrawl";
 
 function App() {
   return (
@@ -25,6 +25,7 @@ function App() {
           <Route path="/Address" element={<Address />} />
           <Route path="/AddAddress" element={<AddAddress />} />
           <Route path="/adminPanel" element={<AdminPanel />} />
+          <Route path="/withdraw" element={ <Withdrawl /> } />
         </Routes>
       </Router>
     </>

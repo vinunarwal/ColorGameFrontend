@@ -13,34 +13,38 @@ function ColorPicker() {
   const [timer, setTimer] = useState(parseInt(initialTimer));
   const [id, setId] = useState(parseInt(initialId));
   const [periodIds, setPeriodIds] = useState(initialPeriodIds);
-  const [lowestBetNumber, setLowestBetNumber] = useState("");
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
-
+  const [countdownOpacity, setCountdownOpacity] = useState(1);
+  const [lowestBetNumberMap, setLowestBetNumberMap] = useState({});
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwtDecode(token);
-      setUserId(decodedToken.userId); 
+      setUserId(decodedToken.userId);
 
-      axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
-      .then(response => {
-         setBankBalance(response.data.bankBalance);
-      })
-      .catch(error => {
-         console.error('Error fetching user data:', error);
-      });
-      
+      axios
+        .get(`http://localhost:5000/user/${decodedToken.userId}`)
+        .then((response) => {
+          setBankBalance(response.data.bankBalance);
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
     }
   }, []);
-
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (timer > 0) {
         setTimer(timer - 1);
         localStorage.setItem("timer", timer - 1);
+        if (timer <= 30) {
+          setCountdownOpacity(0.5); // Change opacity when last 30 seconds
+        } else {
+          setCountdownOpacity(1); // Reset opacity when not in last 30 seconds
+        }
       } else {
         setTimer(60);
         setId((prevId) => prevId + 1);
@@ -48,6 +52,7 @@ function ColorPicker() {
         localStorage.setItem("id", id + 1);
         updatePeriodIds(id); // Update periodIds with the new ID
         fetchLowestBetNumber(id); // Fetch lowest bet number for the new period
+        setCountdownOpacity(1); // Reset opacity when timer resets
       }
     }, 1000);
 
@@ -64,15 +69,23 @@ function ColorPicker() {
 
   const fetchLowestBetNumber = (periodId) => {
     axios
-      .get(`http://localhost:5000/lowest/${periodId}`)
+      .get(`http://localhost:5000/lowest/${periodId}`) // Use periodId instead of id
       .then((response) => {
         const { lowestBetNumber } = response.data;
-        setLowestBetNumber(lowestBetNumber);
+        setLowestBetNumberMap((prevMap) => ({
+          ...prevMap,
+          [periodId]: lowestBetNumber, // Use periodId instead of id
+        }));
       })
       .catch((error) => {
         console.error("Error fetching lowest bet number:", error);
       });
   };
+  
+  useEffect(() => {
+    fetchLowestBetNumber(id); 
+  }, [id]); 
+  
 
 
   const updatePeriodIds = (newId) => {
@@ -80,6 +93,11 @@ function ColorPicker() {
   };
 
   const handleBet = (selection, periodId) => {
+    // Disable handleBet function when countdownOpacity is 0.5
+    if (countdownOpacity === 0.5) {
+      return;
+    }
+
     let amount = 10;
     Swal.fire({
       title: "Place Your Bet",
@@ -98,8 +116,11 @@ function ColorPicker() {
         amount = document.getElementById("amountInput").value;
         if (!amount || amount < 10) {
           Swal.showValidationMessage("Please enter a valid amount (min: 10)");
-        } else if (amount > bankBalance) { // Check if bet amount exceeds bank balance
-          Swal.showValidationMessage("Insufficient balance. Please recharge your account.");
+        } else if (amount > bankBalance) {
+          // Check if bet amount exceeds bank balance
+          Swal.showValidationMessage(
+            "Insufficient balance. Please recharge your account."
+          );
         } else {
           return amount;
         }
@@ -134,9 +155,8 @@ function ColorPicker() {
             periodId,
           })
           .then((response) => {
-
             const updatedBankBalance = bankBalance - amount;
-          setBankBalance(updatedBankBalance); 
+            setBankBalance(updatedBankBalance);
 
             Swal.fire(
               "Success!",
@@ -156,7 +176,6 @@ function ColorPicker() {
     });
   };
 
-
   return (
     <div className="container mx-auto px-4">
       <div
@@ -170,7 +189,21 @@ function ColorPicker() {
           </div>
           <div className="flex justify-between w-full sm:w-auto">
             <h2 className="text-lg font-medium">ID: {id}</h2>
-            <h2 className="text-lg font-medium">{`0${minutes}:${formattedSeconds}`}</h2>
+            <h2
+              className="text-lg font-bold"
+              style={{
+                color: timer <= 30 ? "red" : "black",
+                opacity: timer <= 30 ? 0.5 : 1,
+              }}
+            >
+              {timer <= 30 ? (
+                <span
+                  style={{ opacity: 1 }}
+                >{`0${minutes}:${formattedSeconds}`}</span>
+              ) : (
+                <span>{`0${minutes}:${formattedSeconds}`}</span>
+              )}
+            </h2>
           </div>
           <div className="flex justify-around mt-4">
             <button
@@ -259,12 +292,11 @@ function ColorPicker() {
                   9
                 </button>
               </div>
-
             </div>
           </div>
         </div>
       </div>
-      <GameRecord periodIds={periodIds} />
+      <GameRecord periodIds={periodIds} lowestBetNumberMap={lowestBetNumberMap} />
     </div>
   );
 }
