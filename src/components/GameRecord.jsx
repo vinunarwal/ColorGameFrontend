@@ -2,12 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode';
 
-
 function GameRecord({ periodIds, lowestBetNumberMap }) {
-
    const [userId, setUserId] = useState("");
    const [bankBalance, setBankBalance] = useState("0");
-
 
    useEffect(() => {
       const token = localStorage.getItem('token');
@@ -22,11 +19,8 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
             .catch(error => {
                console.error('Error fetching user data:', error);
             });
-
       }
    }, []);
-
-
 
    // Get the latest 10 elements from periodIds
    const latestTenPeriodIds = periodIds.slice(0, 10);
@@ -45,7 +39,7 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
                   const { userId, winAmount } = winningBet;
                   // Update bank balance for each winning user
 
-                  axios.patch(`http://localhost:5000/user/${userId}`, {
+                  axios.put(`http://localhost:5000/user/${userId}`, {
                      bankBalance: bankBalance + winAmount,
                   });
                });
