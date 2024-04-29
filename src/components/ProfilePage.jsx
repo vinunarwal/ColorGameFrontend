@@ -20,7 +20,7 @@ const ProfilePage = () => {
   const [mobile, setMobile] = useState('');
   const [userId, setUserId] = useState("");
   const [bankBalance, setBankBalance] = useState("0");
-  
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');

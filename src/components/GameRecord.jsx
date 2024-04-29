@@ -1,7 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { jwtDecode } from 'jwt-decode';
+
 
 function GameRecord({ periodIds, lowestBetNumberMap }) {
+
+   const [userId, setUserId] = useState("");
+   const [bankBalance, setBankBalance] = useState("0");
+
+
+   useEffect(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+         const decodedToken = jwtDecode(token);
+         setUserId(decodedToken.userId);
+
+         axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+            .then(response => {
+               setBankBalance(response.data.bankBalance);
+            })
+            .catch(error => {
+               console.error('Error fetching user data:', error);
+            });
+
+      }
+   }, []);
+
+
+
    // Get the latest 10 elements from periodIds
    const latestTenPeriodIds = periodIds.slice(0, 10);
 
@@ -9,18 +35,18 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
       // Fetch winAmount for matching bets and update bank balance
       latestTenPeriodIds.forEach((periodId) => {
          const result = lowestBetNumberMap[periodId];
-         const multiplier = lowestBetNumberMap[`${periodId}-multiplier`];
 
          axios
             .get(`http://localhost:5000/bet/result/${periodId}/${result}`)
             .then((response) => {
                const { winningBets } = response.data;
+
                winningBets.forEach((winningBet) => {
                   const { userId, winAmount } = winningBet;
                   // Update bank balance for each winning user
-                  // Assuming there's an API endpoint to update the user's bank balance
+
                   axios.patch(`http://localhost:5000/user/${userId}`, {
-                     bankBalance: winAmount * multiplier,
+                     bankBalance: bankBalance + winAmount,
                   });
                });
             })
