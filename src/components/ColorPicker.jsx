@@ -155,7 +155,7 @@ function ColorPicker() {
             periodId,
           })
           .then((response) => {
-            const updatedBankBalance = bankBalance - amount;
+            const updatedBankBalance = response.data.bankBalance; // Assuming the backend sends the updated bank balance
             setBankBalance(updatedBankBalance);
 
             Swal.fire(
