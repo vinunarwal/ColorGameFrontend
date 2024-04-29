@@ -67,6 +67,10 @@ function ColorPicker() {
     localStorage.setItem("lowestBetNumberMap", JSON.stringify(lowestBetNumberMap));
   }, [lowestBetNumberMap]);
 
+  useEffect(() => {
+    localStorage.setItem("lowestBetNumberMap", JSON.stringify(lowestBetNumberMap));
+  }, [lowestBetNumberMap]);
+
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
   const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
