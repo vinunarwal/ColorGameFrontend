@@ -17,7 +17,6 @@ function ColorPicker() {
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
   const [countdownOpacity, setCountdownOpacity] = useState(1);
-  //const [lowestBetNumberMap, setLowestBetNumberMap] = useState({});
   const [lowestBetNumberMap, setLowestBetNumberMap] = useState(initialLowestBetNumberMap);
 
   useEffect(() => {
@@ -92,7 +91,6 @@ function ColorPicker() {
     fetchLowestBetNumber(id); 
   }, [id]); 
   
-
 
   const updatePeriodIds = (newId) => {
     setPeriodIds((prevIds) => [newId, ...prevIds]);
