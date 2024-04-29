@@ -9,6 +9,7 @@ function ColorPicker() {
   const initialTimer = localStorage.getItem("timer") || 60;
   const initialId = localStorage.getItem("id") || 1234567890;
   const initialPeriodIds = JSON.parse(localStorage.getItem("periodIds")) || [];
+  const initialLowestBetNumberMap = JSON.parse(localStorage.getItem("lowestBetNumberMap")) || {};
 
   const [timer, setTimer] = useState(parseInt(initialTimer));
   const [id, setId] = useState(parseInt(initialId));
@@ -16,7 +17,7 @@ function ColorPicker() {
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
   const [countdownOpacity, setCountdownOpacity] = useState(1);
-  const [lowestBetNumberMap, setLowestBetNumberMap] = useState({});
+  const [lowestBetNumberMap, setLowestBetNumberMap] = useState(initialLowestBetNumberMap);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -62,6 +63,9 @@ function ColorPicker() {
   useEffect(() => {
     localStorage.setItem("periodIds", JSON.stringify(periodIds));
   }, [periodIds]);
+  useEffect(() => {
+    localStorage.setItem("lowestBetNumberMap", JSON.stringify(lowestBetNumberMap));
+  }, [lowestBetNumberMap]);
 
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
