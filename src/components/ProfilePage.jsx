@@ -16,16 +16,17 @@ import axios from 'axios';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [mobile, setMobile] = useState("");
+  const [username, setUsername] = useState('');
+  const [mobile, setMobile] = useState('');
   const [userId, setUserId] = useState("");
   const [bankBalance, setBankBalance] = useState("0");
-  
+
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = jwtDecode(token);
+
       setUsername(decodedToken.username);
       setMobile(decodedToken.mobile);
       setUserId(decodedToken.userId);
@@ -41,10 +42,12 @@ const ProfilePage = () => {
     }
   }, []);
 
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
+
 
   return (
     <div>
@@ -127,13 +130,10 @@ const ProfilePage = () => {
             <img src={appdownload} alt="app" />{" "}
             <p className="ps-2">App Download</p>
           </div>
-          <Link
-            to="/Complaints"
-            className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] "
-          >
+          <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
             <img src={complaints} alt="complaints" />{" "}
             <p className="ps-2">Complaints and suggestions</p>
-          </Link>
+          </div>
           <div className="flex  border-b-[1px]  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
             <img src={about} alt="about" /> <p className=" ps-2">About</p>
           </div>
