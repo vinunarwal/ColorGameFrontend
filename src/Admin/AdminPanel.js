@@ -52,7 +52,7 @@ function AdminPanel() {
       await axios.put("http://localhost:5000/updateStatus", {
         transactionId,
         status,
-      });
+      }); 
       fetchTransactions();
     } catch (error) {
       console.error("Error updating transaction status:", error);
