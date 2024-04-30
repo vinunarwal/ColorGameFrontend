@@ -45,7 +45,7 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
                   const { userId, winAmount } = winningBet;
                   // Update bank balance for each winning user
 
-                  axios.patch(`http://localhost:5000/user/${userId}`, {
+                  axios.put(`http://localhost:5000/user/${userId}`, {
                      bankBalance: bankBalance + winAmount,
                   });
                });
