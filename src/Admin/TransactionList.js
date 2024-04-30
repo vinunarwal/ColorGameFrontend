@@ -1,21 +1,21 @@
-import React from 'react';
+import React from "react";
 
 function TransactionList({ transactions, updateTransactionStatus }) {
-   const handleAccept = async (transactionId) => {
-      try {
-         await updateTransactionStatus(transactionId, 'success');
-      } catch (error) {
-         console.error('Error accepting transaction:', error);
-      }
-   };
+  const handleAccept = async (transactionId) => {
+    try {
+      await updateTransactionStatus(transactionId, "success");
+    } catch (error) {
+      console.error("Error accepting transaction:", error);
+    }
+  };
 
-   const handleDeny = async (transactionId) => {
-      try {
-         await updateTransactionStatus(transactionId, 'failed');
-      } catch (error) {
-         console.error('Error denying transaction:', error);
-      }
-   };
+  const handleDeny = async (transactionId) => {
+    try {
+      await updateTransactionStatus(transactionId, "failed");
+    } catch (error) {
+      console.error("Error denying transaction:", error);
+    }
+  };
 
   return (
     <div>
