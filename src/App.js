@@ -10,6 +10,7 @@ import Address from "./components/Address";
 import AddAddress from "./components/AddAddress";
 import AdminPanel from "./Admin/AdminPanel";
 import Withdrawl from "./components/Withdrawl";
+import Win from "./components/Win";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/AddAddress" element={<AddAddress />} />
           <Route path="/adminPanel" element={<AdminPanel />} />
           <Route path="/withdraw" element={ <Withdrawl /> } />
+          <Route path="/win" element ={ <Win />} />
         </Routes>
       </Router>
     </>
