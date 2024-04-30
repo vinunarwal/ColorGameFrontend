@@ -130,10 +130,12 @@ const ProfilePage = () => {
             <img src={appdownload} alt="app" />{" "}
             <p className="ps-2">App Download</p>
           </div>
-          <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
+          <Link
+            to="/Complaints"
+            className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
             <img src={complaints} alt="complaints" />{" "}
             <p className="ps-2">Complaints and suggestions</p>
-          </div>
+          </Link>
           <div className="flex  border-b-[1px]  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
             <img src={about} alt="about" /> <p className=" ps-2">About</p>
           </div>
