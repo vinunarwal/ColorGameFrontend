@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import TransactionList from './TransactionList';
+import TransactionList from '../';
 
 function AdminPanel() {
    const [transactions, setTransactions] = useState([]);
@@ -27,16 +28,37 @@ function AdminPanel() {
       setFilter(newFilter);
    };
 
-   const updateTransactionStatus = async (transactionId, status) => {
-      try {
-         await axios.put('http://localhost:5000/updateStatus', { transactionId, status });
-         fetchTransactions(); // Refresh transactions after updating status
-      } catch (error) {
-         console.error('Error updating transaction status:', error);
-      }
-   };
+  const updateTransactionStatus = async (transactionId, status) => {
+    try {
+      await axios.put("http://localhost:5000/updateStatus", {
+        transactionId,
+        status,
+      }); 
+      fetchTransactions();
+    } catch (error) {
+      console.error("Error updating transaction status:", error);
+    }
+  };
 
+const updateWithdrawStatus = async (upiId, status) => {
+  try {
+    await axios.put("http://localhost:5000/status", {
+      upiId: upiId, // Pass upiId as a property of the object
+      status: status, // Pass status as a property of the object
+    });
+    fetchWithdrawals();
+  } catch (error) {
+    console.error("Error updating withdrawal status:", error);
+  }
+};
 
+  const handleRechargeButtonClick = () => { 
+    setShowTransactionList(true);
+  };
+
+  const handleWithdrawButtonClick = () => {
+    setShowTransactionList(false);
+  };
 
    return (
       <div className="container mx-auto px-4 py-8">
