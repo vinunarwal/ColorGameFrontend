@@ -7,22 +7,22 @@ function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [bankBalance, setBankBalance] = useState("0");
 
-  useEffect(()=>{
+  useEffect(() => {
     const token = localStorage.getItem('token');
-      if (token) {
-         const decodedToken = jwtDecode(token);
+    if (token) {
+      const decodedToken = jwtDecode(token);
 
-         axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
-         .then(response => {
+      axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+        .then(response => {
           setBankBalance(response.data.bankBalance);
-         })
-         .catch(error => {
-            console.error('Error fetching user data:', error);
-         });
-     
-      }
-  } ,[]
-);
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
+
+    }
+  }, []
+  );
 
   const openPopup = () => {
     setIsOpen(true);
@@ -57,7 +57,7 @@ function Home() {
               </button>
               {isOpen && (
                 <div className="fixed inset-0 z-[1000000]  flex items-center justify-center bg-gray-500 bg-opacity-75">
-                  <div className="bg-white max-w-[400px] mx-auto rounded-lg p-4 max-w-md">
+                  <div className="bg-white max-w-[400px] mx-auto rounded-lg p-4">
                     <h2 className="text-md font-bold mb-4">Rule of guess:</h2>
                     <p className="text-[13px] mt-2">
                       3 minutes 1 issue, 2 minutes and 30 seconds to order, 30
@@ -101,22 +101,22 @@ function Home() {
             </div>
             <div className="mt-4">
               <Link to="/">
-              <button className="bg-white text-black py-2 px-3 rounded-full">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-6 h-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                  />
-                </svg>
-              </button>
+                <button className="bg-white text-black py-2 px-3 rounded-full">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+                    />
+                  </svg>
+                </button>
               </Link>
             </div>
           </div>
