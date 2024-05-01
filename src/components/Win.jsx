@@ -2,21 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Footer from './Footer';
-import {jwtDecode} from 'jwt-decode';  // Correct import statement, no braces
+import { jwtDecode } from 'jwt-decode';  // Correct import statement, no braces
 
 const Win = ({ periodId }) => {
    const [userBets, setUserBets] = useState([]);
-   const [loading, setLoading] = useState(true);
    const [error, setError] = useState(null);
 
    useEffect(() => {
       const fetchUserBets = async () => {
-         setLoading(true);
+
          try {
             const token = localStorage.getItem('token');
             if (!token) {
                setError('No token found');
-               setLoading(false);
                return;
             }
             const decodedToken = jwtDecode(token);
@@ -27,16 +25,12 @@ const Win = ({ periodId }) => {
          } catch (error) {
             console.error('Error fetching user bets:', error);
             setError('Failed to fetch bets');
-         } finally {
-            setLoading(false);
          }
       };
 
       fetchUserBets();
-   }, [periodId]);  // Ensure periodId is used or needed; if not used, remove it from dependencies
+   }, [periodId]);
 
-   // if (loading) return <div>Loading...</div>;
-   // if (error) return <div>Error: {error}</div>;
 
    return (
       <>
@@ -58,9 +52,10 @@ const Win = ({ periodId }) => {
                            <tr key={index} className="border-b border-gray-300">
                               <td className="py-2">{bet.periodId}</td>
                               <td className="py-2">{bet.amount}</td>
-                              <td className={bet.isWin ? 'text-green-500 py-2' : 'text-red-500 py-2'}>
+                              {/*<td className={bet.isWin ? 'text-green-500 py-2' : 'text-red-500 py-2'}>
                                  {bet.isWin ? 'Win' : 'Loss'}
-                              </td>
+                              </td>*/}
+                              <td classname="py-2">{bet.outcome}</td>
                               <td className="py-2">{bet.winAmount}</td>
                            </tr>
                         )) : <tr><td colSpan="4">No bets found</td></tr>}

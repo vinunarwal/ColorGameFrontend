@@ -37,11 +37,22 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
 
                winningBets.forEach((winningBet) => {
                   const { userId, winAmount } = winningBet;
-                  // Update bank balance for each winning user
+                  // Update bank balance for winning user
 
                   axios.put(`http://localhost:5000/user/${userId}`, {
                      bankBalance: bankBalance + winAmount,
                   });
+
+
+                    // Update outcome to 'Win' for winning bet
+               axios.put(`http://localhost:5000/bet/updateOutcome`, {
+                  userId: userId,
+                  periodId: periodId,
+                  selection: result,
+                  outcome: 'Win',
+               });
+
+
                });
             })
             .catch((error) => {
