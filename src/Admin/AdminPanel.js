@@ -59,17 +59,17 @@ function AdminPanel() {
     }
   };
 
-  const updateWithdrawStatus = async (upiId, status) => {
-    try {
-      await axios.put("http://localhost:5000/status", {
-        upiId: upiId, // Pass upiId as a property of the object
-        status: status, // Pass status as a property of the object
-      });
-      fetchWithdrawals();
-    } catch (error) {
-      console.error("Error updating withdrawal status:", error);
-    }
-  };
+const updateWithdrawStatus = async (upiId, status) => {
+  try {
+    await axios.put("http://localhost:5000/status", {
+      upiId: upiId, // Pass upiId as a property of the object
+      status: status, // Pass status as a property of the object
+    });
+    fetchWithdrawals();
+  } catch (error) {
+    console.error("Error updating withdrawal status:", error);
+  }
+};
 
   const handleRechargeButtonClick = () => {
     setShowTransactionList(true);
@@ -85,22 +85,25 @@ function AdminPanel() {
       <div className="flex justify-center mb-4">
         <button
           onClick={() => handleFilterChange("pending")}
-          className={`mr-2 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md ${filter === "pending" && "bg-gray-300"
-            }`}
+          className={`mr-2 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md ${
+            filter === "pending" && "bg-gray-300"
+          }`}
         >
           Pending Transactions
         </button>
         <button
           onClick={() => handleFilterChange("success")}
-          className={`mr-2 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md ${filter === "success" && "bg-gray-300"
-            }`}
+          className={`mr-2 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md ${
+            filter === "success" && "bg-gray-300"
+          }`}
         >
           Successful Transactions
         </button>
         <button
           onClick={() => handleFilterChange("failed")}
-          className={`bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md ${filter === "failed" && "bg-gray-300"
-            }`}
+          className={`bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md ${
+            filter === "failed" && "bg-gray-300"
+          }`}
         >
           Failed Transactions
         </button>

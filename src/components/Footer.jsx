@@ -14,13 +14,16 @@ function Footer() {
             Home
           </Link>
           <Link to='/recharge' className="flex flex-col items-center justify-center  text-white py-2 px-4 rounded">
-          <FontAwesomeIcon icon={faBolt} className="w-6 h-6" />
+            <FontAwesomeIcon icon={faBolt} className="w-6 h-6" />
             Recharge
           </Link>
-          <button className="flex flex-col items-center justify-center text-white py-2 px-4 rounded">
-            <FontAwesomeIcon icon={faMedal} className="w-6 h-6" />
-            Win
-          </button>
+          <Link to="/win">
+            <button className="flex flex-col items-center justify-center text-white py-2 px-4 rounded">
+              <FontAwesomeIcon icon={faMedal} className="w-6 h-6" />
+              Win
+            </button>
+          </Link>
+
           <Link to="/ProfilePage">
             <button className="flex flex-col items-center justify-center  text-white py-2 px-4 rounded">
               <FontAwesomeIcon icon={faUser} className="w-6 h-6" />
