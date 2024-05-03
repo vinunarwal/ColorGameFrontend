@@ -9,7 +9,6 @@ function ColorPicker() {
   const initialTimer = localStorage.getItem("timer") || 60;
   const initialId = localStorage.getItem("id") || 1234567890;
   const initialPeriodIds = JSON.parse(localStorage.getItem("periodIds")) || [];
-  
 
   const [timer, setTimer] = useState(parseInt(initialTimer));
   const [id, setId] = useState(parseInt(initialId));
@@ -19,7 +18,6 @@ function ColorPicker() {
   const [countdownOpacity, setCountdownOpacity] = useState(1);
   const [lowestBetNumberMap, setLowestBetNumberMap] = useState({});
 
-  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
