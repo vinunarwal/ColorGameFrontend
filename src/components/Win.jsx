@@ -1,8 +1,7 @@
-// React - Win component
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Footer from './Footer';
-import { jwtDecode } from 'jwt-decode';  // Correct import statement, no braces
+import { jwtDecode } from 'jwt-decode';  
 
 const Win = ({ periodId }) => {
    const [userBets, setUserBets] = useState([]);
@@ -52,9 +51,6 @@ const Win = ({ periodId }) => {
                            <tr key={index} className="border-b border-gray-300">
                               <td className="py-2">{bet.periodId}</td>
                               <td className="py-2">{bet.amount}</td>
-                              {/*<td className={bet.isWin ? 'text-green-500 py-2' : 'text-red-500 py-2'}>
-                                 {bet.isWin ? 'Win' : 'Loss'}
-                              </td>*/}
                               <td classname="py-2">{bet.outcome}</td>
                               <td className="py-2">{bet.winAmount}</td>
                            </tr>
