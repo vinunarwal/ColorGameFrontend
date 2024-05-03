@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Footer from './Footer';
-import { jwtDecode } from 'jwt-decode';  
+import { jwtDecode } from 'jwt-decode';
 
 const Win = ({ periodId }) => {
    const [userBets, setUserBets] = useState([]);
@@ -47,7 +47,7 @@ const Win = ({ periodId }) => {
                         </tr>
                      </thead>
                      <tbody>
-                        {userBets.length > 0 ? userBets.map((bet, index) => (
+                        {userBets.length > 0 ? userBets.slice().reverse().map((bet, index) => ( // Reverse the array
                            <tr key={index} className="border-b border-gray-300">
                               <td className="py-2">{bet.periodId}</td>
                               <td className="py-2">{bet.amount}</td>
