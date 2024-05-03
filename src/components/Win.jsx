@@ -52,7 +52,9 @@ const Win = ({ periodId }) => {
                               <td className="py-2">{bet.periodId}</td>
                               <td className="py-2">{bet.amount}</td>
                               <td classname="py-2">{bet.outcome}</td>
-                              <td className="py-2">{bet.winAmount}</td>
+                              <td classname="py-2">
+                                 {bet.outcome==="Win" ? bet.winAmount:0}
+                              </td>
                            </tr>
                         )) : <tr><td colSpan="4">No bets found</td></tr>}
                      </tbody>
