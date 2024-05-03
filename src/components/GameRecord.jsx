@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 
 function GameRecord({ periodIds, lowestBetNumberMap }) {
    const [userId, setUserId] = useState("");
-   const [bankBalance, setBankBalance] = useState(0); 
+   const [bankBalance, setBankBalance] = useState(0);
 
    useEffect(() => {
       const token = localStorage.getItem('token');
@@ -33,28 +33,41 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
             .then((response) => {
                const { winningBets } = response.data;
 
-               winningBets.forEach((winningBet) => {
+               const updatePromises = winningBets.map((winningBet) => {
                   const { userId, winAmount } = winningBet;
-
-                  axios.put(`http://localhost:5000/user/${userId}`, {
-                     bankBalance: bankBalance + winAmount, 
+                  //setBankBalance(prevBalance => prevBalance + winAmount);
+                  // Update bank balance on the server
+                  return axios.put(`http://localhost:5000/user/${userId}`, {
+                     bankBalance: bankBalance + winAmount,
                   });
-
-                  axios.put(`http://localhost:5000/bet/updateOutcome`, {
-                     periodId: periodId,
-                     result: result,
-                  })
-                     .then((response) => {
-                        console.log("Bet outcomes updated successfully:", response.data.message);
-                     })
-                     .catch((error) => {
-                        console.error("Error updating bet outcomes:", error);
-                     });
                });
+
+               Promise.all(updatePromises)
+                  .then(() => {
+                     console.log("Bank balances updated successfully");
+                  })
+                  .catch((error) => {
+                     console.error("Error updating bank balances:", error);
+                  });
+            })
+            .catch((error) => {
+               console.error("Error fetching bet results:", error);
             });
+
+         // Update bet outcome
+         axios.put(`http://localhost:5000/bet/updateOutcome`, {
+            periodId: periodId,
+            result: result,
+         })
+            .then((response) => {
+               console.log("Bet outcomes updated successfully:", response.data.message);
+            })
+            .catch((error) => {
+               console.error("Error updating bet outcomes:", error);
+            });
+
       });
    }, [latestTenPeriodIds, lowestBetNumberMap]);
-
 
    return (
       <div className="container mx-auto">
