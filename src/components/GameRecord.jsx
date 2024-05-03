@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode';
 
 function GameRecord({ periodIds, lowestBetNumberMap }) {
    const [userId, setUserId] = useState("");
-   const [bankBalance, setBankBalance] = useState("0");
+   const [bankBalance, setBankBalance] = useState(0); 
 
    useEffect(() => {
       const token = localStorage.getItem('token');
@@ -22,11 +22,9 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
       }
    }, []);
 
-   // Get the latest 10 elements from periodIds
    const latestTenPeriodIds = periodIds.slice(0, 10);
 
    useEffect(() => {
-      // Fetch winAmount for matching bets and update bank balance
       latestTenPeriodIds.forEach((periodId) => {
          const result = lowestBetNumberMap[periodId];
 
@@ -37,29 +35,26 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
 
                winningBets.forEach((winningBet) => {
                   const { userId, winAmount } = winningBet;
-                  // Update bank balance for winning user
 
                   axios.put(`http://localhost:5000/user/${userId}`, {
-                     bankBalance: bankBalance + winAmount,
+                     bankBalance: bankBalance + winAmount, 
                   });
 
-
-                    // Update outcome to 'Win' for winning bet
-               axios.put(`http://localhost:5000/bet/updateOutcome`, {
-                  userId: userId,
-                  periodId: periodId,
-                  selection: result,
-                  outcome: 'Win',
+                  axios.put(`http://localhost:5000/bet/updateOutcome`, {
+                     periodId: periodId,
+                     result: result,
+                  })
+                     .then((response) => {
+                        console.log("Bet outcomes updated successfully:", response.data.message);
+                     })
+                     .catch((error) => {
+                        console.error("Error updating bet outcomes:", error);
+                     });
                });
-
-
-               });
-            })
-            .catch((error) => {
-               console.error("Error fetching winning bets:", error);
             });
       });
    }, [latestTenPeriodIds, lowestBetNumberMap]);
+
 
    return (
       <div className="container mx-auto">
@@ -80,7 +75,6 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
                            <tr key={index}>
                               <td className="px-4 py-2">{id}</td>
                               <td className="px-4 py-2">{lowestBetNumberMap[id]}</td>
-                              {/** Display lowestBetNumber */}
                            </tr>
                         ))}
                      </tbody>
