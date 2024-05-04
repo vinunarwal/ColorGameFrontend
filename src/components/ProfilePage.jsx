@@ -51,8 +51,8 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <div className="max-w-lg mx-auto px-[12px]">
-        <div className=" bg-blue-500 m-[20px] rounded-md p-[20px]">
+      <div className="max-w-[420px] mx-auto">
+        <div className=" bg-blue-500 mt-5 rounded-md p-[20px]">
           <div className="flex justify-between items-center">
             <div className="flex items-center justify-center">
               <img
@@ -104,45 +104,45 @@ const ProfilePage = () => {
           </Link>
 
         </div>
-        <div className="m-[20px]">
-          <div className="flex  ">
+        <div className=" bg-slate-100 h-[514px]">
+          <div className="flex  pl-2 pt-5">
             <img src={bonus} alt="bonus" />
             <p className=" ps-2">Bonus Record</p>
           </div>
-          <div className="flex border-t-[1px] py-[4px] border-solid border-[#706f6f77]  ">
+          <div className="flex border-t-[1px] py-[4px] border-solid border-[#706f6f77]  pl-2">
             <img src={promotion} alt="promotion" />
             <p className=" ps-2">Promotion</p>
           </div>
-          <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
+          <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] pl-2">
             <img src={bankcard} alt="bankcard" />{" "}
             <p className="ps-2">Bank Card</p>
           </div>
-          <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
+          <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] pl-2">
             <img src={wallet} alt="wallet" /> <p className="ps-2">Wallet</p>
           </div>
           <Link
             to="/Address"
-            className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] "
+            className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] pl-2"
           >
             <img src={address} alt="ADDRESS" /> <p className="ps-2">Address</p>
           </Link>
-          <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
+          <div className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] pl-2">
             <img src={appdownload} alt="app" />{" "}
             <p className="ps-2">App Download</p>
           </div>
           <Link
             to="/Complaints"
-            className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
+            className="flex  border-t-[1px] py-[4px] border-solid border-[#706f6f77] pl-2">
             <img src={complaints} alt="complaints" />{" "}
             <p className="ps-2">Complaints and suggestions</p>
           </Link>
-          <div className="flex  border-b-[1px]  border-t-[1px] py-[4px] border-solid border-[#706f6f77] ">
+          <div className="flex  border-b-[1px]  border-t-[1px] py-[4px] border-solid border-[#706f6f77] pl-2">
             <img src={about} alt="about" /> <p className=" ps-2">About</p>
           </div>
           <div className="text-center">
             <button
               className="border-1  rounded-md mt-5 bg-[red] text-white border-solid py-[7px] px-[15px]"
-              onClick={handleLogout}
+              onClick={handleLogout}pl-2
             >
               Logout
             </button>
