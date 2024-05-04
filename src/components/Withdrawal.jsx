@@ -31,7 +31,7 @@ function Withdrawal() {
             setUsername(decodedToken.username);
             setUserId(decodedToken.userId);
 
-            axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+            axios.get(`https://colorgamebackend-1.onrender.com/user/${decodedToken.userId}`)
                 .then(response => {
                     setBankBalance(response.data.bankBalance);
                 })

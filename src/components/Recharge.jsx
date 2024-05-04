@@ -98,7 +98,6 @@ function Recharge() {
       }
 
       try {
-
          const response = await axios.post('https://colorgamebackend-1.onrender.com/transaction', { transactionId, platform, amount, userId });
 
          if (response.status === 200 || response.status === 201) {
