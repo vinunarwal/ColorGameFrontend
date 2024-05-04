@@ -35,7 +35,7 @@ function Withdrawl() {
          setUsername(decodedToken.username);
          setUserId(decodedToken.userId);
 
-         axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+         axios.get(`https://colorgamebackend-1.onrender.com/user/${decodedToken.userId}`)
             .then(response => {
                setBankBalance(response.data.bankBalance);
             })
@@ -88,7 +88,7 @@ function Withdrawl() {
                   userId: userId
                };
 
-               const response = await axios.post('http://localhost:5000/withDraw', requestBody);
+               const response = await axios.post('https://colorgamebackend-1.onrender.com/withDraw', requestBody);
                console.log("Withdrawal successful:", response.data);
                setSuccessMessage("Withdrawal successful.");
                setErrorMessage("");

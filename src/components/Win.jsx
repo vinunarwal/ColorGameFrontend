@@ -19,7 +19,7 @@ const Win = ({ periodId }) => {
             const decodedToken = jwtDecode(token);
             const userId = decodedToken.userId;
 
-            const response = await axios.get(`http://localhost:5000/bets/${userId}`);
+            const response = await axios.get(`https://colorgamebackend-1.onrender.com/bets/${userId}`);
             setUserBets(response.data.userBets || []); // Handle case where no bets are found
          } catch (error) {
             console.error('Error fetching user bets:', error);
@@ -47,7 +47,7 @@ const Win = ({ periodId }) => {
                         </tr>
                      </thead>
                      <tbody>
-                        {userBets.length > 0 ? userBets.slice().reverse().map((bet, index) => ( // Reverse the array
+                        {userBets.length > 0 ? userBets.slice().reverse().map((bet, index) => ( 
                            <tr key={index} className="border-b border-gray-300">
                               <td className="py-2">{bet.periodId}</td>
                               <td className="py-2">{bet.amount}</td>

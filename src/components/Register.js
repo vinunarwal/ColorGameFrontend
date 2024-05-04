@@ -42,7 +42,7 @@ const RegistrationPage = () => {
    const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-         const response = await axios.post('http://localhost:5000/register', formData);
+         const response = await axios.post('https://colorgamebackend-1.onrender.com/register', formData);
          const { data } = response;
          if (data.token) {
             Swal.fire({
