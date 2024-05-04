@@ -38,7 +38,7 @@ function Recharge() {
          setUsername(decodedToken.username);
          setUserId(decodedToken.userId);
 
-         axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+         axios.get(`https://colorgamebackend-1.onrender.com/user/${decodedToken.userId}`)
             .then(response => {
                setBankBalance(response.data.bankBalance);
             })
@@ -98,7 +98,7 @@ function Recharge() {
       }
 
       try {
-         const response = await axios.post('http://localhost:5000/transaction', { transactionId, platform, amount, userId });
+         const response = await axios.post('https://colorgamebackend-1.onrender.com/transaction', { transactionId, platform, amount, userId });
 
          if (response.status === 200 || response.status === 201) {
             setShowMessage(true);

@@ -12,7 +12,7 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
          const decodedToken = jwtDecode(token);
          setUserId(decodedToken.userId);
 
-         axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+         axios.get(`https://colorgamebackend-1.onrender.com/user/${decodedToken.userId}`)
             .then(response => {
                setBankBalance(response.data.bankBalance);
             })
@@ -29,7 +29,7 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
          const result = lowestBetNumberMap[periodId];
 
          axios
-            .get(`http://localhost:5000/bet/result/${periodId}/${result}`)
+            .get(`https://colorgamebackend-1.onrender.com/bet/result/${periodId}/${result}`)
             .then((response) => {
                const { winningBets } = response.data;
 
@@ -37,7 +37,7 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
                   const { userId, winAmount } = winningBet;
                   //setBankBalance(prevBalance => prevBalance + winAmount);
                   // Update bank balance on the server
-                  return axios.put(`http://localhost:5000/user/${userId}`, {
+                  return axios.put(`https://colorgamebackend-1.onrender.com/user/${userId}`, {
                      bankBalance: bankBalance + winAmount,
                   });
                });
@@ -55,7 +55,7 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
             });
 
          // Update bet outcome
-         axios.put(`http://localhost:5000/bet/updateOutcome`, {
+         axios.put(`https://colorgamebackend-1.onrender.com/bet/updateOutcome`, {
             periodId: periodId,
             result: result,
          })

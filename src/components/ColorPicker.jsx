@@ -28,7 +28,7 @@ function ColorPicker() {
       setUserId(decodedToken.userId);
 
       axios
-        .get(`http://localhost:5000/user/${decodedToken.userId}`)
+        .get(`https://colorgamebackend-1.onrender.com/user/${decodedToken.userId}`)
         .then((response) => {
           setBankBalance(response.data.bankBalance);
         })
@@ -72,7 +72,7 @@ function ColorPicker() {
 
   const fetchLowestBetNumber = (periodId) => {
     axios
-      .get(`http://localhost:5000/lowest/${periodId}`) // Use periodId instead of id
+      .get(`https://colorgamebackend-1.onrender.com/lowest/${periodId}`) // Use periodId instead of id
       .then((response) => {
         const { lowestBetNumber } = response.data;
         setLowestBetNumberMap((prevMap) => ({
@@ -151,7 +151,7 @@ function ColorPicker() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post("http://localhost:5000/bet", {
+          .post("https://colorgamebackend-1.onrender.com/bet", {
             userId,
             amount,
             selection,

@@ -18,7 +18,7 @@ const Win = ({ periodId }) => {
                 const decodedToken = jwtDecode(token);
                 const userId = decodedToken.userId;
 
-                const response = await axios.get(`http://localhost:5000/bets/${userId}`);
+                const response = await axios.get(`https://colorgamebackend-1.onrender.com/bets/${userId}`);
                 setUserBets(response.data.userBets || []); // Handle case where no bets are found
             } catch (error) {
                 console.error('Error fetching user bets:', error);
