@@ -24,6 +24,7 @@ function App() {
           <Route path="/ProfilePage" element={<ProfilePage />} />
           <Route path="/complaints" element={<Complaints/>} />
           <Route path="/recharge" element={<Recharge />} />
+          <Route path="/withdrawal" element={<Withdrawl />} />
           <Route path="/Address" element={<Address />} />
           <Route path="/AddAddress" element={<AddAddress />} />
           <Route path="/adminPanel" element={<AdminPanel />} />
