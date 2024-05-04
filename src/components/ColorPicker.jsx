@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import GameRecord from "./GameRecord";
 import Swal from "sweetalert2";

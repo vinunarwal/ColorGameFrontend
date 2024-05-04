@@ -35,7 +35,6 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
 
                const updatePromises = winningBets.map((winningBet) => {
                   const { userId, winAmount } = winningBet;
-                  //setBankBalance(prevBalance => prevBalance + winAmount);
                   // Update bank balance on the server
                   return axios.put(`https://colorgamebackend-1.onrender.com/user/${userId}`, {
                      bankBalance: bankBalance + winAmount,
@@ -70,18 +69,21 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
    }, [latestTenPeriodIds, lowestBetNumberMap]);
 
    const getLowestBetNumberBackgroundColor = (number) => {
-      if (number === 0) {
-        return "bg-gradient-to-r from-green-500 to-violet-500 text-white";
-      } else if (number === 5) {
-        return "bg-gradient-to-r from-red-500 to-violet-500 text-white";
-      } else if ([1, 3, 7, 9].includes(number)) {
-        return "bg-green-500 text-white";
-      } else if ([2, 4, 6, 8].includes(number)) {
-        return "bg-red-500 text-white";
-      } else {
-        return "";
-      }
-    };
+
+    if (number === 0) {
+      return "bg-gradient-to-r from-green-500 to-violet-500 text-white";
+    } else if (number === 5) {
+      return "bg-gradient-to-r from-red-500 to-violet-500 text-white";
+    } else if ([1, 3, 7, 9].includes(number)) {
+      return "bg-green-500 text-white";
+    } else if ([2, 4, 6, 8].includes(number)) {
+      return "bg-red-500 text-white";
+    } else {
+      return "";
+    }
+  };
+  
+
   
     return (
       <div className="container mx-auto">
