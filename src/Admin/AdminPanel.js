@@ -19,7 +19,7 @@ function AdminPanel() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/transaction?filter=${filter}`
+        `https://colorgamebackend-1.onrender.com/transaction?filter=${filter}`
       );
       setTransactions(response.data);
       setLoading(false);
@@ -33,7 +33,7 @@ function AdminPanel() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/withdraw?filter=${filter}`
+        `https://colorgamebackend-1.onrender.com/withdraw?filter=${filter}`
       );
       setWithdrawals(response.data);
       setLoading(false);
@@ -49,7 +49,7 @@ function AdminPanel() {
 
   const updateTransactionStatus = async (transactionId, status) => {
     try {
-      await axios.put("http://localhost:5000/updateStatus", {
+      await axios.put("https://colorgamebackend-1.onrender.com/updateStatus", {
         transactionId,
         status,
       });
@@ -61,7 +61,7 @@ function AdminPanel() {
 
 const updateWithdrawStatus = async (upiId, status) => {
   try {
-    await axios.put("http://localhost:5000/status", {
+    await axios.put("https://colorgamebackend-1.onrender.com/status", {
       upiId: upiId, // Pass upiId as a property of the object
       status: status, // Pass status as a property of the object
     });

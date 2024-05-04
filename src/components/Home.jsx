@@ -12,7 +12,7 @@ function Home() {
     if (token) {
       const decodedToken = jwtDecode(token);
 
-      axios.get(`http://localhost:5000/user/${decodedToken.userId}`)
+      axios.get(`https://colorgamebackend-1.onrender.com/user/${decodedToken.userId}`)
         .then(response => {
           setBankBalance(response.data.bankBalance);
         })

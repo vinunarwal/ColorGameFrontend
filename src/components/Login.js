@@ -25,7 +25,7 @@ const Login = () => {
    const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-         const response = await axios.post('http://localhost:5000/login', formData);
+         const response = await axios.post('https://colorgamebackend-1.onrender.com/login', formData);
          const { data } = response;
          if (data.token) {
             localStorage.setItem('token', data.token);

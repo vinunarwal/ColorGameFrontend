@@ -1,6 +1,4 @@
-// WithdrawList.js
 import React from "react";
-import axios from "axios";
 
 function WithdrawList({ withdrawals, updateWithdrawStatus }) {
   const handleAccept = async (upiId) => {
