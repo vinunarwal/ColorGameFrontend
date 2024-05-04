@@ -71,7 +71,7 @@ const updateWithdrawStatus = async (upiId, status) => {
   }
 };
 
-  const handleRechargeButtonClick = () => { 
+  const handleRechargeButtonClick = () => {
     setShowTransactionList(true);
   };
 
