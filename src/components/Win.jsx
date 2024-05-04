@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Footer from './Footer';
-import { jwtDecode } from 'jwt-decode';  
+import { jwtDecode } from 'jwt-decode';
 
 const Win = ({ periodId }) => {
    const [userBets, setUserBets] = useState([]);
@@ -40,19 +40,21 @@ const Win = ({ periodId }) => {
                   <table className="w-full text-center">
                      <thead className="sticky bg-slate-300 top-0 z-10">
                         <tr>
-                           <th className="font-semibold border-b-2 border-gray-400">Period ID</th>
-                           <th className="font-semibold border-b-2 border-gray-400">Bet (in Rs.)</th>
-                           <th className="font-semibold border-b-2 border-gray-400">Result (Win/Loss)</th>
-                           <th className="font-semibold border-b-2 border-gray-400">Win (in Rs.)</th>
+                           <th className="font-semibold border-b-2 border-r-2 border-gray-400">Period ID</th>
+                           <th className="font-semibold border-b-2 border-r-2 border-gray-400">Bet <span className='block'>Amount</span></th>
+                           <th className="font-semibold border-b-2 border-r-2 border-gray-400">Result <span className='block'>(Win/Loss)</span></th>
+                           <th className="font-semibold border-b-2 border-gray-400">Win <span className='block'>Amount</span></th>
                         </tr>
                      </thead>
                      <tbody>
-                        {userBets.length > 0 ? userBets.map((bet, index) => (
+                        {userBets.length > 0 ? userBets.slice().reverse().map((bet, index) => ( // Reverse the array
                            <tr key={index} className="border-b border-gray-300">
                               <td className="py-2">{bet.periodId}</td>
                               <td className="py-2">{bet.amount}</td>
                               <td classname="py-2">{bet.outcome}</td>
-                              <td className="py-2">{bet.winAmount}</td>
+                              <td classname="py-2">
+                                 {bet.outcome==="Win" ? bet.winAmount:0}
+                              </td>
                            </tr>
                         )) : <tr><td colSpan="4">No bets found</td></tr>}
                      </tbody>
