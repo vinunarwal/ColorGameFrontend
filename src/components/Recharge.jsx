@@ -10,7 +10,6 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import Marquee from "react-fast-marquee";
 
-
 function Recharge() {
    const [greeting, setGreeting] = useState('');
    const [username, setUsername] = useState('');
@@ -21,7 +20,7 @@ function Recharge() {
    const [submitClicked, setSubmitClicked] = useState(false);
    const [userId, setUserId] = useState("");
    const [bankBalance, setBankBalance] = useState("0");
-
+   const [error, seterror] = useState("");
 
    useEffect(() => {
       const currentHour = new Date().getHours();
@@ -46,10 +45,8 @@ function Recharge() {
             .catch(error => {
                console.error('Error fetching user data:', error);
             });
-
       }
    }, []);
-
 
    const handleAmountClick = (amountValue) => {
       setAmount(amountValue);
@@ -95,19 +92,21 @@ function Recharge() {
    const handleSubmit = async (e) => {
       e.preventDefault();
       setSubmitClicked(true);
-      if (!amount || !transactionId || !platform || !userId) {
+      if (!amount || !transactionId || !platform) {
+         seterror('Amount, Transaction ID, and Platform are required.');
          return;
       }
+
       try {
          const response = await axios.post('http://localhost:5000/transaction', { transactionId, platform, amount, userId });
+
          if (response.status === 200 || response.status === 201) {
             setShowMessage(true);
             console.log('Transaction details saved successfully');
-            // Clear input fields after successful submission
             setTransactionId('');
             setPlatform('');
             setAmount('');
-
+            seterror('');
          } else {
             console.error('Failed to save transaction details');
          }
@@ -120,8 +119,6 @@ function Recharge() {
       <div>
          <div className=' mt-[5px]'>
             <div className='content max-w-[420px] mx-auto px-[12px] bg-slate-100'>
-
-               {/* Profile Secttion */}
                <div className='pt-[12px] '>
                   <div className='Header mb-5 flex py-[8px] rounded-xl justify-between mx-[40px] px-[12px] bg-sky-300 '>
                      <div className='User'>
@@ -136,8 +133,6 @@ function Recharge() {
                      </div>
                   </div>
                </div>
-
-               {/* Total Balance Section */}
                <div className='rounded-lg mx-[15px] bg-lime-200'>
                   <div className='flex justify-between mx-[12px] py-[10px]'>
                      <div className='bank-img max-[394px]:hidden'>
@@ -162,15 +157,12 @@ function Recharge() {
                      </div>
                   </div>
                </div>
-
                <p className=' font-bold text-xl my-[10px] pl-5'
                   style={{ fontFamily: 'Times New Roman', fontSize: '20px', fontWeight: 'normal' }}>
                   Select Amount</p>
-
-               {/* Select Amount Section */}
                <div className='Select-Amonunt'>
                   <div className='enteramount'>
-
+                     {/* Amount input */}
                      <div className='flex justify-center px-[10px] rtl relative mx-[16px] mb-5'>
                         <input
                            type="number"
@@ -185,13 +177,14 @@ function Recharge() {
                         />
                         <img className='absolute top-1 left-3 w-11 h-8 rounded-s-lg' src={Ruppees} alt="not found rounded-md" />
                      </div>
-
+                     {/* Or */}
                      <div className="flex items-center justify-center">
                         <hr className="w-full border-gray-400 border-t-2 mx-4" />
                         <span className="text-gray-400">OR</span>
                         <hr className="w-full border-gray-400 border-t-2 mx-4" />
                      </div>
 
+                     {/* Amount buttons */}
                      <div className="flex justify-center">
                         <div className="flex flex-wrap justify-between">
                            <div>
@@ -239,6 +232,7 @@ function Recharge() {
                         </div>
                      </div>
 
+                     {/* Recharge button */}
                      <div className="flex justify-center mt-5 pb-5">
                         <button className="bg-sky-500 hover:bg-rose-600 duration-300 text-white text-lg font-bold py-3 px-20 rounded-lg focus:outline-none focus:shadow-outline"
                            style={{ fontFamily: 'Times New Roman', fontSize: '20px', fontWeight: 'normal' }}
@@ -246,9 +240,7 @@ function Recharge() {
                            Recharge
                         </button>
                      </div>
-
-                     {/* Text and input fields for transaction ID and platform */}
-
+                     {/* Transaction ID and Platform input */}
                      <div className="pb-6">
                         <div className="flex flex-col justify-center bg-slate-300 rounded-md">
                            <Marquee className=''>
@@ -264,9 +256,8 @@ function Recharge() {
                                  required
                                  onChange={(e) => setTransactionId(e.target.value)}
                               />
-
+                              {/* Select platform dropdown */}
                               <select
-
                                  value={platform}
                                  onChange={(e) => setPlatform(e.target.value)}
                                  className="border border-gray-300 bg-amber-100 rounded-md px-1 max-w-40 py-1 focus:outline-none"
@@ -288,53 +279,34 @@ function Recharge() {
                                     style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}>
                                     Google Pay</option>
                               </select>
-
-                              {/* <input type="text"
-                                 placeholder="Platform.. Eg. Paytm *"
-
-                                 className="border border-gray-300 bg-amber-100 rounded-md px-1 max-w-40 py-1 focus:outline-none"
-                                 value={platform}
-                                 required
-                                 onChange={(e) => setPlatform(e.target.value)}
-
-                                 
-                              /> */}
-
                            </div>
-
-                           {submitClicked && (!transactionId || !platform) && (
-
-                              <p className="text-red-500 text-sm"
-                                 style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}>
-                                 Transaction ID, Platform & Amount are mandatory *</p>
-
-                           )}
+                           {/* Error message */}
+                           <p className="text-red-500 text-sm text-center">{error}</p>
+                           {/* Submit button */}
                            <div className=' flex justify-center'>
                               <button className="bg-sky-500 hover:bg-rose-600 duration-500 text-white font-bold py-2 px-9 rounded-md my-2 mb-4  focus:outline-none"
                                  style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}
                                  onClick={handleSubmit}>
-                                 Submit</button>
+                                 Submit
+                              </button>
                            </div>
                         </div>
                      </div>
+                     {/* Success message */}
                      <div>
-                        {showMessage && ( // Render message if showMessage is true
+                        {showMessage && (
                            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mb-1 rounded relative" role="alert">
-                              <span className="block sm:inline"> Transaction details saved successfully.</span>
+                              <span className="block sm:inline">Transaction details saved successfully.</span>
                               <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
                                  <svg onClick={() => setShowMessage(false)} className="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.35 14.35a1 1 0 0 1-1.41 0L10 11.41l-2.93 2.93a1 1 0 1 1-1.41-1.41L8.59 10 5.66 7.07a1 1 0 0 1 1.41-1.41L10 8.59l2.93-2.93a1 1 0 0 1 1.41 1.41L11.41 10l2.93 2.93a1 1 0 0 1 0 1.42z" /></svg>
                               </span>
                            </div>
                         )}
                      </div>
-
-
                   </div>
                </div>
-
             </div>
          </div>
-
          <Footer />
       </div>
    );
