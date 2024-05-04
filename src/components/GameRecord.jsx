@@ -70,13 +70,13 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
    }, [latestTenPeriodIds, lowestBetNumberMap]);
 
    const getLowestBetNumberBackgroundColor = (number) => {
-      if (number === "0") {
+      if (number === 0) {
         return "bg-gradient-to-r from-green-500 to-violet-500 text-white";
-      } else if (number === "5") {
+      } else if (number === 5) {
         return "bg-gradient-to-r from-red-500 to-violet-500 text-white";
-      } else if (["1", "3", "7", "9"].includes(number)) {
+      } else if ([1, 3, 7, 9].includes(number)) {
         return "bg-green-500 text-white";
-      } else if (["2", "4", "6", "8"].includes(number)) {
+      } else if ([2, 4, 6, 8].includes(number)) {
         return "bg-red-500 text-white";
       } else {
         return "";
