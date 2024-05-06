@@ -7,16 +7,34 @@ import { jwtDecode } from "jwt-decode";
 
 function ColorPicker() {
   const initialTimer = localStorage.getItem("timer") || 60;
-  const initialId = localStorage.getItem("id") || 1234567890;
-  const initialPeriodIds = JSON.parse(localStorage.getItem("periodIds")) || [];
+  // const initialId = localStorage.getItem("id") || 1234567890;
+  // const initialPeriodIds = JSON.parse(localStorage.getItem("periodIds")) || [];
 
   const [timer, setTimer] = useState(parseInt(initialTimer));
-  const [id, setId] = useState(parseInt(initialId));
-  const [periodIds, setPeriodIds] = useState(initialPeriodIds);
+  // const [id, setId] = useState(parseInt(initialId));
+  // const [periodIds, setPeriodIds] = useState(initialPeriodIds);
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
   const [countdownOpacity, setCountdownOpacity] = useState(1);
   const [lowestBetNumberMap, setLowestBetNumberMap] = useState({});
+
+  const [periodId, setPeriodId] = useState('');
+
+  
+  useEffect(() => {
+    fetchPeriodId();
+  }, []);
+
+  const fetchPeriodId = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/timer'); // Replace with your actual backend endpoint
+      console.log('Full response:', response.data); 
+      setPeriodId(response.data.periodId);
+      console.log('Period ID updated:', response.data.periodId);
+    } catch (error) {
+      console.error('Error fetching periodId:', error);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -35,33 +53,33 @@ function ColorPicker() {
     }
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (timer > 0) {
-        setTimer(timer - 1);
-        localStorage.setItem("timer", timer - 1);
-        if (timer <= 30) {
-          setCountdownOpacity(0.5); // Change opacity when last 30 seconds
-        } else {
-          setCountdownOpacity(1); // Reset opacity when not in last 30 seconds
-        }
-      } else {
-        setTimer(60);
-        setId((prevId) => prevId + 1);
-        localStorage.setItem("timer", 60);
-        localStorage.setItem("id", id + 1);
-        updatePeriodIds(id); // Update periodIds with the new ID
-        fetchLowestBetNumber(id); // Fetch lowest bet number for the new period
-        setCountdownOpacity(1); // Reset opacity when timer resets
-      }
-    }, 1000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (timer > 0) {
+  //       setTimer(timer - 1);
+  //       localStorage.setItem("timer", timer - 1);
+  //       if (timer <= 30) {
+  //         setCountdownOpacity(0.5); // Change opacity when last 30 seconds
+  //       } else {
+  //         setCountdownOpacity(1); // Reset opacity when not in last 30 seconds
+  //       }
+  //     } else {
+  //       setTimer(60);
+  //       setId((prevId) => prevId + 1);
+  //       localStorage.setItem("timer", 60);
+  //       localStorage.setItem("id", id + 1);
+  //       updatePeriodIds(id); // Update periodIds with the new ID
+  //       fetchLowestBetNumber(id); // Fetch lowest bet number for the new period
+  //       setCountdownOpacity(1); // Reset opacity when timer resets
+  //     }
+  //   }, 1000);
 
-    return () => clearInterval(interval);
-  }, [timer, id]);
+  //   return () => clearInterval(interval);
+  // }, [timer, id]);
 
-  useEffect(() => {
-    localStorage.setItem("periodIds", JSON.stringify(periodIds));
-  }, [periodIds]);
+  // useEffect(() => {
+  //   localStorage.setItem("periodIds", JSON.stringify(periodIds));
+  // }, [periodIds]);
 
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
@@ -82,15 +100,15 @@ function ColorPicker() {
       });
   };
   
-  useEffect(() => {
-    fetchLowestBetNumber(id); 
-  }, [id]); 
+  // useEffect(() => {
+  //   fetchLowestBetNumber(id); 
+  // }, [id]); 
   
 
 
-  const updatePeriodIds = (newId) => {
-    setPeriodIds((prevIds) => [newId, ...prevIds]);
-  };
+  // const updatePeriodIds = (newId) => {
+  //   setPeriodIds((prevIds) => [newId, ...prevIds]);
+  // };
 
   const handleBet = (selection, periodId) => {
     // Disable handleBet function when countdownOpacity is 0.5
@@ -188,7 +206,7 @@ function ColorPicker() {
             <h2 className="text-lg font-bold">Count Down</h2>
           </div>
           <div className="flex justify-between w-full sm:w-auto">
-            <h2 className="text-lg font-medium">ID: {id}</h2>
+            <h2 className="text-lg font-medium">ID: {periodId}</h2>
             <h2
               className="text-lg font-bold"
               style={{
@@ -205,7 +223,7 @@ function ColorPicker() {
               )}
             </h2>
           </div>
-          <div className="flex justify-around mt-4">
+          {/* <div className="flex justify-around mt-4">
             <button
               onClick={() => handleBet("Green", id)}
               className="bg-green-500 text-white py-2 px-4 rounded"
@@ -224,10 +242,10 @@ function ColorPicker() {
             >
               Join Violet
             </button>
-          </div>
+          </div> */}
           <div>
             <div className="text-center">
-              <div className="flex justify-around mt-4">
+              {/* <div className="flex justify-around mt-4">
                 <button
                   onClick={() => handleBet("0", id)}
                   className="bg-gradient-to-r from-green-500 to-violet-500 text-white py-1 px-5 rounded"
@@ -258,9 +276,9 @@ function ColorPicker() {
                 >
                   4
                 </button>
-              </div>
+              </div> */}
 
-              <div className="flex justify-around mt-4">
+              {/* <div className="flex justify-around mt-4">
                 <button
                   onClick={() => handleBet("5", id)}
                   className="bg-gradient-to-r from-red-500 to-violet-500 text-white py-1 px-5 rounded"
@@ -280,23 +298,23 @@ function ColorPicker() {
                   7
                 </button>
                 <button
-                  onClick={() => handleBet("8", id)}
                   className="bg-red-500 text-white py-1 px-5 rounded"
+                  onClick={() => handleBet("8", id)}
                 >
                   8
                 </button>
                 <button
-                  onClick={() => handleBet("9", id)}
                   className="bg-green-500 text-white py-1 px-5 rounded"
+                  onClick={() => handleBet("9", id)}
                 >
                   9
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       </div>
-      <GameRecord periodIds={periodIds} lowestBetNumberMap={lowestBetNumberMap} />
+      {/* <GameRecord periodIds={periodIds} lowestBetNumberMap={lowestBetNumberMap} /> */}
     </div>
   );
 }
