@@ -11,6 +11,7 @@ import Address from "./components/Address";
 import AddAddress from "./components/AddAddress";
 import AdminPanel from "./Admin/AdminPanel";
 import Withdrawl from "./components/Withdrawl";
+// import Withdrawal from "./components/Withdrawal";
 import Win from "./components/Win";
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
           <Route path="/ProfilePage" element={<ProfilePage />} />
           <Route path="/complaints" element={<Complaints/>} />
           <Route path="/recharge" element={<Recharge />} />
-          <Route path="/withdrawal" element={<Withdrawl />} />
+          {/* <Route path="/withdrawal" element={<Withdrawal />} /> */}
           <Route path="/Address" element={<Address />} />
           <Route path="/AddAddress" element={<AddAddress />} />
           <Route path="/adminPanel" element={<AdminPanel />} />

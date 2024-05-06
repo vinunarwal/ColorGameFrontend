@@ -9,6 +9,7 @@ const Login = () => {
    });
 
    const [error, setError] = useState('');
+   const [isSubmiting, setIsSubmitting] = useState(false)
    const navigate = useNavigate();
 
    useEffect(() => {
@@ -24,6 +25,7 @@ const Login = () => {
 
    const handleSubmit = async (e) => {
       e.preventDefault();
+      setIsSubmitting(true);
       try {
          const response = await axios.post('https://colorgamebackend-1.onrender.com/login', formData);
          const { data } = response;
@@ -36,6 +38,7 @@ const Login = () => {
       } catch (error) {
          setError('Login failed');
       }
+      setIsSubmitting(false);
    };
 
 
@@ -47,7 +50,7 @@ const Login = () => {
                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div>
                      <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                     Username
+                        Username
                      </label>
                      <div className="mt-1">
                         <input
@@ -84,9 +87,11 @@ const Login = () => {
                   <div>
                      <button
                         type="submit"
-                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600
+                         hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        disabled={isSubmiting}
                      >
-                        Log In
+                        {isSubmiting ? 'Please Wait...' : 'Login'}
                      </button>
                   </div>
                </form>

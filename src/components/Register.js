@@ -11,6 +11,7 @@ const RegistrationPage = () => {
       mobile: ''
    });
    const [errors, setErrors] = useState({});
+   const [isSubmitting, setIsSubmitting] = useState(false)
    const navigate = useNavigate();
 
    const handleChange = (e) => {
@@ -41,6 +42,7 @@ const RegistrationPage = () => {
 
    const handleSubmit = async (e) => {
       e.preventDefault();
+      setIsSubmitting(true);
       try {
          const response = await axios.post('https://colorgamebackend-1.onrender.com/register', formData);
          const { data } = response;
@@ -73,6 +75,7 @@ const RegistrationPage = () => {
             setErrors({ general: 'Registration failed' });
          }
       }
+      setIsSubmitting(false);
    };
 
 
@@ -157,9 +160,11 @@ const RegistrationPage = () => {
                   <div>
                      <button
                         type="submit"
-                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white
+                         bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        disabled = {isSubmitting}
                      >
-                        Create Account
+                        {isSubmitting ? 'Please Wait.. ' : 'Create Account'}
                      </button>
                   </div>
                </form>

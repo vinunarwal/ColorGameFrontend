@@ -16,7 +16,7 @@ function Withdrawl() {
    const [errorMessage, setErrorMessage] = useState("");
    const [successMessage, setSuccessMessage] = useState("");
    const [upiValidationMessage, setUpiValidationMessage] = useState("");
-
+   const [isSubmitting, setIsSubmitting] = useState(false);
 
 
    useEffect(() => {
@@ -68,6 +68,7 @@ function Withdrawl() {
 
 
    const handleSubmit = async () => {
+      setIsSubmitting(true);
       if (!validateUpiId()) {
          return; // Stop the submission if the UPI ID is invalid
       }
@@ -98,6 +99,7 @@ function Withdrawl() {
             console.error('Error withdrawing amount:', error);
             setErrorMessage("Error withdrawing amount. Please try again later.");
          }
+         setIsSubmitting(false);
       }
    };
 
@@ -197,8 +199,10 @@ function Withdrawl() {
                      <div className=' flex justify-center pt-3'>
                         <button
                            className="bg-blue-500 hover:bg-blue-800 duration-500 text-white py-2 px-6 rounded-md"
-                           onClick={handleSubmit}>
-                           Submit
+                           onClick={handleSubmit}
+                           disabled={isSubmitting}
+                           >
+                           {isSubmitting ? 'Withdrawal is processing..' : 'Withdraw'}
                         </button>
                      </div>
 

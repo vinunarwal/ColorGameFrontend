@@ -21,6 +21,7 @@ function Recharge() {
    const [userId, setUserId] = useState("");
    const [bankBalance, setBankBalance] = useState("0");
    const [error, seterror] = useState("");
+   const [isSubmitting, setIsSubmitting] = useState(false);
 
    useEffect(() => {
       const currentHour = new Date().getHours();
@@ -91,6 +92,7 @@ function Recharge() {
 
    const handleSubmit = async (e) => {
       e.preventDefault();
+      setIsSubmitting(true);
       setSubmitClicked(true);
       if (!amount || !transactionId || !platform) {
          seterror('Amount, Transaction ID, and Platform are required.');
@@ -113,6 +115,7 @@ function Recharge() {
       } catch (error) {
          console.error('Error while saving transaction details:', error);
       }
+      setIsSubmitting(false);
    };
 
    return (
@@ -286,8 +289,10 @@ function Recharge() {
                            <div className=' flex justify-center'>
                               <button className="bg-sky-500 hover:bg-rose-600 duration-500 text-white font-bold py-2 px-9 rounded-md my-2 mb-4  focus:outline-none"
                                  style={{ fontFamily: 'Times New Roman', fontSize: '16px', fontWeight: 'normal' }}
-                                 onClick={handleSubmit}>
-                                 Submit
+                                 onClick={handleSubmit}
+                                 disabled = {isSubmitting}
+                                 >
+                                 {isSubmitting ? 'Processing...' : 'Submit'}
                               </button>
                            </div>
                         </div>
