@@ -29,7 +29,7 @@ function ColorPicker() {
       setUserId(decodedToken.userId);
 
       axios
-        .get(`https://colorgamebackend-1.onrender.com/user/${decodedToken.userId}`)
+        .get(`http://localhost:5000/user/${decodedToken.userId}`)
         .then((response) => {
           setBankBalance(response.data.bankBalance);
         })
@@ -45,13 +45,15 @@ function ColorPicker() {
   }, []);
 
   useEffect(() => {
+    fetchData(); // Fetch initial data
+    
     const timer = setInterval(() => {
       setTime(prevTime => {
         if (prevTime > 0) {
           return prevTime - 1; // Decrement time every second if time is greater than 0
         } else {
           clearInterval(timer); // Clear interval when time reaches 0
-          return prevTime; // Return the current time
+          fetchData(); // Refetch data when time reaches 0
         }
       });
     }, 1000);
@@ -59,7 +61,6 @@ function ColorPicker() {
     // Cleanup function to clear interval when component unmounts
     return () => clearInterval(timer);
   }, []);
-  
   
   const fetchData = async () => {
     try {
@@ -72,7 +73,7 @@ function ColorPicker() {
       // Calculate remaining time based on startTime and endTime
       const now = moment();
       const endTimeMoment = moment(endTime);
-      const remainingTime = Math.max(0, endTimeMoment.diff(now, 'seconds')); // Calculate remaining time in seconds
+      const remainingTime = Math.max(0, endTimeMoment.diff(now, 'seconds')); 
       setTime(remainingTime);
   
       console.log("periodId :", periodId);
@@ -83,15 +84,15 @@ function ColorPicker() {
   };
   
   
-
+  
   const fetchLowestBetNumber = (periodId) => {
     axios
-      .get(`https://colorgamebackend-1.onrender.com/lowest/${periodId}`) // Use periodId instead of id
+      .get(`http://localhost:5000/lowest/${periodId}`) 
       .then((response) => {
         const { lowestBetNumber } = response.data;
         setLowestBetNumberMap((prevMap) => ({
           ...prevMap,
-          [periodId]: lowestBetNumber, // Use periodId instead of id
+          [periodId]: lowestBetNumber, 
         }));
       })
       .catch((error) => {
@@ -103,7 +104,6 @@ function ColorPicker() {
     fetchLowestBetNumber(periodId); 
   }, [periodId]); 
   
-
 
   const handleBet = (selection, periodId) => {
     // Disable handleBet function when countdownOpacity is 0.5
@@ -161,7 +161,7 @@ function ColorPicker() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post("https://colorgamebackend-1.onrender.com/bet", {
+          .post("http://localhost:5000/bet", {
             userId,
             amount,
             selection,
@@ -189,6 +189,10 @@ function ColorPicker() {
     });
   };
 
+   // Calculate minutes and seconds
+   const minutes = Math.floor(time / 60);
+   const seconds = time % 60;
+
   return (
     <div className="container mx-auto px-4">
       <div
@@ -202,7 +206,9 @@ function ColorPicker() {
           </div>
           <div className="flex justify-between w-full sm:w-auto">
             <h2 className="text-lg font-medium">ID: {periodId}</h2>
-            <h2>Time : {time}</h2>
+            <h2 className="text-lg font-medium">
+              {minutes}:{seconds}
+            </h2>
             
           </div>
           <div className="flex justify-around mt-4">
