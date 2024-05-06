@@ -4,22 +4,24 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import moment from "moment";
 
 function ColorPicker() {
-  const initialTimer = localStorage.getItem("timer") || 60;
-  const initialId = localStorage.getItem("id") || 1234567890;
-  const initialPeriodIds = JSON.parse(localStorage.getItem("periodIds")) || [];
+  //const initialTimer = localStorage.getItem("timer") || 60;
+  //const initialId = localStorage.getItem("id") || 1234567890;
+  //const initialPeriodIds = JSON.parse(localStorage.getItem("periodIds")) || [];
   
+  const [periodId, setPeriodId] = useState("");
+  const [time, setTime] = useState(60)
 
-  const [timer, setTimer] = useState(parseInt(initialTimer));
-  const [id, setId] = useState(parseInt(initialId));
-  const [periodIds, setPeriodIds] = useState(initialPeriodIds);
+  //const [timer, setTimer] = useState(parseInt(initialTimer));
+  const [id, setId] = useState(parseInt(periodId));
+  const [periodIds, setPeriodIds] = useState([id]);
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
   const [countdownOpacity, setCountdownOpacity] = useState(1);
   const [lowestBetNumberMap, setLowestBetNumberMap] = useState({});
 
-  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -37,37 +39,50 @@ function ColorPicker() {
     }
   }, []);
 
+ 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (timer > 0) {
-        setTimer(timer - 1);
-        localStorage.setItem("timer", timer - 1);
-        if (timer <= 30) {
-          setCountdownOpacity(0.5); // Change opacity when last 30 seconds
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(prevTime => {
+        if (prevTime > 0) {
+          return prevTime - 1; // Decrement time every second if time is greater than 0
         } else {
-          setCountdownOpacity(1); // Reset opacity when not in last 30 seconds
+          clearInterval(timer); // Clear interval when time reaches 0
+          return prevTime; // Return the current time
         }
-      } else {
-        setTimer(60);
-        setId((prevId) => prevId + 1);
-        localStorage.setItem("timer", 60);
-        localStorage.setItem("id", id + 1);
-        updatePeriodIds(id); // Update periodIds with the new ID
-        fetchLowestBetNumber(id); // Fetch lowest bet number for the new period
-        setCountdownOpacity(1); // Reset opacity when timer resets
-      }
+      });
     }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timer, id]);
-
-  useEffect(() => {
-    localStorage.setItem("periodIds", JSON.stringify(periodIds));
-  }, [periodIds]);
-
-  const minutes = Math.floor(timer / 60);
-  const seconds = timer % 60;
-  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+  
+    // Cleanup function to clear interval when component unmounts
+    return () => clearInterval(timer);
+  }, []);
+  
+  
+  const fetchData = async () => {
+    try {
+      const dataResponse = await axios.get("http://localhost:5000/time");
+  
+      const { periodId, endTime } = dataResponse.data;
+  
+      setPeriodId(periodId);
+  
+      // Calculate remaining time based on startTime and endTime
+      const now = moment();
+      const endTimeMoment = moment(endTime);
+      const remainingTime = Math.max(0, endTimeMoment.diff(now, 'seconds')); // Calculate remaining time in seconds
+      setTime(remainingTime);
+  
+      console.log("periodId :", periodId);
+      console.log("time :", remainingTime);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
+  
 
   const fetchLowestBetNumber = (periodId) => {
     axios
@@ -80,19 +95,15 @@ function ColorPicker() {
         }));
       })
       .catch((error) => {
-        console.error("Error fetching lowest bet number:", error);
+        //console.error("Error fetching lowest bet number:", error);
       });
   };
   
   useEffect(() => {
-    fetchLowestBetNumber(id); 
-  }, [id]); 
+    fetchLowestBetNumber(periodId); 
+  }, [periodId]); 
   
 
-
-  const updatePeriodIds = (newId) => {
-    setPeriodIds((prevIds) => [newId, ...prevIds]);
-  };
 
   const handleBet = (selection, periodId) => {
     // Disable handleBet function when countdownOpacity is 0.5
@@ -167,7 +178,7 @@ function ColorPicker() {
             );
           })
           .catch((error) => {
-            console.error("Error placing bet:", error);
+            //console.error("Error placing bet:", error);
             Swal.fire(
               "Error!",
               "Failed to place bet. Please try again.",
@@ -190,22 +201,9 @@ function ColorPicker() {
             <h2 className="text-lg font-bold">Count Down</h2>
           </div>
           <div className="flex justify-between w-full sm:w-auto">
-            <h2 className="text-lg font-medium">ID: {id}</h2>
-            <h2
-              className="text-lg font-bold"
-              style={{
-                color: timer <= 30 ? "red" : "black",
-                opacity: timer <= 30 ? 0.5 : 1,
-              }}
-            >
-              {timer <= 30 ? (
-                <span
-                  style={{ opacity: 1 }}
-                >{`0${minutes}:${formattedSeconds}`}</span>
-              ) : (
-                <span>{`0${minutes}:${formattedSeconds}`}</span>
-              )}
-            </h2>
+            <h2 className="text-lg font-medium">ID: {periodId}</h2>
+            <h2>Time : {time}</h2>
+            
           </div>
           <div className="flex justify-around mt-4">
             <button
