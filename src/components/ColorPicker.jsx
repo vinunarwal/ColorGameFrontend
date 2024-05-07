@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import GameRecord from "./GameRecord";
+//import GameRecord from "./GameRecord";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 function ColorPicker() {
-  const initialTimer = localStorage.getItem("timer") || 60;
-  const initialId = localStorage.getItem("id") || 1234567890;
-  const initialPeriodIds = JSON.parse(localStorage.getItem("periodIds")) || [];
-  
+  //const initialTimer = localStorage.getItem("timer") || 60;
+  //const initialId = localStorage.getItem("id") || 1234567890;
+  //const initialPeriodIds = JSON.parse(localStorage.getItem("periodIds")) || [];
+  const [periodId, setPeriodId] = useState("");
+  const [time, setTime] = useState("");
 
-  const [timer, setTimer] = useState(parseInt(initialTimer));
-  const [id, setId] = useState(parseInt(initialId));
-  const [periodIds, setPeriodIds] = useState(initialPeriodIds);
+  //const [timer, setTimer] = useState(parseInt(initialTimer));
+  const [id, setId] = useState(parseInt(periodId));
+  //const [periodIds, setPeriodIds] = useState();
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
   const [countdownOpacity, setCountdownOpacity] = useState(1);
@@ -37,37 +38,59 @@ function ColorPicker() {
     }
   }, []);
 
+
+  const fetchData = () => {
+    axios
+      .get(`http://localhost:5000/time`) 
+      .then((response) => {
+        const { periodId, time } = response.data;
+        setPeriodId(periodId);
+        setTime(time)
+      })
+      .catch((error) => {
+        console.error("Error fetching lowest bet number:", error);
+      });
+  };
+  
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (timer > 0) {
-        setTimer(timer - 1);
-        localStorage.setItem("timer", timer - 1);
-        if (timer <= 30) {
-          setCountdownOpacity(0.5); // Change opacity when last 30 seconds
-        } else {
-          setCountdownOpacity(1); // Reset opacity when not in last 30 seconds
-        }
-      } else {
-        setTimer(60);
-        setId((prevId) => prevId + 1);
-        localStorage.setItem("timer", 60);
-        localStorage.setItem("id", id + 1);
-        updatePeriodIds(id); // Update periodIds with the new ID
-        fetchLowestBetNumber(id); // Fetch lowest bet number for the new period
-        setCountdownOpacity(1); // Reset opacity when timer resets
-      }
-    }, 1000);
+    fetchData();
 
-    return () => clearInterval(interval);
-  }, [timer, id]);
+    const intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId); 
+  }, []); 
 
-  useEffect(() => {
-    localStorage.setItem("periodIds", JSON.stringify(periodIds));
-  }, [periodIds]);
 
-  const minutes = Math.floor(timer / 60);
-  const seconds = timer % 60;
-  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+  //useEffect(() => {
+  //  const interval = setInterval(() => {
+  //    if (timer > 0) {
+  //      setTimer(timer - 1);
+  //      localStorage.setItem("timer", timer - 1);
+  //      if (timer <= 30) {
+  //        setCountdownOpacity(0.5); // Change opacity when last 30 seconds
+  //      } else {
+  //        setCountdownOpacity(1); // Reset opacity when not in last 30 seconds
+  //      }
+  //    } else {
+  //      setTimer(60);
+  //      setId((prevId) => prevId + 1);
+  //      localStorage.setItem("timer", 60);
+  //      localStorage.setItem("id", id + 1);
+  //      updatePeriodIds(id); // Update periodIds with the new ID
+  //      fetchLowestBetNumber(id); // Fetch lowest bet number for the new period
+  //      setCountdownOpacity(1); // Reset opacity when timer resets
+  //    }
+  //  }, 1000);
+
+  //  return () => clearInterval(interval);
+  //}, [timer, id]);
+
+  //useEffect(() => {
+  //  localStorage.setItem("periodIds", JSON.stringify(periodIds));
+  //}, [periodIds]);
+
+  //const minutes = Math.floor(timer / 60);
+  //const seconds = timer % 60;
+  //const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
   const fetchLowestBetNumber = (periodId) => {
     axios
@@ -90,9 +113,9 @@ function ColorPicker() {
   
 
 
-  const updatePeriodIds = (newId) => {
-    setPeriodIds((prevIds) => [newId, ...prevIds]);
-  };
+  //const updatePeriodIds = (newId) => {
+  //  setPeriodIds((prevIds) => [newId, ...prevIds]);
+  //};
 
   const handleBet = (selection, periodId) => {
     // Disable handleBet function when countdownOpacity is 0.5
@@ -190,8 +213,9 @@ function ColorPicker() {
             <h2 className="text-lg font-bold">Count Down</h2>
           </div>
           <div className="flex justify-between w-full sm:w-auto">
-            <h2 className="text-lg font-medium">ID: {id}</h2>
-            <h2
+            <h2 className="text-lg font-medium">ID: {periodId}</h2>
+            <h2>Time : {time}</h2>
+            {/*<h2
               className="text-lg font-bold"
               style={{
                 color: timer <= 30 ? "red" : "black",
@@ -205,7 +229,7 @@ function ColorPicker() {
               ) : (
                 <span>{`0${minutes}:${formattedSeconds}`}</span>
               )}
-            </h2>
+            </h2>*/}
           </div>
           <div className="flex justify-around mt-4">
             <button
@@ -298,7 +322,7 @@ function ColorPicker() {
           </div>
         </div>
       </div>
-      <GameRecord periodIds={periodIds} lowestBetNumberMap={lowestBetNumberMap} />
+      {/*<GameRecord periodIds={periodIds} lowestBetNumberMap={lowestBetNumberMap} />*/}
     </div>
   );
 }
