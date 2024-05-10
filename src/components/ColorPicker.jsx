@@ -10,7 +10,7 @@ function ColorPicker() {
   const [periodId, setPeriodId] = useState("");
   const [time, setTime] = useState("");
   const [periodIds, setPeriodIds] = useState([]);
-  const [id, setId] = useState(parseInt(periodId));
+  const [id, setId] = useState("");
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
   const [countdownOpacity, setCountdownOpacity] = useState(1);
@@ -41,15 +41,22 @@ function ColorPicker() {
       .then((response) => {
         const { periodId, time } = response.data;
         setPeriodId(periodId);
-        setTime(time)
-        setId(periodId)
-        setPeriodIds(prevIds => [periodId, ...prevIds]);
+        setTime(time);
+        setPeriodIds((prevIds) => [periodId, ...prevIds]);
+        setId(periodId); // Update id whenever periodId changes
+  
+        // Fetch lowest bet number for the previous period
+        if (periodIds.length > 0) {
+          const previousPeriodId = periodIds[0];
+          fetchLowestBetNumber(previousPeriodId);
+        }
       })
       .catch((error) => {
-        console.error("Error fetching lowest bet number:", error);
+        console.error("Error fetching time:", error);
       });
   };
-
+  
+  
   useEffect(() => {
     fetchData();
 
@@ -67,16 +74,31 @@ function ColorPicker() {
           ...prevMap,
           [id]: lowestBetNumber,
         }));
+  
+        // Assuming you have the wonNumber stored in a state variable named 'wonNumber'
+        axios
+          .put(`http://localhost:5000/update/won`, {
+            periodId: periodId,
+            newWonNumber: lowestBetNumber // Assuming lowestBetNumber is the new wonNumber
+          })
+          .then((response) => {
+            console.log(response.data.message); // Log the response message
+            // You can also update any state variables or perform additional actions here if needed
+          })
+          .catch((error) => {
+            console.error("Error updating wonNumber:", error);
+          });
       })
       .catch((error) => {
         console.error("Error fetching lowest bet number:", error);
       });
   };
+  
 
   useEffect(() => {
     fetchLowestBetNumber(id);
-  }, [id]);
-
+  }, [id, periodIds]); 
+  
 
   const handleBet = (selection, periodId) => {
     // Disable handleBet function when countdownOpacity is 0.5
@@ -268,7 +290,7 @@ function ColorPicker() {
           </div>
         </div>
       </div>
-      <GameRecord periodIds={periodIds} lowestBetNumberMap={lowestBetNumberMap} />
+      <GameRecord lowestBetNumberMap={lowestBetNumberMap} />
     </div>
   );
 }

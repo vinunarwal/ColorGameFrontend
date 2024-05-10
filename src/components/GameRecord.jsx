@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode';
 
-function GameRecord({ periodIds, lowestBetNumberMap }) {
+function GameRecord({ lowestBetNumberMap }) {
    const [userId, setUserId] = useState("");
    const [bankBalance, setBankBalance] = useState(0);
    const [periods, setPeriods] = useState([]);
+   const [wonNumber, setWonNumber] = useState([]);
 
    useEffect(() => {
       const token = localStorage.getItem('token');
@@ -28,8 +29,9 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
       axios
          .get(`http://localhost:5000/periods`)
          .then((response) => {
-            const { Periods } = response.data;
+            const { Periods, wonNumber } = response.data;
             setPeriods(Periods);
+            setWonNumber(wonNumber);
          })
          .catch((error) => {
             console.error("Error fetching period data:", error);
@@ -88,15 +90,15 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
       });
    }, [periods]);
 
-   const getLowestBetNumberBackgroundColor = (number) => {
+   const getBackgroundColorForWonNumber = (wonNumber) => {
 
-      if (number === 0) {
+      if (wonNumber === 0) {
          return "bg-gradient-to-r from-green-500 to-violet-500 text-white";
-      } else if (number === 5) {
+      } else if (wonNumber === 5) {
          return "bg-gradient-to-r from-red-500 to-violet-500 text-white";
-      } else if ([1, 3, 7, 9].includes(number)) {
+      } else if ([1, 3, 7, 9].includes(wonNumber)) {
          return "bg-green-500 text-white";
-      } else if ([2, 4, 6, 8].includes(number)) {
+      } else if ([2, 4, 6, 8].includes(wonNumber)) {
          return "bg-red-500 text-white";
       } else {
          return "";
@@ -124,13 +126,13 @@ function GameRecord({ periodIds, lowestBetNumberMap }) {
                               <td className="px-4 py-2">{period.periodId}</td>
                               <td className="px-4 py-2 flex items-center justify-center">
                                  <div
-                                    className={`w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 ${getLowestBetNumberBackgroundColor(
-                                       lowestBetNumberMap[period.periodId]
+                                    className={`w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 
+                                    ${getBackgroundColorForWonNumber(
+                                       period.wonNumber
                                     )}`}
                                  >
-                                   {lowestBetNumberMap[period.periodId]}
+                                    {period.wonNumber}
                                  </div>
-
                               </td>
                            </tr>
                         ))}
