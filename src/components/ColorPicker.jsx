@@ -6,20 +6,16 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 function ColorPicker() {
-  const initialTimer = localStorage.getItem("timer") || 60;
-  const initialId = localStorage.getItem("id") || 1234567890;
-  const initialPeriodIds = JSON.parse(localStorage.getItem("periodIds")) || [];
-  
 
-  const [timer, setTimer] = useState(parseInt(initialTimer));
-  const [id, setId] = useState(parseInt(initialId));
-  const [periodIds, setPeriodIds] = useState(initialPeriodIds);
+  const [periodId, setPeriodId] = useState("");
+  const [time, setTime] = useState("");
+  const [periodIds, setPeriodIds] = useState([]);
+  const [id, setId] = useState("");
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
-  const [countdownOpacity, setCountdownOpacity] = useState(1);
   const [lowestBetNumberMap, setLowestBetNumberMap] = useState({});
 
-  
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -37,66 +33,71 @@ function ColorPicker() {
     }
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (timer > 0) {
-        setTimer(timer - 1);
-        localStorage.setItem("timer", timer - 1);
-        if (timer <= 30) {
-          setCountdownOpacity(0.5); // Change opacity when last 30 seconds
-        } else {
-          setCountdownOpacity(1); // Reset opacity when not in last 30 seconds
-        }
-      } else {
-        setTimer(60);
-        setId((prevId) => prevId + 1);
-        localStorage.setItem("timer", 60);
-        localStorage.setItem("id", id + 1);
-        updatePeriodIds(id); // Update periodIds with the new ID
-        fetchLowestBetNumber(id); // Fetch lowest bet number for the new period
-        setCountdownOpacity(1); // Reset opacity when timer resets
-      }
-    }, 1000);
 
-    return () => clearInterval(interval);
-  }, [timer, id]);
+  const fetchData = () => {
+    axios
+      .get(`http://localhost:5000/time`)
+      .then((response) => {
+        const { periodId, time } = response.data;
+        setPeriodId(periodId);
+        setTime(time);
+        setPeriodIds((prevIds) => [periodId, ...prevIds]);
+        setId(periodId);
+      })
+      .catch((error) => {
+        console.error("Error fetching time:", error);
+      });
+  };
+
 
   useEffect(() => {
-    localStorage.setItem("periodIds", JSON.stringify(periodIds));
-  }, [periodIds]);
+    fetchData();
 
-  const minutes = Math.floor(timer / 60);
-  const seconds = timer % 60;
-  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+    const intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+
 
   const fetchLowestBetNumber = (periodId) => {
     axios
-      .get(`https://colorgamebackend-1.onrender.com/lowest/${periodId}`) // Use periodId instead of id
+      .get(`https://colorgamebackend-1.onrender.com/lowest/${periodId}`)
       .then((response) => {
         const { lowestBetNumber } = response.data;
         setLowestBetNumberMap((prevMap) => ({
           ...prevMap,
-          [periodId]: lowestBetNumber, // Use periodId instead of id
+          [id]: lowestBetNumber,
         }));
+
+        axios
+          .put(`http://localhost:5000/update/won`, {
+            periodId: periodId,
+            newWonNumber: lowestBetNumber
+          })
+          .then((response) => {
+            console.log(response.data.message);
+          })
+          .catch((error) => {
+            console.error("Error updating wonNumber:", error);
+          });
       })
       .catch((error) => {
         console.error("Error fetching lowest bet number:", error);
       });
   };
-  
+
+
   useEffect(() => {
-    fetchLowestBetNumber(id); 
-  }, [id]); 
-  
+    fetchLowestBetNumber(id);
+  }, [id, periodIds]);
 
-
-  const updatePeriodIds = (newId) => {
-    setPeriodIds((prevIds) => [newId, ...prevIds]);
-  };
 
   const handleBet = (selection, periodId) => {
-    // Disable handleBet function when countdownOpacity is 0.5
-    if (countdownOpacity === 0.5) {
+
+    if ( parseInt(time) <= 30) {
+      Swal.fire({
+        icon: "info",
+        text: "Sorry, you can't place a bet when the time is less than 30 sec.",
+      });
       return;
     }
 
@@ -157,7 +158,7 @@ function ColorPicker() {
             periodId,
           })
           .then((response) => {
-            const updatedBankBalance = response.data.bankBalance; // Assuming the backend sends the updated bank balance
+            const updatedBankBalance = response.data.bankBalance;
             setBankBalance(updatedBankBalance);
 
             Swal.fire(
@@ -190,115 +191,103 @@ function ColorPicker() {
             <h2 className="text-lg font-bold">Count Down</h2>
           </div>
           <div className="flex justify-between w-full sm:w-auto">
-            <h2 className="text-lg font-medium">ID: {id}</h2>
-            <h2
-              className="text-lg font-bold"
-              style={{
-                color: timer <= 30 ? "red" : "black",
-                opacity: timer <= 30 ? 0.5 : 1,
-              }}
-            >
-              {timer <= 30 ? (
-                <span
-                  style={{ opacity: 1 }}
-                >{`0${minutes}:${formattedSeconds}`}</span>
-              ) : (
-                <span>{`0${minutes}:${formattedSeconds}`}</span>
-              )}
-            </h2>
+            <h2 className="text-lg font-medium">ID: {periodId}</h2>
+            <h2 className="font-bold" style={{ color: time <= 30 ? "red" : "inherit" }}>{time}</h2>
           </div>
-          <div className="flex justify-around mt-4">
-            <button
-              onClick={() => handleBet("Green", id)}
-              className="bg-green-500 text-white py-2 px-4 rounded"
-            >
-              Join Green
-            </button>
-            <button
-              onClick={() => handleBet("Red", id)}
-              className="bg-red-500 text-white py-2 px-4 rounded"
-            >
-              Join Red
-            </button>
-            <button
-              onClick={() => handleBet("Violet", id)}
-              className="bg-purple-500 text-white py-2 px-4 rounded"
-            >
-              Join Violet
-            </button>
-          </div>
-          <div>
-            <div className="text-center">
+          <div className={` ${parseInt(time) <= 30 ? 'border-dashed border-2 border-indigo-300 animate-pulse' : ''}`}>
               <div className="flex justify-around mt-4">
                 <button
-                  onClick={() => handleBet("0", id)}
-                  className="bg-gradient-to-r from-green-500 to-violet-500 text-white py-1 px-5 rounded"
+                  onClick={() => handleBet("Green", id)}
+                  className="bg-green-500 text-white py-2 px-4 rounded"
                 >
-                  0
+                  Join Green
                 </button>
                 <button
-                  onClick={() => handleBet("1", id)}
-                  className="bg-green-500 text-white py-1 px-5 rounded"
+                  onClick={() => handleBet("Red", id)}
+                  className="bg-red-500 text-white py-2 px-4 rounded"
                 >
-                  1
+                  Join Red
                 </button>
                 <button
-                  onClick={() => handleBet("2", id)}
-                  className="bg-red-500 text-white py-1 px-5 rounded"
+                  onClick={() => handleBet("Violet", id)}
+                  className="bg-purple-500 text-white py-2 px-4 rounded"
                 >
-                  2
-                </button>
-                <button
-                  onClick={() => handleBet("3", id)}
-                  className="bg-green-500 text-white py-1 px-5 rounded"
-                >
-                  3
-                </button>
-                <button
-                  onClick={() => handleBet("4", id)}
-                  className="bg-red-500 text-white py-1 px-5 rounded"
-                >
-                  4
+                  Join Violet
                 </button>
               </div>
+              <div>
+                <div className="text-center mb-4">
+                  <div className="flex justify-around mt-4">
+                    <button
+                      onClick={() => handleBet("0", id)}
+                      className="bg-gradient-to-r from-green-500 to-violet-500 text-white py-1 px-5 rounded"
+                    >
+                      0
+                    </button>
+                    <button
+                      onClick={() => handleBet("1", id)}
+                      className="bg-green-500 text-white py-1 px-5 rounded"
+                    >
+                      1
+                    </button>
+                    <button
+                      onClick={() => handleBet("2", id)}
+                      className="bg-red-500 text-white py-1 px-5 rounded"
+                    >
+                      2
+                    </button>
+                    <button
+                      onClick={() => handleBet("3", id)}
+                      className="bg-green-500 text-white py-1 px-5 rounded"
+                    >
+                      3
+                    </button>
+                    <button
+                      onClick={() => handleBet("4", id)}
+                      className="bg-red-500 text-white py-1 px-5 rounded"
+                    >
+                      4
+                    </button>
+                  </div>
 
-              <div className="flex justify-around mt-4">
-                <button
-                  onClick={() => handleBet("5", id)}
-                  className="bg-gradient-to-r from-red-500 to-violet-500 text-white py-1 px-5 rounded"
-                >
-                  5
-                </button>
-                <button
-                  onClick={() => handleBet("6", id)}
-                  className="bg-red-500 text-white py-1 px-5 rounded"
-                >
-                  6
-                </button>
-                <button
-                  onClick={() => handleBet("7", id)}
-                  className="bg-green-500 text-white py-1 px-5 rounded"
-                >
-                  7
-                </button>
-                <button
-                  onClick={() => handleBet("8", id)}
-                  className="bg-red-500 text-white py-1 px-5 rounded"
-                >
-                  8
-                </button>
-                <button
-                  onClick={() => handleBet("9", id)}
-                  className="bg-green-500 text-white py-1 px-5 rounded"
-                >
-                  9
-                </button>
+                  <div className="flex justify-around mt-4">
+                    <button
+                      onClick={() => handleBet("5", id)}
+                      className="bg-gradient-to-r from-red-500 to-violet-500 text-white py-1 px-5 rounded"
+                    >
+                      5
+                    </button>
+                    <button
+                      onClick={() => handleBet("6", id)}
+                      className="bg-red-500 text-white py-1 px-5 rounded"
+                    >
+                      6
+                    </button>
+                    <button
+                      onClick={() => handleBet("7", id)}
+                      className="bg-green-500 text-white py-1 px-5 rounded"
+                    >
+                      7
+                    </button>
+                    <button
+                      onClick={() => handleBet("8", id)}
+                      className="bg-red-500 text-white py-1 px-5 rounded"
+                    >
+                      8
+                    </button>
+                    <button
+                      onClick={() => handleBet("9", id)}
+                      className="bg-green-500 text-white py-1 px-5 rounded"
+                    >
+                      9
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
       </div>
-      <GameRecord periodIds={periodIds} lowestBetNumberMap={lowestBetNumberMap} />
+      <GameRecord lowestBetNumberMap={lowestBetNumberMap} />
     </div>
   );
 }
