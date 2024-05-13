@@ -36,7 +36,7 @@ function ColorPicker() {
 
   const fetchData = () => {
     axios
-      .get(`http://localhost:5000/time`)
+      .get(`https://colorgamebackend-1.onrender.com/time`)
       .then((response) => {
         const { periodId, time } = response.data;
         setPeriodId(periodId);
@@ -69,7 +69,7 @@ function ColorPicker() {
         }));
 
         axios
-          .put(`http://localhost:5000/update/won`, {
+          .put(`https://colorgamebackend-1.onrender.com/update/won`, {
             periodId: periodId,
             newWonNumber: lowestBetNumber
           })

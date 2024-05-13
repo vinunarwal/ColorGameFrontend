@@ -27,7 +27,7 @@ function GameRecord({ lowestBetNumberMap }) {
 
    const fetchPeriods = () => {
       axios
-         .get(`http://localhost:5000/periods`)
+         .get(`https://colorgamebackend-1.onrender.com/periods`)
          .then((response) => {
             const { Periods, wonNumber } = response.data;
             setPeriods(Periods);
