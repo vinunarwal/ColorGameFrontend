@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ColorPicker() {
 
@@ -15,6 +17,24 @@ function ColorPicker() {
   const [userId, setUserId] = useState("");
   const [lowestBetNumberMap, setLowestBetNumberMap] = useState({});
 
+
+  // Function to show toast notification
+  const showWinnerToast = (periodId, lowestBetNumber) => {
+    toast(
+      <div>
+        The won number for period <span style={{ color: 'red' }}>{periodId}</span> is: <span style={{ color: 'blue' }}>{lowestBetNumber}</span>
+      </div>,
+      {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }
+    );
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -76,9 +96,13 @@ function ColorPicker() {
           .then((response) => {
             console.log(response.data.message);
           })
+          
           .catch((error) => {
             console.error("Error updating wonNumber:", error);
           });
+          if (time === 0) {
+            showWinnerToast(periodId, lowestBetNumber);
+            }
       })
       .catch((error) => {
         console.error("Error fetching lowest bet number:", error);
