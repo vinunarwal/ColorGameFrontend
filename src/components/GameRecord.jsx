@@ -58,7 +58,7 @@ function GameRecord({ lowestBetNumberMap }) {
 
                const updatePromises = winningBets.map((winningBet) => {
                   const { userId, winAmount } = winningBet;
-                  // Update bank balance on the server
+                  
                   return axios.put(`https://colorgamebackend-1.onrender.com/user/${userId}`, {
                      bankBalance: bankBalance + winAmount,
                   });

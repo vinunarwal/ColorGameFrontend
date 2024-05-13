@@ -13,7 +13,6 @@ function ColorPicker() {
   const [id, setId] = useState("");
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
-  const [countdownOpacity, setCountdownOpacity] = useState(1);
   const [lowestBetNumberMap, setLowestBetNumberMap] = useState({});
 
 
@@ -43,20 +42,14 @@ function ColorPicker() {
         setPeriodId(periodId);
         setTime(time);
         setPeriodIds((prevIds) => [periodId, ...prevIds]);
-        setId(periodId); // Update id whenever periodId changes
-  
-        // Fetch lowest bet number for the previous period
-        if (periodIds.length > 0) {
-          const previousPeriodId = periodIds[0];
-          fetchLowestBetNumber(previousPeriodId);
-        }
+        setId(periodId);
       })
       .catch((error) => {
         console.error("Error fetching time:", error);
       });
   };
-  
-  
+
+
   useEffect(() => {
     fetchData();
 
@@ -74,16 +67,14 @@ function ColorPicker() {
           ...prevMap,
           [id]: lowestBetNumber,
         }));
-  
-        // Assuming you have the wonNumber stored in a state variable named 'wonNumber'
+
         axios
           .put(`http://localhost:5000/update/won`, {
             periodId: periodId,
-            newWonNumber: lowestBetNumber // Assuming lowestBetNumber is the new wonNumber
+            newWonNumber: lowestBetNumber
           })
           .then((response) => {
-            console.log(response.data.message); // Log the response message
-            // You can also update any state variables or perform additional actions here if needed
+            console.log(response.data.message);
           })
           .catch((error) => {
             console.error("Error updating wonNumber:", error);
@@ -93,16 +84,20 @@ function ColorPicker() {
         console.error("Error fetching lowest bet number:", error);
       });
   };
-  
+
 
   useEffect(() => {
     fetchLowestBetNumber(id);
-  }, [id, periodIds]); 
-  
+  }, [id, periodIds]);
+
 
   const handleBet = (selection, periodId) => {
-    // Disable handleBet function when countdownOpacity is 0.5
-    if (countdownOpacity === 0.5) {
+
+    if ( parseInt(time) <= 30) {
+      Swal.fire({
+        icon: "info",
+        text: "Sorry, you can't place a bet when the time is less than 30 sec.",
+      });
       return;
     }
 
@@ -163,7 +158,7 @@ function ColorPicker() {
             periodId,
           })
           .then((response) => {
-            const updatedBankBalance = response.data.bankBalance; // Assuming the backend sends the updated bank balance
+            const updatedBankBalance = response.data.bankBalance;
             setBankBalance(updatedBankBalance);
 
             Swal.fire(
@@ -197,98 +192,100 @@ function ColorPicker() {
           </div>
           <div className="flex justify-between w-full sm:w-auto">
             <h2 className="text-lg font-medium">ID: {periodId}</h2>
-            <h2>Time : {time} </h2>
+            <h2 className="font-bold" style={{ color: time <= 30 ? "red" : "inherit" }}>{time}</h2>
           </div>
-          <div className="flex justify-around mt-4">
-            <button
-              onClick={() => handleBet("Green", id)}
-              className="bg-green-500 text-white py-2 px-4 rounded"
-            >
-              Join Green
-            </button>
-            <button
-              onClick={() => handleBet("Red", id)}
-              className="bg-red-500 text-white py-2 px-4 rounded"
-            >
-              Join Red
-            </button>
-            <button
-              onClick={() => handleBet("Violet", id)}
-              className="bg-purple-500 text-white py-2 px-4 rounded"
-            >
-              Join Violet
-            </button>
-          </div>
-          <div>
-            <div className="text-center">
+          <div className={` ${parseInt(time) <= 30 ? 'border-dashed border-2 border-indigo-300 animate-pulse' : ''}`}>
               <div className="flex justify-around mt-4">
                 <button
-                  onClick={() => handleBet("0", id)}
-                  className="bg-gradient-to-r from-green-500 to-violet-500 text-white py-1 px-5 rounded"
+                  onClick={() => handleBet("Green", id)}
+                  className="bg-green-500 text-white py-2 px-4 rounded"
                 >
-                  0
+                  Join Green
                 </button>
                 <button
-                  onClick={() => handleBet("1", id)}
-                  className="bg-green-500 text-white py-1 px-5 rounded"
+                  onClick={() => handleBet("Red", id)}
+                  className="bg-red-500 text-white py-2 px-4 rounded"
                 >
-                  1
+                  Join Red
                 </button>
                 <button
-                  onClick={() => handleBet("2", id)}
-                  className="bg-red-500 text-white py-1 px-5 rounded"
+                  onClick={() => handleBet("Violet", id)}
+                  className="bg-purple-500 text-white py-2 px-4 rounded"
                 >
-                  2
-                </button>
-                <button
-                  onClick={() => handleBet("3", id)}
-                  className="bg-green-500 text-white py-1 px-5 rounded"
-                >
-                  3
-                </button>
-                <button
-                  onClick={() => handleBet("4", id)}
-                  className="bg-red-500 text-white py-1 px-5 rounded"
-                >
-                  4
+                  Join Violet
                 </button>
               </div>
+              <div>
+                <div className="text-center mb-4">
+                  <div className="flex justify-around mt-4">
+                    <button
+                      onClick={() => handleBet("0", id)}
+                      className="bg-gradient-to-r from-green-500 to-violet-500 text-white py-1 px-5 rounded"
+                    >
+                      0
+                    </button>
+                    <button
+                      onClick={() => handleBet("1", id)}
+                      className="bg-green-500 text-white py-1 px-5 rounded"
+                    >
+                      1
+                    </button>
+                    <button
+                      onClick={() => handleBet("2", id)}
+                      className="bg-red-500 text-white py-1 px-5 rounded"
+                    >
+                      2
+                    </button>
+                    <button
+                      onClick={() => handleBet("3", id)}
+                      className="bg-green-500 text-white py-1 px-5 rounded"
+                    >
+                      3
+                    </button>
+                    <button
+                      onClick={() => handleBet("4", id)}
+                      className="bg-red-500 text-white py-1 px-5 rounded"
+                    >
+                      4
+                    </button>
+                  </div>
 
-              <div className="flex justify-around mt-4">
-                <button
-                  onClick={() => handleBet("5", id)}
-                  className="bg-gradient-to-r from-red-500 to-violet-500 text-white py-1 px-5 rounded"
-                >
-                  5
-                </button>
-                <button
-                  onClick={() => handleBet("6", id)}
-                  className="bg-red-500 text-white py-1 px-5 rounded"
-                >
-                  6
-                </button>
-                <button
-                  onClick={() => handleBet("7", id)}
-                  className="bg-green-500 text-white py-1 px-5 rounded"
-                >
-                  7
-                </button>
-                <button
-                  onClick={() => handleBet("8", id)}
-                  className="bg-red-500 text-white py-1 px-5 rounded"
-                >
-                  8
-                </button>
-                <button
-                  onClick={() => handleBet("9", id)}
-                  className="bg-green-500 text-white py-1 px-5 rounded"
-                >
-                  9
-                </button>
+                  <div className="flex justify-around mt-4">
+                    <button
+                      onClick={() => handleBet("5", id)}
+                      className="bg-gradient-to-r from-red-500 to-violet-500 text-white py-1 px-5 rounded"
+                    >
+                      5
+                    </button>
+                    <button
+                      onClick={() => handleBet("6", id)}
+                      className="bg-red-500 text-white py-1 px-5 rounded"
+                    >
+                      6
+                    </button>
+                    <button
+                      onClick={() => handleBet("7", id)}
+                      className="bg-green-500 text-white py-1 px-5 rounded"
+                    >
+                      7
+                    </button>
+                    <button
+                      onClick={() => handleBet("8", id)}
+                      className="bg-red-500 text-white py-1 px-5 rounded"
+                    >
+                      8
+                    </button>
+                    <button
+                      onClick={() => handleBet("9", id)}
+                      className="bg-green-500 text-white py-1 px-5 rounded"
+                    >
+                      9
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
       </div>
       <GameRecord lowestBetNumberMap={lowestBetNumberMap} />
     </div>
