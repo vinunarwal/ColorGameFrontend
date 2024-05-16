@@ -15,7 +15,6 @@ function ColorPicker() {
   const [id, setId] = useState("");
   const [bankBalance, setBankBalance] = useState(0);
   const [userId, setUserId] = useState("");
-  const [lowestBetNumberMap, setLowestBetNumberMap] = useState([]);
   const [periods, setPeriods] = useState([]);
   const [wonNumber, setWonNumber] = useState([]);
 
@@ -61,7 +60,6 @@ function ColorPicker() {
         const { periodId, time } = response.data;
         setPeriodId(periodId);
         setTime(time);
-        setPeriodIds((prevIds) => [periodId, ...prevIds]);
         setId(periodId);
 
         axios
@@ -95,12 +93,6 @@ function ColorPicker() {
       .get(`https://colorgamebackend-1.onrender.com/lowest/${periodId}`)
       .then((response) => {
         const { lowestBetNumber } = response.data;
-        setLowestBetNumberMap((prevMap) => ({
-          ...prevMap,
-          lowestNumber: lowestBetNumber,
-          period: id
-        }));
-        console.log("LowestNumberMap : ", lowestBetNumberMap)
 
         axios
           .put(`https://colorgamebackend-1.onrender.com/update/won`, {
@@ -111,14 +103,12 @@ function ColorPicker() {
             console.log(response.data.message);
             showWinnerToast(periodId, lowestBetNumber);
           })
-
           .catch((error) => {
             console.error("Error updating wonNumber:", error);
           });
 
         const result = lowestBetNumber;
         console.log("Result : ", result)
-
 
         axios
           .get(`https://colorgamebackend-1.onrender.com/bet/result/${periodId}/${result}`)
@@ -140,23 +130,25 @@ function ColorPicker() {
               .catch((error) => {
                 console.error("Error updating bank balances:", error);
               });
+
+
+            // Update bet outcome
+            axios.put(`http://localhost:5000/bet/updateOutcome`, {
+              periodId: periodId,
+              result: lowestBetNumber,
+            })
+              .then((response) => {
+                console.log(response.data.message);
+              })
+              .catch((error) => {
+                console.error("Error updating bet outcomes:", error);
+              });
+
+
           })
           .catch((error) => {
             console.error("Error fetching bet results:", error);
           });
-
-        // Update bet outcome
-        axios.put(`http://localhost:5000/bet/updateOutcome`, {
-          periodId: periodId,
-          result: lowestBetNumber,
-        })
-          .then((response) => {
-            console.log("Bet outcomes updated successfully:", response.data.message);
-          })
-          .catch((error) => {
-            console.error("Error updating bet outcomes:", error);
-          });
-
 
       })
       .catch((error) => {
@@ -165,10 +157,10 @@ function ColorPicker() {
   };
 
 
+
   useEffect(() => {
     time == 1 && fetchLowestBetNumber(id);
   }, [time]);
-
 
 
   const handleBet = (selection, periodId) => {
@@ -258,6 +250,8 @@ function ColorPicker() {
       }
     });
   };
+
+
 
   return (
     <div className="container mx-auto px-4">
@@ -367,10 +361,10 @@ function ColorPicker() {
           </div>
         </div>
       </div>
-      <GameRecord periods={periods} wonNumber={wonNumber} lowestBetNumberMap={lowestBetNumberMap} />
+      <GameRecord periods={periods} wonNumber={wonNumber} />
     </div>
   );
-  
+
 }
 
 export default ColorPicker;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode';
 
-function GameRecord({periods, wonNumber, lowestBetNumberMap }) {
+function GameRecord({periods }) {
    const [userId, setUserId] = useState("");
    const [bankBalance, setBankBalance] = useState(0);
  
