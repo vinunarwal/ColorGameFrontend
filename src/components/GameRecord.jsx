@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode';
 
-function GameRecord({ lowestBetNumberMap }) {
+function GameRecord({periods, wonNumber, lowestBetNumberMap }) {
    const [userId, setUserId] = useState("");
    const [bankBalance, setBankBalance] = useState(0);
-   const [periods, setPeriods] = useState([]);
-   const [wonNumber, setWonNumber] = useState([]);
+ 
 
    useEffect(() => {
       const token = localStorage.getItem('token');
@@ -25,72 +24,7 @@ function GameRecord({ lowestBetNumberMap }) {
    }, []);
 
 
-   const fetchPeriods = () => {
-      axios
-         .get(`https://colorgamebackend-1.onrender.com/periods`)
-         .then((response) => {
-            const { Periods, wonNumber } = response.data;
-            setPeriods(Periods);
-            setWonNumber(wonNumber);
-         })
-         .catch((error) => {
-            console.error("Error fetching period data:", error);
-         });
-   };
-
-
-   useEffect(() => {
-      fetchPeriods();
-      const intervalId = setInterval(fetchPeriods, 60000);
-      return () => clearInterval(intervalId);
-   }, []);
-
-
-   useEffect(() => {
-      periods.forEach((period) => {
-         const periodId = period.periodId;
-         const result = lowestBetNumberMap[periodId];
-
-         axios
-            .get(`https://colorgamebackend-1.onrender.com/bet/result/${periodId}/${result}`)
-            .then((response) => {
-               const { winningBets } = response.data;
-
-               const updatePromises = winningBets.map((winningBet) => {
-                  const { userId, winAmount } = winningBet;
-                  
-                  return axios.put(`https://colorgamebackend-1.onrender.com/user/${userId}`, {
-                     bankBalance: bankBalance + winAmount,
-                  });
-               });
-
-               Promise.all(updatePromises)
-                  .then(() => {
-                     console.log("Bank balances updated successfully");
-                  })
-                  .catch((error) => {
-                     console.error("Error updating bank balances:", error);
-                  });
-            })
-            .catch((error) => {
-               console.error("Error fetching bet results:", error);
-            });
-
-         // Update bet outcome
-         axios.put(`https://colorgamebackend-1.onrender.com/bet/updateOutcome`, {
-            periodId: periodId,
-            result: result,
-         })
-            .then((response) => {
-               console.log("Bet outcomes updated successfully:", response.data.message);
-            })
-            .catch((error) => {
-               console.error("Error updating bet outcomes:", error);
-            });
-      });
-   }, [periods]);
-
-   const getBackgroundColorForWonNumber = (wonNumber) => {
+     const getBackgroundColorForWonNumber = (wonNumber) => {
 
       if (wonNumber === 0) {
          return "bg-gradient-to-r from-green-500 to-violet-500 text-white";
