@@ -133,7 +133,7 @@ function ColorPicker() {
 
 
             // Update bet outcome
-            axios.put(`http://localhost:5000/bet/updateOutcome`, {
+            axios.put(`https://colorgamebackend-1.onrender.com/bet/updateOutcome`, {
               periodId: periodId,
               result: lowestBetNumber,
             })
