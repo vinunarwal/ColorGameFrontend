@@ -1,39 +1,90 @@
+// Footer.jsx - Fixed at bottom
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faBolt, faMedal, faUser } from '@fortawesome/free-solid-svg-icons';
 
 function Footer() {
-  return (
-    // <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white">
-    <div className="container  z-[10000] mx-auto ">
-      <div className="bg-slate-400 mx-auto py-2 max-w-[420px]">
-        <div className=" flex items-center justify-around px-4 mx-auto max-w-[640px]">
-          <Link to='/main' className="flex flex-col items-center justify-center  text-white py-2 px-4 rounded">
-            <FontAwesomeIcon icon={faHome} className="w-6 h-6" />
-            Home
-          </Link>
-          <Link to='/recharge' className="flex flex-col items-center justify-center  text-white py-2 px-4 rounded">
-            <FontAwesomeIcon icon={faBolt} className="w-6 h-6" />
-            Recharge
-          </Link>
-          <Link to="/win">
-            <button className="flex flex-col items-center justify-center text-white py-2 px-4 rounded">
-              <FontAwesomeIcon icon={faMedal} className="w-6 h-6" />
-              Win
-            </button>
-          </Link>
+  const location = useLocation();
+  
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
 
-          <Link to="/ProfilePage">
-            <button className="flex flex-col items-center justify-center  text-white py-2 px-4 rounded">
-              <FontAwesomeIcon icon={faUser} className="w-6 h-6" />
-              My
-            </button>
-          </Link>
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-[10000]">
+      <div className="container mx-auto">
+        <div className="mx-auto" style={{ maxWidth: "420px" }}>
+          <div className="footer-nav">
+            <div className="flex items-center justify-around px-4 mx-auto max-w-[640px]">
+              <Link 
+                to='/main' 
+                className={`flex flex-col items-center justify-center transition-all duration-300 py-2 px-4 rounded group ${
+                  isActive('/main') ? 'text-white' : 'text-white/60'
+                }`}
+              >
+                <div className={`rounded-full p-2 mb-1 transition-all duration-300 ${
+                  isActive('/main') 
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg scale-110' 
+                    : 'bg-white/10 group-hover:bg-white/20'
+                }`}>
+                  <FontAwesomeIcon icon={faHome} className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-medium">Home</span>
+              </Link>
+              
+              <Link 
+                to='/recharge' 
+                className={`flex flex-col items-center justify-center transition-all duration-300 py-2 px-4 rounded group ${
+                  isActive('/recharge') ? 'text-white' : 'text-white/60'
+                }`}
+              >
+                <div className={`rounded-full p-2 mb-1 transition-all duration-300 ${
+                  isActive('/recharge') 
+                    ? 'bg-gradient-to-r from-yellow-500 to-orange-500 shadow-lg scale-110' 
+                    : 'bg-white/10 group-hover:bg-white/20'
+                }`}>
+                  <FontAwesomeIcon icon={faBolt} className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-medium">Recharge</span>
+              </Link>
+              
+              <Link 
+                to="/win" 
+                className={`flex flex-col items-center justify-center transition-all duration-300 py-2 px-4 rounded group ${
+                  isActive('/win') ? 'text-white' : 'text-white/60'
+                }`}
+              >
+                <div className={`rounded-full p-2 mb-1 transition-all duration-300 ${
+                  isActive('/win') 
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg scale-110' 
+                    : 'bg-white/10 group-hover:bg-white/20'
+                }`}>
+                  <FontAwesomeIcon icon={faMedal} className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-medium">Win</span>
+              </Link>
+
+              <Link 
+                to="/ProfilePage" 
+                className={`flex flex-col items-center justify-center transition-all duration-300 py-2 px-4 rounded group ${
+                  isActive('/ProfilePage') ? 'text-white' : 'text-white/60'
+                }`}
+              >
+                <div className={`rounded-full p-2 mb-1 transition-all duration-300 ${
+                  isActive('/ProfilePage') 
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg scale-110' 
+                    : 'bg-white/10 group-hover:bg-white/20'
+                }`}>
+                  <FontAwesomeIcon icon={faUser} className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-medium">Profile</span>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    // </div>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import TransactionList from "../Admin/TransactionList";
 import WithdrawList from "../Admin/WithdrawalList";
@@ -10,12 +10,7 @@ function AdminPanel() {
   const [loading, setLoading] = useState(false);
   const [showTransactionList, setShowTransactionList] = useState(true);
 
-  useEffect(() => {
-    fetchTransactions();
-    fetchWithdrawals();
-  }, [filter]);
-
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(
@@ -27,9 +22,9 @@ function AdminPanel() {
       console.error("Error fetching transactions:", error);
       setLoading(false);
     }
-  };
+  }, [filter]);
 
-  const fetchWithdrawals = async () => {
+  const fetchWithdrawals = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(
@@ -41,7 +36,12 @@ function AdminPanel() {
       console.error("Error fetching withdrawals:", error);
       setLoading(false);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    fetchTransactions();
+    fetchWithdrawals();
+  }, [fetchTransactions, fetchWithdrawals]);
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);

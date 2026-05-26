@@ -17,7 +17,6 @@ function Recharge() {
    const [transactionId, setTransactionId] = useState('');
    const [platform, setPlatform] = useState('');
    const [showMessage, setShowMessage] = useState(false);
-   const [submitClicked, setSubmitClicked] = useState(false);
    const [userId, setUserId] = useState("");
    const [bankBalance, setBankBalance] = useState("0");
    const [error, seterror] = useState("");
@@ -93,9 +92,9 @@ function Recharge() {
    const handleSubmit = async (e) => {
       e.preventDefault();
       setIsSubmitting(true);
-      setSubmitClicked(true);
       if (!amount || !transactionId || !platform) {
          seterror('Amount, Transaction ID, and Platform are required.');
+         setIsSubmitting(false);
          return;
       }
 

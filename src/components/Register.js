@@ -38,8 +38,6 @@ const RegistrationPage = () => {
       setErrors({ ...errors, [name]: errorMessage });
    };
 
-
-
    const handleSubmit = async (e) => {
       e.preventDefault();
       setIsSubmitting(true);
