@@ -1,82 +1,53 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { jwtDecode } from 'jwt-decode';
+// GameRecord.jsx - Updated with new design
+import React from "react";
 
-function GameRecord({periods }) {
-   const [userId, setUserId] = useState("");
-   const [bankBalance, setBankBalance] = useState(0);
- 
+function GameRecord({ periods }) {
+  const getBackgroundColorForWonNumber = (wonNumber) => {
+    if (wonNumber === 0) {
+      return "result-badge number-gradient-0";
+    } else if (wonNumber === 5) {
+      return "result-badge number-gradient-5";
+    } else if ([1, 3, 7, 9].includes(wonNumber)) {
+      return "result-badge number-green";
+    } else if ([2, 4, 6, 8].includes(wonNumber)) {
+      return "result-badge number-red";
+    } else {
+      return "result-badge bg-gray-600 text-white";
+    }
+  };
 
-   useEffect(() => {
-      const token = localStorage.getItem('token');
-      if (token) {
-         const decodedToken = jwtDecode(token);
-         setUserId(decodedToken.userId);
-
-         axios.get(`https://colorgamebackend-1.onrender.com/user/${decodedToken.userId}`)
-            .then(response => {
-               setBankBalance(response.data.bankBalance);
-            })
-            .catch(error => {
-               console.error('Error fetching user data:', error);
-            });
-      }
-   }, []);
-
-
-     const getBackgroundColorForWonNumber = (wonNumber) => {
-
-      if (wonNumber === 0) {
-         return "bg-gradient-to-r from-green-500 to-violet-500 text-white";
-      } else if (wonNumber === 5) {
-         return "bg-gradient-to-r from-red-500 to-violet-500 text-white";
-      } else if ([1, 3, 7, 9].includes(wonNumber)) {
-         return "bg-green-500 text-white";
-      } else if ([2, 4, 6, 8].includes(wonNumber)) {
-         return "bg-red-500 text-white";
-      } else {
-         return "";
-      }
-   };
-
-
-   return (
-      <div className="container mx-auto">
-         <div className="bg-slate-200 mx-auto py-4 max-w-[420px]">
-            <div className="px-4 mx-auto max-w-[640px]">
-               <h2 className="text-xl font-bold text-center">Parity Record</h2>
-               <hr className="my-4 border-b-2 border-blue-500 font-bold" />
-               <div className="overflow-y-scroll example h-[268px] bg-slate-100">
-                  <table className="table-auto w-full text-center">
-                     <thead className="sticky bg-slate-100 top-0 z-10">
-                        <tr>
-                           <th className="px-4 py-2">Period</th>
-                           <th className="px-4 py-2">Result</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        {periods.map((period, index) => (
-                           <tr key={index}>
-                              <td className="px-4 py-2">{period.periodId}</td>
-                              <td className="px-4 py-2 flex items-center justify-center">
-                                 <div
-                                    className={`w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 
-                                    ${getBackgroundColorForWonNumber(
-                                       period.wonNumber
-                                    )}`}
-                                 >
-                                    {period.wonNumber}
-                                 </div>
-                              </td>
-                           </tr>
-                        ))}
-                     </tbody>
-                  </table>
-               </div>
-            </div>
-         </div>
+  return (
+    <div className="container mx-auto px-4 pb-4">
+      <div className="record-container mx-auto" style={{ maxWidth: "420px" }}>
+        <div className="p-4">
+          <h2 className="record-title text-center mb-4">📊 GAME HISTORY</h2>
+          <hr className="mb-4 border-t-2 border-purple-500/50" />
+          <div className="overflow-y-scroll h-[320px] custom-scroll">
+            <table className="record-table w-full text-center">
+              <thead>
+                <tr>
+                  <th className="px-4 py-3">PERIOD</th>
+                  <th className="px-4 py-3">RESULT</th>
+                </tr>
+              </thead>
+              <tbody>
+                {periods.map((period, index) => (
+                  <tr key={index} className="border-b border-white/5">
+                    <td className="period-cell px-4 py-3">#{period.periodId}</td>
+                    <td className="px-4 py-3">
+                      <div className={getBackgroundColorForWonNumber(period.wonNumber)}>
+                        {period.wonNumber !== undefined ? period.wonNumber : "—"}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-   );
+    </div>
+  );
 }
 
 export default GameRecord;

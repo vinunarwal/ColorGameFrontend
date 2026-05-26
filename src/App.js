@@ -13,6 +13,7 @@ import AdminPanel from "./Admin/AdminPanel";
 import Withdrawl from "./components/Withdrawl";
 // import Withdrawal from "./components/Withdrawal";
 import Win from "./components/Win";
+import About from "./components/About";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/adminPanel" element={<AdminPanel />} />
           <Route path="/withdraw" element={ <Withdrawl /> } />
           <Route path="/win" element ={ <Win />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Router>
     </>

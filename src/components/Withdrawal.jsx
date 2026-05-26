@@ -38,7 +38,6 @@ function Withdrawal() {
                 .catch(error => {
                     console.error('Error fetching user data:', error);
                 });
-
         }
     }, []);
 
@@ -60,7 +59,6 @@ function Withdrawal() {
             return;
         }
     };
-
 
     const handlePlatformChange = (e) => {
         setPlatform(e.target.value);
@@ -117,8 +115,6 @@ function Withdrawal() {
                         </div>
                     </div>
                 </div>
-
-
 
                 <h2 className="text-2xl font-semibold mb-4 my-4 text-center">Withdrawal</h2>
                 <div className="mb-4">
